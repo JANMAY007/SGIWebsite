@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}
+	Reels Stock
+{% endblock %}
+
+{% block content %}
+	<div class="card shadow">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label><button class="btn btn-primary" type="button">Search</button></div>
+                                </div>
+                            </div>
+                            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                                <table class="table my-0" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Reel No.</th>
+                                            <th>BF</th>
+                                            <th>GSM</th>
+                                            <th>Size</th>
+                                            <th>Weight</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>2024/04/2</td>
+                                            <td>18</td>
+                                            <td>120</td>
+                                            <td>41 Inch</td>
+                                            <td>545</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>2024/04/5</td>
+                                            <td>18</td>
+                                            <td>120</td>
+                                            <td>41 Inch</td>
+                                            <td>575</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td><strong>Name</strong></td>
+                                            <td><strong>Position</strong></td>
+                                            <td><strong>Office</strong></td>
+                                            <td><strong>Age</strong></td>
+                                            <td><strong>Start date</strong></td>
+                                            <td><strong>Salary</strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+{% endblock %}
