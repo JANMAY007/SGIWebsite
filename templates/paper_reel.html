@@ -1,58 +1,94 @@
 {% extends 'base.html' %}
+
 {% block title %}
-	Reels Stock
+    Reels Stock
 {% endblock %}
 
 {% block content %}
-	<div class="card shadow">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label><button class="btn btn-primary" type="button">Search</button></div>
-                                </div>
-                            </div>
-                            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
-                                <table class="table my-0" id="dataTable">
-                                    <thead>
-                                        <tr>
-                                            <th>No.</th>
-                                            <th>Reel No.</th>
-                                            <th>BF</th>
-                                            <th>GSM</th>
-                                            <th>Size</th>
-                                            <th>Weight</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>2024/04/2</td>
-                                            <td>18</td>
-                                            <td>120</td>
-                                            <td>41 Inch</td>
-                                            <td>545</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>2024/04/5</td>
-                                            <td>18</td>
-                                            <td>120</td>
-                                            <td>41 Inch</td>
-                                            <td>575</td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td><strong>Name</strong></td>
-                                            <td><strong>Position</strong></td>
-                                            <td><strong>Office</strong></td>
-                                            <td><strong>Age</strong></td>
-                                            <td><strong>Start date</strong></td>
-                                            <td><strong>Salary</strong></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
+<div class="card shadow">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="text-md-end dataTables_filter" id="dataTable_filter">
+                    <label class="form-label">
+                        <input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search">
+                    </label>
+                    <button class="btn btn-primary" type="button">Search</button>
+                </div>
+            </div>
+            <!-- Add Reel Button -->
+            <div class="col-md-6">
+                <div class="text-end mt-3">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addReelModal">
+                        Add Reel
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+            <table class="table my-0" id="dataTable">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Reel No.</th>
+                        <th>BF</th>
+                        <th>GSM</th>
+                        <th>Size</th>
+                        <th>Weight</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reel in reels %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ reel.reel_number }}</td>
+                            <td>{{ reel.bf }}</td>
+                            <td>{{ reel.gsm }}</td>
+                            <td>{{ reel.size }} Inch</td>
+                            <td>{{ reel.weight }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Add Reel Modal -->
+<div class="modal fade" id="addReelModal" tabindex="-1" aria-labelledby="addReelModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addReelModalLabel">Add Paper Reel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="reel_number" class="form-label">Reel Number</label>
+                        <input type="text" class="form-control" id="reel_number" name="reel_number" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="bf" class="form-label">BF</label>
+                        <input type="number" class="form-control" id="bf" name="bf" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="gsm" class="form-label">GSM</label>
+                        <input type="number" class="form-control" id="gsm" name="gsm" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="size" class="form-label">Size (Inch)</label>
+                        <input type="number" class="form-control" id="size" name="size" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="weight" class="form-label">Weight</label>
+                        <input type="number" class="form-control" id="weight" name="weight" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Reel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

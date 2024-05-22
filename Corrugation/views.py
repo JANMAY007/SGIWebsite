@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import PaperReels, Product, PurchaseOrder, Dispatch
 
 
@@ -13,7 +13,21 @@ def paper_reels(request):
         gsm = request.POST.get('gsm')
         size = request.POST.get('size')
         weight = request.POST.get('weight')
-        PaperReels.objects.create(reel_number=reel_number, bf=bf, gsm=gsm, size=size, weight=weight)
+        try:
+            bf = int(bf)
+            gsm = int(gsm)
+            size = int(size)
+            weight = int(weight)
+            PaperReels.objects.create(
+                reel_number=reel_number,
+                bf=bf,
+                gsm=gsm,
+                size=size,
+                weight=weight
+            )
+            return redirect('Corrugation:paper_reels')
+        except (ValueError, TypeError):
+            return render(request, 'paper_reel.html', {'error': 'Invalid input. Please enter valid numbers.'})
     reels = PaperReels.objects.all()
     context = {
         'reels': reels,
