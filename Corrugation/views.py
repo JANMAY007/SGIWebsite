@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import PaperReels, Product, PurchaseOrder, Dispatch
 
 
@@ -33,6 +33,27 @@ def paper_reels(request):
         'reels': reels,
     }
     return render(request, 'paper_reel.html', context)
+
+
+def update_reel(request, pk):
+    reel = get_object_or_404(PaperReels, pk=pk)
+    if request.method == 'POST':
+        reel.reel_number = request.POST.get('reel_number')
+        reel.bf = request.POST.get('bf')
+        reel.gsm = request.POST.get('gsm')
+        reel.size = request.POST.get('size')
+        reel.weight = request.POST.get('weight')
+        reel.save()
+        return redirect('Corrugation:paper_reels')
+    return redirect('Corrugation:paper_reels')
+
+
+def delete_reel(request, pk):
+    reel = get_object_or_404(PaperReels, pk=pk)
+    if request.method == 'POST':
+        reel.delete()
+        return redirect('Corrugation:paper_reels')
+    return redirect('Corrugation:paper_reels')
 
 
 def products(request):

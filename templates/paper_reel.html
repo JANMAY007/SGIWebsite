@@ -5,6 +5,11 @@
 {% endblock %}
 
 {% block content %}
+    <div class="text-end mt-3">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addReelModal">
+            Add Reel
+        </button>
+    </div>
 <div class="card shadow">
     <div class="card-body">
         <div class="row">
@@ -13,15 +18,7 @@
                     <label class="form-label">
                         <input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search">
                     </label>
-                    <button class="btn btn-primary" type="button">Search</button>
-                </div>
-            </div>
-            <!-- Add Reel Button -->
-            <div class="col-md-6">
-                <div class="text-end mt-3">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addReelModal">
-                        Add Reel
-                    </button>
+                    <button class="btn btn-primary btn-md" type="button">Search</button>
                 </div>
             </div>
         </div>
@@ -35,6 +32,7 @@
                         <th>GSM</th>
                         <th>Size</th>
                         <th>Weight</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,7 +44,75 @@
                             <td>{{ reel.gsm }}</td>
                             <td>{{ reel.size }} Inch</td>
                             <td>{{ reel.weight }}</td>
+                            <td>
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editReelModal{{ reel.id }}">
+                                    Edit
+                                </button>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteReelModal{{ reel.id }}">
+                                    Delete
+                                </button>
+                            </td>
                         </tr>
+                        
+                        <!-- Edit Reel Modal -->
+                        <div class="modal fade" id="editReelModal{{ reel.id }}" tabindex="-1" aria-labelledby="editReelModalLabel{{ reel.id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editReelModalLabel{{ reel.id }}">Edit Paper Reel</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" action="{% url 'Corrugation:update_reel' reel.id %}">
+                                            {% csrf_token %}
+                                            <div class="mb-3">
+                                                <label for="reel_number" class="form-label">Reel Number</label>
+                                                <input type="text" class="form-control" id="reel_number" name="reel_number" value="{{ reel.reel_number }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="bf" class="form-label">BF</label>
+                                                <input type="number" class="form-control" id="bf" name="bf" value="{{ reel.bf }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="gsm" class="form-label">GSM</label>
+                                                <input type="number" class="form-control" id="gsm" name="gsm" value="{{ reel.gsm }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="size" class="form-label">Size (Inch)</label>
+                                                <input type="number" class="form-control" id="size" name="size" value="{{ reel.size }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="weight" class="form-label">Weight</label>
+                                                <input type="number" class="form-control" id="weight" name="weight" value="{{ reel.weight }}" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Delete Reel Modal -->
+                        <div class="modal fade" id="deleteReelModal{{ reel.id }}" tabindex="-1" aria-labelledby="deleteReelModalLabel{{ reel.id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteReelModalLabel{{ reel.id }}">Delete Paper Reel</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to delete the reel <strong>{{ reel.reel_number }}</strong>?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form method="post" action="{% url 'Corrugation:delete_reel' reel.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     {% endfor %}
                 </tbody>
             </table>
@@ -54,7 +120,6 @@
     </div>
 </div>
 
-<!-- Add Reel Modal -->
 <div class="modal fade" id="addReelModal" tabindex="-1" aria-labelledby="addReelModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -91,4 +156,7 @@
         </div>
     </div>
 </div>
+
+<!-- Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
