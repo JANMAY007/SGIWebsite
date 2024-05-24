@@ -107,3 +107,18 @@ class Dispatch(models.Model):
 
     def __str__(self):
         return f'{self.po} - {self.dispatch_date}'
+
+
+class Program(models.Model):
+    class Meta:
+        verbose_name = 'Program'
+        verbose_name_plural = 'Programs'
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    program_quantity = models.PositiveIntegerField()
+    program_date = models.DateField()
+    program_notes = models.TextField()
+    active = models.BooleanField(default=True)
+    objects = models.manager
+
+    def __str__(self):
+        return f'{self.program_date}'

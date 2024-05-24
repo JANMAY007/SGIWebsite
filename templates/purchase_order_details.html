@@ -68,13 +68,6 @@
                         <div class="card-header py-3">
                             <h6 class="text-primary m-0 fw-bold">
                                 Dispatch
-                                <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
-                                        data-bs-target="#dispatchModal">
-                                    <span class="text-white-50 icon">
-                                            <i class="fas fa-truck-loading"></i>
-                                        </span>
-                                    <span class="text-white text">Add Dispatch</span>
-                                </button>
                                 <form method="POST"
                                       action="{% url 'Corrugation:delete_purchase_order' purchase_order.pk %}"
                                       id="close-po-form">
@@ -86,6 +79,13 @@
                                         <span class="text-white text">Close this PO</span>
                                     </button>
                                 </form>
+                                <button type="button" class="float-end btn btn-primary btn-icon-split" data-bs-toggle="modal"
+                                        data-bs-target="#dispatchModal">
+                                    <span class="text-white-50 icon">
+                                            <i class="fas fa-truck-loading"></i>
+                                        </span>
+                                    <span class="text-white text">Add Dispatch</span>
+                                </button>
                             </h6>
                         </div>
                         <div class="modal fade" id="dispatchModal" tabindex="-1" aria-labelledby="dispatchModalLabel"

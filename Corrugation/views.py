@@ -1,8 +1,9 @@
 from calendar import month_abbr
+from datetime import datetime
 from django.db.models import Count
 from django.db.models.functions import ExtractMonth
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import PaperReels, Product, Partition, PurchaseOrder, Dispatch
+from .models import PaperReels, Product, Partition, PurchaseOrder, Dispatch, Program
 
 
 def index(request):
@@ -225,3 +226,72 @@ def add_dispatch(request):
         )
         return redirect('Corrugation:purchase_order')
     return redirect('Corrugation:purchase_order')
+
+
+def daily_program(request):
+    if request.method == 'POST':
+        # Extract data from POST request
+        data = request.POST
+        product_name = data.get('product_name')
+        program_quantity = data.get('program_quantity')
+        program_date_str = data.get('program_date')
+        program_notes = data.get('program_notes')
+        # Convert program_date from string to datetime
+        program_date = datetime.strptime(program_date_str, '%Y-%m-%d').date()
+        # Create a new Program instance
+        Program.objects.create(
+            product=product_name,
+            program_quantity=program_quantity,
+            program_date=program_date,
+            program_notes=program_notes
+        )
+        return redirect('Corrugation:program')
+    programs = Program.objects.filter(active=True)
+    # Prepare data to return
+    programs_data = []
+    for program in programs:
+        # Get related product
+        product = program.product
+
+        # Get related partitions for the product
+        partitions = Partition.objects.filter(product_name=product)
+
+        # Prepare partition data
+        partitions_data = []
+        for partition in partitions:
+            partition_data = {
+                'partition_size': partition.partition_size,
+                'partition_od': partition.partition_od,
+                'deckle_cut': partition.deckle_cut,
+                'length_cut': partition.length_cut,
+                'partition_type': partition.get_partition_type_display(),
+                'ply_no': partition.get_ply_no_display(),
+                'partition_weight': partition.partition_weight
+            }
+            partitions_data.append(partition_data)
+
+        # Prepare program data
+        program_data = {
+            'product_name': product.product_name,
+            'box_no': product.box_no,
+            'material_code': product.material_code,
+            'size': product.size,
+            'inner_length': product.inner_length,
+            'inner_breadth': product.inner_breadth,
+            'inner_depth': product.inner_depth,
+            'outer_length': product.outer_length,
+            'outer_breadth': product.outer_breadth,
+            'outer_depth': product.outer_depth,
+            'box': product.box,
+            'color': product.color,
+            'weight': product.weight,
+            'partitions': partitions_data,
+            'program_quantity': program.program_quantity,
+            'program_date': program.program_date.strftime('%Y-%m-%d'),
+            'program_notes': program.program_notes,
+        }
+        programs_data.append(program_data)
+    context = {
+        'programs': programs_data,
+    }
+    return render(request, 'program.html', context)
