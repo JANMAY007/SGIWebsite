@@ -33,6 +33,14 @@ class Product(models.Model):
     box = models.CharField(max_length=20)  # check this
     color = models.CharField(max_length=20)
     weight = models.CharField(max_length=7)
+    objects = models.manager
+
+    def __str__(self):
+        return f'{self.product_name} - {self.box_no}'
+
+
+class Partition(models.Model):
+    product_name = models.ForeignKey(Product, on_delete=models.CASCADE)
     partition_size = models.CharField(max_length=10)  # change this
     partition_od = models.CharField(max_length=50)
     deckle_cut = models.CharField(max_length=1)
@@ -50,10 +58,10 @@ class Product(models.Model):
     )
     ply_no = models.CharField(max_length=1, choices=ply_no_choices)
     partition_weight = models.CharField(max_length=7)
-    objects = models.manager
+    object = models.manager
 
     def __str__(self):
-        return f'{self.product_name} - {self.box_no}'
+        return f'{self.product_name} - {self.partition_type}'
 
 
 class PurchaseOrder(models.Model):
@@ -61,10 +69,21 @@ class PurchaseOrder(models.Model):
         verbose_name = 'Purchase Order'
         verbose_name_plural = 'Purchase Orders'
     product_name = models.ForeignKey(Product, on_delete=models.CASCADE)
+    po_given_by_choices = (
+        ('A', 'A'),
+        ('B', 'B'),
+        ('C', 'C'),
+        ('D', 'D'),
+        ('E', 'E'),
+        ('F', 'F'),
+        ('G', 'G'),
+    )
+    po_given_by = models.CharField(max_length=1, choices=po_given_by_choices)
     po_number = models.CharField(max_length=10)
     po_date = models.DateField()
     rate = models.FloatField()
     po_quantity = models.PositiveIntegerField()
+    active = models.BooleanField(default=True)
     objects = models.manager
 
     def __str__(self):
