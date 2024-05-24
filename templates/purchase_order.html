@@ -13,6 +13,12 @@
                     Add Purchase Order
                 </button>
             </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#addProductModal">
+                    Add Product
+                </button>
+            </div>
         </div>
         <div class="row">
             {% for purchase_order in purchase_order_list %}
@@ -93,4 +99,201 @@
             </div>
         </div>
     </div>
+    
+    <!-- Modal Structure -->
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProductForm">
+                        <!-- Product Fields -->
+                        <div class="mb-3">
+                            <label for="product_name" class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="product_name" name="product_name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="box_no" class="form-label">Box Number</label>
+                            <input type="text" class="form-control" id="box_no" name="box_no" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="material_code" class="form-label">Material Code</label>
+                            <input type="text" class="form-control" id="material_code" name="material_code" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="size" class="form-label">Size</label>
+                            <input type="text" class="form-control" id="size" name="size" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inner_length" class="form-label">Inner Length</label>
+                            <input type="number" class="form-control" id="inner_length" name="inner_length" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inner_breadth" class="form-label">Inner Breadth</label>
+                            <input type="number" class="form-control" id="inner_breadth" name="inner_breadth" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inner_depth" class="form-label">Inner Depth</label>
+                            <input type="number" class="form-control" id="inner_depth" name="inner_depth" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="outer_length" class="form-label">Outer Length</label>
+                            <input type="number" class="form-control" id="outer_length" name="outer_length" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="outer_breadth" class="form-label">Outer Breadth</label>
+                            <input type="number" class="form-control" id="outer_breadth" name="outer_breadth" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="outer_depth" class="form-label">Outer Depth</label>
+                            <input type="number" class="form-control" id="outer_depth" name="outer_depth" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="box" class="form-label">Box</label>
+                            <input type="text" class="form-control" id="box" name="box" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="color" class="form-label">Color</label>
+                            <input type="text" class="form-control" id="color" name="color" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="weight" class="form-label">Weight</label>
+                            <input type="text" class="form-control" id="weight" name="weight" required>
+                        </div>
+                        
+                        <!-- Partition Fields -->
+                        <div id="partitions">
+                            <div class="partition mb-3" id="partition_0">
+                                <h6>Partition 1</h6>
+                                <div class="mb-3">
+                                    <label for="partition_size_0" class="form-label">Partition Size</label>
+                                    <input type="text" class="form-control" id="partition_size_0" name="partition_size_0" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="partition_od_0" class="form-label">Partition OD</label>
+                                    <input type="text" class="form-control" id="partition_od_0" name="partition_od_0" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="deckle_cut_0" class="form-label">Deckle Cut</label>
+                                    <input type="text" class="form-control" id="deckle_cut_0" name="deckle_cut_0" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="length_cut_0" class="form-label">Length Cut</label>
+                                    <input type="text" class="form-control" id="length_cut_0" name="length_cut_0" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="partition_type_0" class="form-label">Partition Type</label>
+                                    <select class="form-select" id="partition_type_0" name="partition_type_0" required>
+                                        <option value="vertical">Vertical</option>
+                                        <option value="horizontal">Horizontal</option>
+                                        <option value="z-type">Z-Type</option>
+                                        <option value="criss-cross">Criss-Cross</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="ply_no_0" class="form-label">Ply Number</label>
+                                    <select class="form-select" id="ply_no_0" name="ply_no_0" required>
+                                        <option value="3">3 Ply</option>
+                                        <option value="5">5 Ply</option>
+                                        <option value="7">7 Ply</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="partition_weight_0" class="form-label">Partition Weight</label>
+                                    <input type="text" class="form-control" id="partition_weight_0" name="partition_weight_0" required>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary" id="addPartitionBtn">Add Another Partition</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveProductBtn">Save Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let partitionCount = 1;
+        
+            document.getElementById('addPartitionBtn').addEventListener('click', function () {
+                const partitionTemplate = `
+                    <div class="partition mb-3" id="partition_${partitionCount}">
+                        <h6>Partition ${partitionCount + 1}</h6>
+                        <div class="mb-3">
+                            <label for="partition_size_${partitionCount}" class="form-label">Partition Size</label>
+                            <input type="text" class="form-control" id="partition_size_${partitionCount}" name="partition_size_${partitionCount}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="partition_od_${partitionCount}" class="form-label">Partition OD</label>
+                            <input type="text" class="form-control" id="partition_od_${partitionCount}" name="partition_od_${partitionCount}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="deckle_cut_${partitionCount}" class="form-label">Deckle Cut</label>
+                            <input type="text" class="form-control" id="deckle_cut_${partitionCount}" name="deckle_cut_${partitionCount}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="length_cut_${partitionCount}" class="form-label">Length Cut</label>
+                            <input type="text" class="form-control" id="length_cut_${partitionCount}" name="length_cut_${partitionCount}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="partition_type_${partitionCount}" class="form-label">Partition Type</label>
+                            <select class="form-select" id="partition_type_${partitionCount}" name="partition_type_${partitionCount}" required>
+                                <option value="vertical">Vertical</option>
+                                <option value="horizontal">Horizontal</option>
+                                <option value="z-type">Z-Type</option>
+                                <option value="criss-cross">Criss-Cross</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ply_no_${partitionCount}" class="form-label">Ply Number</label>
+                            <select class="form-select" id="ply_no_${partitionCount}" name="ply_no_${partitionCount}" required>
+                                <option value="3">3 Ply</option>
+                                <option value="5">5 Ply</option>
+                                <option value="7">7 Ply</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="partition_weight_${partitionCount}" class="form-label">Partition Weight</label>
+                            <input type="text" class="form-control" id="partition_weight_${partitionCount}" name="partition_weight_${partitionCount}" required>
+                        </div>
+                    </div>
+                `;
+                partitionCount++;
+                document.getElementById('partitions').insertAdjacentHTML('beforeend', partitionTemplate);
+            });
+        
+            document.getElementById('saveProductBtn').addEventListener('click', function () {
+                const form = document.getElementById('addProductForm');
+                const formData = new FormData(form);
+                
+                fetch('/add-product/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert('Product added successfully.');
+                        window.location.reload();  // Optionally reload the page to see the new product
+                    } else {
+                        alert('Failed to add product.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                     window.location.reload();
+                });
+            });
+        });
+        </script>
 {% endblock %}

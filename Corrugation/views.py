@@ -110,6 +110,7 @@ def add_product(request):
                 ply_no=ply_no[i],
                 partition_weight=partition_weight[i]
             )
+        return redirect('Corrugation:purchase_order')
     return redirect('Corrugation:purchase_order')
 
 

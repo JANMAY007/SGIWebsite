@@ -49,6 +49,7 @@ class Partition(models.Model):
         ('vertical', 'Vertical'),
         ('horizontal', 'Horizontal'),
         ('z-type', 'Z-Type'),
+        ('crisscross', 'Criss-Cross'),
     )
     partition_type = models.CharField(max_length=10, choices=partition_type_choice)
     ply_no_choices = (
