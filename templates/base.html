@@ -24,8 +24,13 @@
         <div class="container-fluid d-flex flex-column p-0"><a
                 class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
                 href="{% url 'Corrugation:index' %}">
-            <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-box"></i></div>
-            <div class="sidebar-brand-text mx-3"><span>SGI</span></div>
+            <div class="sidebar-brand-icon rotate-n-15">
+                {% comment %}
+                	<i class="fas fa-box-open"></i>
+                {% endcomment %}
+                <img src="{% static 'logo/logo.png' %}" alt="logo" style="max-width: 35px">
+            </div>
+            <div class="sidebar-brand-text mx-3"><span>Shiv Packaging</span></div>
         </a>
             <ul class="navbar-nav text-light" id="accordionSidebar">
                 <li class="nav-item"><a class="nav-link" href="{% url 'Corrugation:index' %}"><i

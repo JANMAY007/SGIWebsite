@@ -70,15 +70,20 @@ class PurchaseOrder(models.Model):
         verbose_name_plural = 'Purchase Orders'
     product_name = models.ForeignKey(Product, on_delete=models.CASCADE)
     po_given_by_choices = (
-        ('A', 'A'),
-        ('B', 'B'),
-        ('C', 'C'),
-        ('D', 'D'),
-        ('E', 'E'),
-        ('F', 'F'),
-        ('G', 'G'),
+        ('Sweety Industries', 'Sweety Industries'),
+        ('Sweetco Foods', 'Sweetco Foods'),
+        ('VR Agro Processors LLP', 'VR Agro Processors LLP'),
+        ('Lao More Biscuits Pvt Ltd', 'Lao More Biscuits Pvt Ltd'),
+        ('Makson Pharmaceuticals I Pvt Ltd', 'Makson Pharmaceuticals I Pvt Ltd'),
+        ('GP Manglani Foods Pvt Ltd', 'GP Manglani Foods Pvt Ltd'),
+        ('KMM Foods Pvt Ltd', 'KMM Foods Pvt Ltd'),
+        ('Parle Product Pvt Ltd', 'Parle Product Pvt Ltd'),
+        ('JRJ Foods Pvt Ltd', 'JRJ Foods Pvt Ltd'),
+        ('RZ Dholakia', 'RZ Dholakia'),
+        ('Ishwar Snuff Works', 'Ishwar Snuff Works'),
+        ('Parag Perfumes', 'Parag Perfumes'),
     )
-    po_given_by = models.CharField(max_length=1, choices=po_given_by_choices)
+    po_given_by = models.CharField(max_length=32, choices=po_given_by_choices)
     po_number = models.CharField(max_length=10)
     po_date = models.DateField()
     rate = models.FloatField()

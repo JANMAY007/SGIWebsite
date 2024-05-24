@@ -132,7 +132,7 @@ def purchase_order(request):
     return render(request, 'purchase_order.html', context)
 
 
-def add_purchase_order_detail(request):
+def add_purchase_order_detailed(request):
     if request.method == 'POST':
         product_id = request.POST['product_name']
         product = get_object_or_404(Product, id=product_id)
@@ -152,8 +152,62 @@ def add_purchase_order_detail(request):
         )
 
         return redirect('Corrugation:purchase_order')
-    products = Product.objects.get(pk=request.GET.get('pk'))
-    return render(request, 'purchase_order_details.html', {'products': products})
+
+
+def add_purchase_order_detail(request):
+    if request.method == 'POST':
+        month_word = request.POST['month']
+        po_given_by = request.POST['po_given_by']
+
+        # Convert month_word to a numeric month
+        month_dict = {
+            'Jan': 1,
+            'Feb': 2,
+            'Mar': 3,
+            'Apr': 4,
+            'May': 5,
+            'Jun': 6,
+            'Jul': 7,
+            'Aug': 8,
+            'Sep': 9,
+            'Oct': 10,
+            'Nov': 11,
+            'Dec': 12,
+        }
+        month_numeric = month_dict.get(month_word)
+
+        # Get purchase orders for the given month and po_given_by
+        purchase_orders = PurchaseOrder.objects.filter(
+            po_date__month=month_numeric,
+            po_given_by=po_given_by,
+            active=True
+        ).select_related('product_name')
+
+        # Get dispatches for the selected purchase orders
+        purchase_order_ids = purchase_orders.values_list('id', flat=True)
+        dispatches = Dispatch.objects.filter(po_id__in=purchase_order_ids).select_related('po')
+        # Group dispatches by purchase order
+        dispatches_dict = {}
+        for dispatch in dispatches:
+            if dispatch.po_id not in dispatches_dict:
+                dispatches_dict[dispatch.po_id] = []
+            dispatches_dict[dispatch.po_id].append(dispatch)
+
+        # Add dispatches to purchase orders
+        for po in purchase_orders:
+            po.dispatches = dispatches_dict.get(po.id, [])
+        context = {
+            'purchase_orders': purchase_orders,
+        }
+        return render(request, 'purchase_order_details.html', context)
+
+
+def delete_purchase_order(request, pk):
+    if request.method == 'POST':
+        po = get_object_or_404(PurchaseOrder, pk=pk)
+        po.active = False
+        po.save()
+        return redirect('Corrugation:purchase_order')
 
 
 def add_dispatch(request):

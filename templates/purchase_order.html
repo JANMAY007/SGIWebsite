@@ -17,7 +17,7 @@
         <div class="row">
             {% for purchase_order in purchase_order_list %}
                 <div class="col-md-6 col-xl-3 col-sm-12 mb-4">
-                    <form method="post" action="{% url 'Corrugation:add_purchase_order_detail' %}"
+                    <form method="POST" action="{% url 'Corrugation:add_purchase_order_detail' %}"
                           class="card shadow border-start-warning py-2">
                         {% csrf_token %}
                         <input type="hidden" name="po_given_by" value="{{ purchase_order.po_given_by }}">
@@ -51,7 +51,7 @@
                 </div>
                 <div class="modal-body">
                     <!-- Form for adding a new purchase order -->
-                    <form method="POST" action="{% url 'Corrugation:add_purchase_order_detail' %}">
+                    <form method="POST" action="{% url 'Corrugation:add_purchase_order_detailed' %}">
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="product_name" class="form-label">Product Name</label>

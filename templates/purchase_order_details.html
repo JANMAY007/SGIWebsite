@@ -1,152 +1,101 @@
 {% extends 'base.html' %}
-
+{% load custom_filters %}
 {% block title %}
     Detailed Purchase Order
 {% endblock %}
 
 {% block content %}
     <div class="container-fluid">
-        <!-- Start: Basic Card -->
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="text-primary m-0 fw-bold">Product name - Parle G 50 gm<span
-                        class="float-end">21-03-2024</span></h6>
-            </div>
-            <div class="card-body">
-                <!-- Start: Card Primary -->
-                <div class="card shadow border-start-primary py-2">
-                    <div class="card-body">
-                        <div class="row align-items-center no-gutters">
-                            <div class="col me-2">
-                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Material Code</span>
+        {% for purchase_order in purchase_orders %}
+            <!-- Start: Basic Card -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="text-primary m-0 fw-bold">Product name - {{ purchase_order.product_name }}<span
+                            class="float-end">{{ purchase_order.po_date }}</span></h6>
+                </div>
+                <div class="card-body">
+                    <!-- Start: Card Primary -->
+                    <div class="card shadow border-start-primary py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center no-gutters">
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1">
+                                        <span>Material Code</span>
+                                    </div>
+                                    <div class="text-dark fw-bold h5 mb-0"><span>4013995</span></div>
                                 </div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>4013995</span></div>
-                            </div>
-                            <div class="col me-2">
-                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Box No.</span></div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>BH-177</span></div>
-                            </div>
-                        </div>
-                        <div class="row align-items-center no-gutters">
-                            <div class="col me-2">
-                                <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>PO Number</span>
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Box No.</span>
+                                    </div>
+                                    <div class="text-dark fw-bold h5 mb-0"><span>BH-177</span></div>
                                 </div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>4100277999</span></div>
                             </div>
-                            <div class="col me-2">
-                                <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>Rate</span></div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>11.57</span></div>
-                            </div>
-                        </div>
-                        <div class="row align-items-center no-gutters">
-                            <div class="col me-2">
-                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span class="text-danger">PO Quantity (given)</span>
+                            <div class="row align-items-center no-gutters">
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>PO Number</span>
+                                    </div>
+                                    <div class="text-dark fw-bold h5 mb-0"><span>{{ purchase_order.po_number }}</span>
+                                    </div>
                                 </div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>54700</span></div>
-                            </div>
-                            <div class="col me-2">
-                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span class="text-danger">po quantity (allowed +5%)</span>
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>Rate</span>
+                                    </div>
+                                    <div class="text-dark fw-bold h5 mb-0"><span>{{ purchase_order.rate }}</span></div>
                                 </div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>57435</span></div>
                             </div>
-                        </div>
-                    </div>
-                </div><!-- End: Card Primary -->
-                <!-- Start: Card Warning -->
-                <div class="card shadow border-start-warning py-2">
-                    <div class="card-header py-3">
-                        <h6 class="text-primary m-0 fw-bold">Dispatch<a class="btn btn-danger float-end btn-icon-split"
-                                                                        role="button"><span
-                                class="text-white-50 icon"><i class="fas fa-trash"></i></span><span
-                                class="text-white text">Close this PO</span></a></h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="row align-items-center no-gutters">
-                            <div class="col me-2">
-                                <div class="text-dark fw-bold h5 mb-0"><span>16395</span></div>
-                            </div>
-                            <div class="col-auto"><span>03-04-2024</span></div>
-                        </div>
-                        <div class="row align-items-center no-gutters">
-                            <div class="col me-2">
-                                <div class="text-dark fw-bold h5 mb-0"><span>10185</span></div>
-                            </div>
-                            <div class="col-auto"><span>13-04-2024</span></div>
-                        </div>
-                        <div class="row align-items-center no-gutters">
-                            <div class="col me-2">
-                                <div class="text-dark fw-bold h5 mb-0"><span>15220</span></div>
-                            </div>
-                            <div class="col-auto"><span>07-04-2024</span></div>
-                        </div>
-                    </div>
-                </div><!-- End: Card Warning -->
-            </div>
-        </div><!-- End: Basic Card -->
-        <!-- Start: Basic Card -->
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="text-primary m-0 fw-bold">Product name - Parle G 50 gm<span
-                        class="float-end">23-02-2024</span></h6>
-            </div>
-            <div class="card-body">
-                <!-- Start: Card Primary -->
-                <div class="card shadow border-start-primary py-2">
-                    <div class="card-body">
-                        <div class="row align-items-center no-gutters">
-                            <div class="col me-2">
-                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Material Code</span>
+                            <div class="row align-items-center no-gutters">
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span
+                                            class="text-danger">PO Quantity (given)</span>
+                                    </div>
+                                    <div class="text-dark fw-bold h5 mb-0">
+                                        <span>{{ purchase_order.po_quantity }}</span>
+                                    </div>
                                 </div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>4013995</span></div>
-                            </div>
-                            <div class="col me-2">
-                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Box No.</span></div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>BH-177</span></div>
-                            </div>
-                        </div>
-                        <div class="row align-items-center no-gutters">
-                            <div class="col me-2">
-                                <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>PO Number</span>
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span
+                                            class="text-danger">po quantity (allowed +5%)</span>
+                                    </div>
+                                    <div class="text-dark fw-bold h5 mb-0">
+                                        <span>{{ purchase_order.po_quantity|add_percent:5|floatformat:2 }}</span>
+                                    </div>
                                 </div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>4100275464</span></div>
-                            </div>
-                            <div class="col me-2">
-                                <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>Rate</span></div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>12.35</span></div>
                             </div>
                         </div>
-                        <div class="row align-items-center no-gutters">
-                            <div class="col me-2">
-                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span class="text-danger">PO Quantity (given)</span>
+                    </div><!-- End: Card Primary -->
+                    <!-- Start: Card Warning -->
+                    <div class="card shadow border-start-warning py-2">
+                        <div class="card-header py-3">
+                            <h6 class="text-primary m-0 fw-bold">
+                                Dispatch
+                                <form method="POST" action="{% url 'Corrugation:delete_purchase_order' purchase_order.pk %}" id="close-po-form">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger float-end btn-icon-split">
+                                        <span class="text-white-50 icon">
+                                            <i class="fas fa-trash"></i>
+                                        </span>
+                                        <span class="text-white text">Close this PO</span>
+                                    </button>
+                                </form>
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            {% for dispatch in purchase_order.dispatches %}
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col me-2">
+                                        <div class="text-dark fw-bold h5 mb-0">
+                                            <span>{{ dispatch.dispatch_quantity }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <span>{{ dispatch.dispatch_date }}</span>
+                                    </div>
                                 </div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>16750</span></div>
-                            </div>
-                            <div class="col me-2">
-                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span class="text-danger">po quantity (allowed + 5%)</span>
-                                </div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>17588</span></div>
-                            </div>
+                            {% endfor %}
                         </div>
-                    </div>
-                </div><!-- End: Card Primary -->
-                <!-- Start: Card Warning -->
-                <div class="card shadow border-start-warning py-2">
-                    <div class="card-header py-3">
-                        <h6 class="text-primary m-0 fw-bold">Dispatch<a class="btn btn-danger float-end btn-icon-split"
-                                                                        role="button"><span
-                                class="text-white-50 icon"><i class="fas fa-trash"></i></span><span
-                                class="text-white text">Close this PO</span></a></h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="row align-items-center no-gutters">
-                            <div class="col me-2">
-                                <div class="text-dark fw-bold h5 mb-0"><span>16865</span></div>
-                            </div>
-                            <div class="col-auto"><span>24-03-2024</span></div>
-                        </div>
-                    </div>
-                </div><!-- End: Card Warning -->
-            </div>
-        </div><!-- End: Basic Card -->
+                    </div><!-- End: Card Warning -->
+                </div>
+            </div><!-- End: Basic Card -->
+        {% endfor %}
     </div>
 {% endblock %}
