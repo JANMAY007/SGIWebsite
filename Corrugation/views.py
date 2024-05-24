@@ -213,8 +213,8 @@ def delete_purchase_order(request, pk):
 
 def add_dispatch(request):
     if request.method == 'POST':
-        po_id = request.POST['po']
-        po = get_object_or_404(PurchaseOrder, id=po_id)
+        pk = request.POST.get('pk')
+        po = get_object_or_404(PurchaseOrder, id=pk)
         dispatch_date = request.POST['dispatch_date']
         dispatch_quantity = request.POST['dispatch_quantity']
 
@@ -223,5 +223,5 @@ def add_dispatch(request):
             dispatch_date=dispatch_date,
             dispatch_quantity=dispatch_quantity
         )
-
-    return redirect('Corrugation:add_purchase_order_detail')
+        return redirect('Corrugation:purchase_order')
+    return redirect('Corrugation:purchase_order')
