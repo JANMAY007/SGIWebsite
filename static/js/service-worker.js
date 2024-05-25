@@ -1,9 +1,12 @@
 const CACHE_NAME = 'sgi-cache-v1';
 const urlsToCache = [
-  '/offline.html',
-  '/static/bootstrap/css/bootstrap.min.css', // Include your CSS files
-  '/static/bootstrap/css/bootstrap.min.js', // Include your JS files
-  '/static/img/logo.png?h=7b3a05042dd79230d60eb276d4c089f7' // Your logo
+  '',
+  '/offline',
+  '/static/bootstrap/css/bootstrap.min.css', // Ensure these paths are correct
+  '/static/bootstrap/js/bootstrap.min.js',  // Ensure these paths are correct
+    '/static/js/script.min.js',
+    '/static/js/theme.js',
+  '/static/img/logo.png?h=7b3a05042dd79230d60eb276d4c089f7' // Ensure these paths are correct
 ];
 
 // Install service worker and cache the static assets
