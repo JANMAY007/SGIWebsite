@@ -15,6 +15,6 @@
       "purpose": "any maskable"
     }
   ],
-  "start_url": "/index.html",
+  "start_url": "/",
   "display": "fullscreen"
 }
