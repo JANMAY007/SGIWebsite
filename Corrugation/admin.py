@@ -26,7 +26,7 @@ class ProductionAdmin(admin.ModelAdmin):
     ]
 
 
-admin.site.register(Production, ProductAdmin)
+admin.site.register(Production, ProductionAdmin)
 admin.site.register(PaperReels)
 admin.site.register(PurchaseOrder)
 admin.site.register(Dispatch)
