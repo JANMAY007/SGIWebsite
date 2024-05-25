@@ -296,3 +296,7 @@ def daily_program(request):
         'products': Product.objects.all().values('product_name'),
     }
     return render(request, 'program.html', context)
+
+
+def production(request):
+    return render(request, 'production.html')
