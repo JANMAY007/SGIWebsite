@@ -16,6 +16,17 @@
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('{% static 'js/service-worker.js' %}')
+                .then(registration => {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(error => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+    </script>
 </head>
 
 <body id="page-top">
@@ -41,7 +52,8 @@
                         class="fas fa-book-reader"></i><span>Purchase Order</span></a></li>
                 <li class="nav-item"><a class="nav-link" href="/production.html"><i class="fas fa-tools"></i><span>Production</span></a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'Corrugation:daily_program' %}"><i class="far fa-envelope"></i><span>Program</span></a>
+                <li class="nav-item"><a class="nav-link" href="{% url 'Corrugation:daily_program' %}"><i
+                        class="far fa-envelope"></i><span>Program</span></a>
                 </li>
             </ul>
             <div class="text-center d-none d-md-inline">
