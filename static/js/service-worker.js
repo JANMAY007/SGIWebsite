@@ -30,7 +30,7 @@ self.addEventListener('fetch', event => {
       .catch(() => {
         // Fallback to offline.html for navigation requests
         if (event.request.mode === 'navigate') {
-          return caches.match('/offline.html');
+          return caches.match('/offline');
         }
       })
   );

@@ -1,5 +1,4 @@
 from django.urls import path
-from django.views.generic import TemplateView
 from .views import (index, paper_reels, update_reel, delete_reel,
                     add_purchase_order_detail, add_product, add_dispatch,
                     purchase_order, add_purchase_order_detailed,
@@ -19,5 +18,4 @@ urlpatterns = [
     path('add-dispatch/', add_dispatch, name='add_dispatch'),
     path('delete-purchase-order/<int:pk>/', delete_purchase_order, name='delete_purchase_order'),
     path('daily-program/', daily_program, name='daily_program'),
-    path('offline/', TemplateView.as_view(template_name='offline.html'), name='offline')
 ]
