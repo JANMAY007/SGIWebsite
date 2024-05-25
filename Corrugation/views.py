@@ -240,12 +240,12 @@ def daily_program(request):
         program_date = datetime.strptime(program_date_str, '%Y-%m-%d').date()
         # Create a new Program instance
         Program.objects.create(
-            product=product_name,
+            product=Product.objects.get(product_name=product_name),
             program_quantity=program_quantity,
             program_date=program_date,
             program_notes=program_notes
         )
-        return redirect('Corrugation:program')
+        return redirect('Corrugation:daily_program')
     programs = Program.objects.filter(active=True)
     # Prepare data to return
     programs_data = []
@@ -293,5 +293,6 @@ def daily_program(request):
         programs_data.append(program_data)
     context = {
         'programs': programs_data,
+        'products': Product.objects.all().values('product_name'),
     }
     return render(request, 'program.html', context)
