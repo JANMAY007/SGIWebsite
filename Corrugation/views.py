@@ -3,7 +3,9 @@ from datetime import datetime
 from django.db.models import Count
 from django.db.models.functions import ExtractMonth
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import PaperReels, Product, Partition, PurchaseOrder, Dispatch, Program
+from django.utils.dateparse import parse_date
+from .models import (PaperReels, Product, Partition, PurchaseOrder, Dispatch,
+                     Program, Production, ProductionReels)
 
 
 def index(request):
@@ -299,4 +301,76 @@ def daily_program(request):
 
 
 def production(request):
-    return render(request, 'production.html')
+    if request.method == 'POST':
+        # Extract data from POST request
+        data = request.POST
+        product_name = data.get('product_name')
+        reel_numbers = data.getlist('reel_numbers')  # getlist to handle multiple reels
+        production_quantity = data.get('production_quantity')
+        production_date_str = data.get('production_date')
+        # Convert production_date from string to datetime
+        production_date = parse_date(production_date_str)
+        # Create a new Production instance
+        product_instance = Product.objects.get(product_name=product_name)
+        production_object = Production.objects.create(
+            product=product_instance,
+            production_quantity=production_quantity,
+            production_date=production_date,
+        )
+        # Create new ProductionReels instances for each reel number
+        for reel_number in reel_numbers:
+            reel_instance = PaperReels.objects.get(reel_number=reel_number)
+            ProductionReels.objects.create(
+                production=production_object,
+                reel=reel_instance,
+            )
+        return redirect('Corrugation:production')
+    context = {
+        'products': Product.objects.all().values('product_name'),
+        'reels': PaperReels.objects.all().values('reel_number'),
+    }
+    return render(request, 'production.html', context)
+
+
+def update_production_quantity(request, pk):
+    production_object = get_object_or_404(Production, pk=pk)
+    if request.method == 'POST':
+        production_object.production_quantity = request.POST.get('production_quantity')
+        production_object.save()
+        return redirect('Corrugation:production')
+    return redirect('Corrugation:production')
+
+
+def add_reel_to_production(request, pk):
+    if request.method == 'POST':
+        # Get the production instance by ID
+        production_object = get_object_or_404(Production, pk=pk)
+        # Get the reel number from the POST request
+        reel_number = request.POST.get('reel_number')
+        try:
+            # Get the reel instance
+            reel = PaperReels.objects.get(reel_number=reel_number)
+            # Create a new ProductionReels instance
+            ProductionReels.objects.create(
+                production=production_object,
+                reel=reel
+            )
+            return redirect('Corrugation:production')
+        except PaperReels.DoesNotExist:
+            return redirect('Corrugation:production')
+    return redirect('Corrugation:production')
+
+
+def delete_production(request, production_id):
+    if request.method == 'POST':
+        production_object = get_object_or_404(Production, id=production_id)
+        # Retrieve all ProductionReels associated with the production
+        production_reels = ProductionReels.objects.filter(production=production_object)
+        # Delete each associated reel from PaperReels
+        for production_reel in production_reels:
+            reel = production_reel.reel
+            reel.delete()
+        # Delete the production instance
+        production_object.delete()
+        return redirect('Corrugation:production')
+    return redirect('Corrugation:production')

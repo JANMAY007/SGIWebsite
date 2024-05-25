@@ -2,7 +2,8 @@ from django.urls import path
 from .views import (index, paper_reels, update_reel, delete_reel,
                     add_purchase_order_detail, add_product, add_dispatch,
                     purchase_order, add_purchase_order_detailed,
-                    delete_purchase_order, daily_program, production)
+                    delete_purchase_order, daily_program, production,
+                    update_production_quantity, add_reel_to_production)
 
 app_name = 'Corrugation'
 
@@ -19,4 +20,6 @@ urlpatterns = [
     path('delete-purchase-order/<int:pk>/', delete_purchase_order, name='delete_purchase_order'),
     path('daily-program/', daily_program, name='daily_program'),
     path('production/', production, name='production'),
+    path('update-production-quantity/<int:pk>/', update_production_quantity, name='update_production_quantity'),
+    path('add-reel-to-production/<int:pk>/', add_reel_to_production, name='add_reel_to_production'),
 ]

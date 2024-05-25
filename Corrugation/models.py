@@ -122,3 +122,28 @@ class Program(models.Model):
 
     def __str__(self):
         return f'{self.program_date}'
+
+
+class Production(models.Model):
+    class Meta:
+        verbose_name = 'Production'
+        verbose_name_plural = 'Productions'
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    production_date = models.DateField()
+    production_quantity = models.PositiveIntegerField()
+    objects = models.manager
+
+    def __str__(self):
+        return f'{self.product} - {self.production_date}'
+
+
+class ProductionReels(models.Model):
+    class Meta:
+        verbose_name = 'Production Reel'
+        verbose_name_plural = 'Production Reels'
+    production = models.ForeignKey(Production, on_delete=models.CASCADE)
+    reel = models.ForeignKey(PaperReels, on_delete=models.CASCADE)
+    objects = models.manager
+
+    def __str__(self):
+        return f'{self.production} - {self.reel}'
