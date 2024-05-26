@@ -241,6 +241,10 @@ def add_purchase_order_detail(request):
         # Add dispatches to purchase orders
         for po in purchase_orders:
             po.dispatches = dispatches_dict.get(po.id, [])
+        for po in purchase_orders:
+            total_dispatch_quantity = sum(dispatch.dispatch_quantity for dispatch in po.dispatches)
+            po.remaining_quantity = po.po_quantity - total_dispatch_quantity
+            po.max_remaining_quantity = po.po_quantity + (po.po_quantity * 5 / 100) - total_dispatch_quantity
         context = {
             'purchase_orders': purchase_orders,
         }

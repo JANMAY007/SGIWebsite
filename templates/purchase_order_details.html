@@ -66,27 +66,38 @@
                     <!-- Start: Card Warning -->
                     <div class="card shadow border-start-warning py-2">
                         <div class="card-header py-3">
-                            <h6 class="text-primary m-0 fw-bold">
-                                Dispatch
-                                <form method="POST"
-                                      action="{% url 'Corrugation:delete_purchase_order' purchase_order.pk %}"
-                                      id="close-po-form">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger float-end btn-icon-split">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h4 class="text-primary m-0 fw-bold">Dispatch</h4>
+                                    <h6>
+                                        Remaining Quantity: {{ purchase_order.remaining_quantity }}
+                                        <br>
+                                        Maximum Remaining Quantity: {{ purchase_order.max_remaining_quantity }}
+                                    </h6>
+                                </div>
+                                <div class="col-auto">
+                                    <form method="POST"
+                                          action="{% url 'Corrugation:delete_purchase_order' purchase_order.pk %}"
+                                          id="close-po-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-icon-split">
                                         <span class="text-white-50 icon">
                                             <i class="fas fa-trash"></i>
                                         </span>
-                                        <span class="text-white text">Close this PO</span>
-                                    </button>
-                                </form>
-                                <button type="button" class="float-end btn btn-primary btn-icon-split" data-bs-toggle="modal"
-                                        data-bs-target="#dispatchModal">
+                                            <span class="text-white text">Close this PO</span>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-primary btn-icon-split" data-bs-toggle="modal"
+                                            data-bs-target="#dispatchModal">
                                     <span class="text-white-50 icon">
-                                            <i class="fas fa-truck-loading"></i>
-                                        </span>
-                                    <span class="text-white text">Add Dispatch</span>
-                                </button>
-                            </h6>
+                                        <i class="fas fa-truck-loading"></i>
+                                    </span>
+                                        <span class="text-white text">Add Dispatch</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal fade" id="dispatchModal" tabindex="-1" aria-labelledby="dispatchModalLabel"
                              aria-hidden="true">
