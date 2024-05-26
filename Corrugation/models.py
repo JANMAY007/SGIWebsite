@@ -154,7 +154,7 @@ class Stock(models.Model):
         verbose_name = 'Stock'
         verbose_name_plural = 'Stocks'
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    stock_quantity = models.PositiveIntegerField()
+    stock_quantity = models.PositiveIntegerField(default=0)
     objects = models.manager
 
     def __str__(self):

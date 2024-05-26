@@ -241,6 +241,10 @@ def add_dispatch(request):
             dispatch_date=dispatch_date,
             dispatch_quantity=dispatch_quantity
         )
+        # remove dispatch quantity from stock of particular product
+        stock = Stock.objects.get(product=po.product_name)
+        stock.stock_quantity -= int(dispatch_quantity)
+        stock.save()
         return redirect('Corrugation:purchase_order')
     return redirect('Corrugation:purchase_order')
 
@@ -330,7 +334,9 @@ def production(request):
             production_quantity=production_quantity,
             production_date=timezone.now(),
         )
-
+        stock, create = Stock.objects.get_or_create(product=product_instance)
+        stock.stock_quantity += int(production_quantity)
+        stock.save()
         # Create new ProductionReels instances for each reel number
         for reel_number in reel_numbers:
             reel_instance = PaperReels.objects.get(reel_number=reel_number)
@@ -364,8 +370,15 @@ def production(request):
 def update_production_quantity(request):
     if request.method == 'POST':
         production_object = get_object_or_404(Production, pk=request.POST.get('pk'))
+        print(production_object.production_quantity)
+        print(production_object.product.product_name)
+        product = Product.objects.get(product_name=production_object.product.product_name)
+        stock, created = Stock.objects.get_or_create(product=product)
+        stock.stock_quantity -= int(production_object.production_quantity)
         production_object.production_quantity = request.POST.get('production_quantity')
         production_object.save()
+        stock.stock_quantity += int(production_object.production_quantity)
+        stock.save()
         return redirect('Corrugation:production')
     return redirect('Corrugation:production')
 
@@ -387,6 +400,11 @@ def add_reel_to_production(request):
 def delete_production(request):
     if request.method == 'POST':
         production_object = get_object_or_404(Production, pk=request.POST.get('pk'))
+        # delete reels that are used in production
+        used_reels = ProductionReels.objects.filter(production=production_object)
+        for reel in used_reels:
+            PaperReels.objects.get(reel_number=reel.reel.reel_number).delete()
+            reel.reel.delete()
         ProductionReels.objects.filter(production=production_object).delete()
         production_object.delete()
         return redirect('Corrugation:production')
