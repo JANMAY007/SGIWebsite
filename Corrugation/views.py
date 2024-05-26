@@ -1,7 +1,8 @@
 from calendar import month_abbr
 from datetime import datetime
+from django.http import JsonResponse
 from django.utils import timezone
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.db.models.functions import ExtractMonth
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import (PaperReels, Product, Partition, PurchaseOrder, Dispatch,
@@ -25,6 +26,31 @@ def index(request):
         'stocks': Stock.objects.all().values('product__product_name', 'stock_quantity'),
     }
     return render(request, 'index.html', context)
+
+
+def search_reels(request):
+    query = request.GET.get('q', '')
+    if query:
+        results = PaperReels.objects.filter(
+            Q(reel_number__icontains=query) |
+            Q(bf__icontains=query) |
+            Q(gsm__icontains=query) |
+            Q(size__icontains=query) |
+            Q(weight__icontains=query)
+        )
+        results_data = [
+            {
+                'reel_number': reel.reel_number,
+                'bf': reel.bf,
+                'gsm': reel.gsm,
+                'size': reel.size,
+                'weight': reel.weight,
+            }
+            for reel in results
+        ]
+    else:
+        results_data = []
+    return JsonResponse({'results': results_data})
 
 
 def paper_reels(request):
