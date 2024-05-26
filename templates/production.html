@@ -9,9 +9,9 @@
             <!-- Start: Split Button Success -->
             <a class="btn btn-success btn-icon-split" role="button" data-bs-toggle="modal"
                data-bs-target="#addProductionLineModal">
-            <span class="text-white-50 icon">
-                <i class="fas fa-check"></i>
-            </span>
+                <span class="text-white-50 icon">
+                    <i class="fas fa-check"></i>
+                </span>
                 <span class="text-white text">Add Production Line</span>
             </a>
             <!-- End: Split Button Success -->
@@ -25,98 +25,207 @@
                         <h5 class="modal-title" id="addProductionLineModalLabel">Add New Production Line</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <form>
+                    <form id="productionForm" method="post" action="{% url 'Corrugation:production' %}">
+                        <div class="modal-body">
+                            <!-- Include CSRF token for form submission -->
+                            {% csrf_token %}
                             <div class="mb-3">
                                 <label for="productSelect" class="form-label">Product</label>
-                                <select class="form-select" id="productSelect">
-                                    <option selected>Select a product</option>
-                                    <!-- Add your product options here -->
+                                <select class="form-select" id="productSelect" name="product">
+                                    <option value="" selected disabled>Select a product</option>
+                                    {% for product in products %}
+                                        <option value="{{ product.product_name }}">{{ product.product_name }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="reelSelect" class="form-label">Reel</label>
-                                <select class="form-select" id="reelSelect">
-                                    <option selected>Select a reel</option>
-                                    <!-- Add your reel options here -->
-                                </select>
+                                <label for="reelSelect" class="form-label">Reels</label>
+                                <div id="reelsContainer">
+                                    <label for="reels"></label>
+                                    <select class="form-select reel-select" id="reels" name="reels">
+                                        <option value="" selected disabled>Select a reel</option>
+                                        {% for reel in reels %}
+                                            <option value="{{ reel.reel_number }}">{{ reel.reel_number }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label for="productionQuantity" class="form-label">Production Quantity</label>
                                 <input type="number" class="form-control" id="productionQuantity"
-                                       placeholder="Enter production quantity">
+                                       name="production_quantity" placeholder="Enter production quantity">
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" id="saveChangesBtn">Save changes</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
 
-        <!-- Start: Dropdown Card -->
-        <div class="card shadow mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h6 class="text-primary fw-bold m-0">Parle-G 50gm</h6>
-                <!-- Start: Split Button Danger -->
-                <a class="btn btn-danger btn-icon-split" role="button">
-                                <span class="text-white-50 icon">
-                                    <i class="fas fa-trash"></i>
-                                </span>
-                    <span class="text-white text">Close Production</span>
-                </a>
-            </div>
-            <div class="card-body">
-                <!-- Start: Card Success -->
-                <div class="card shadow border-start-success py-2">
-                    <div class="card-body">
-                        <div class="row align-items-center no-gutters">
-                            <div class="col me-2">
-                                <div class="text-uppercase text-success fw-bold text-xs mb-1">
-                                    <span>Production Quantity</span>
+        {% for production in productions %}
+            <!-- Start: Dropdown Card -->
+            <div class="card shadow mb-4" data-production-id="{{ production.id }}">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="text-primary fw-bold m-0">{{ production.product_name }}</h6>
+                    <!-- Start: Split Button Danger -->
+                    <a class="btn btn-danger btn-icon-split close-production-btn" role="button"
+                       data-bs-toggle="modal"
+                       data-bs-target="#closeProductionModal"
+                       data-production-id="{{ production.id }}">
+                        <span class="text-white-50 icon">
+                            <i class="fas fa-trash"></i>
+                        </span>
+                        <span class="text-white text">Close Production</span>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <!-- Start: Card Success -->
+                    <div class="card shadow border-start-success py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center no-gutters">
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-success fw-bold text-xs mb-1">
+                                        <span>Production Quantity</span>
+                                    </div>
+                                    <div class="text-dark fw-bold h5 mb-0">
+                                        <span>{{ production.production_quantity }}</span></div>
                                 </div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>54321</span></div>
-                            </div>
-                            <div class="col">
-                                <!-- Start: Split Button Warning -->
-                                <a class="btn btn-warning btn-icon-split" role="button">
-                                    <span class="text-white-50 icon"><i class="fas fa-edit"></i></span>
-                                    <span class="text-white text">Edit Quantity</span>
-                                </a>
-                                <!-- End: Split Button Warning -->
+                                <div class="col">
+                                    <!-- Start: Split Button Warning -->
+                                    <a class="btn btn-warning btn-icon-split edit-quantity-btn" role="button"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#editQuantityModal" data-production-id="{{ production.id }}"
+                                       data-quantity="{{ production.production_quantity }}">
+                                        <span class="text-white-50 icon"><i class="fas fa-edit"></i></span>
+                                        <span class="text-white text">Edit Quantity</span>
+                                    </a>
+                                    <!-- End: Split Button Warning -->
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- End: Card Success -->
-                <!-- Start: Card Warning -->
-                <div class="card shadow border-start-warning py-2">
-                    <div class="card-body">
-                        <div class="row align-items-center no-gutters">
-                            <div class="col me-2">
-                                <div class="text-uppercase text-warning fw-bold text-xs mb-1">
-                                    <span>Reels Used</span>
+                    <!-- End: Card Success -->
+                    <!-- Start: Card Warning -->
+                    <div class="card shadow border-start-warning py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center no-gutters">
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-warning fw-bold text-xs mb-1">
+                                        <span>Reels Used</span>
+                                    </div>
+                                    {% for reel in production.reels %}
+                                        <div class="text-dark fw-bold h5 mb-0">
+                                            <span>{{ reel }}</span>
+                                        </div>
+                                    {% endfor %}
                                 </div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>18</span></div>
-                            </div>
-                            <div class="col">
-                                <!-- Start: Split Button Light -->
-                                <a class="btn btn-light btn-icon-split" role="button">
-                                                <span class="text-black-50 icon">
-                                                    <i class="fas fa-arrow-right"></i>
-                                                </span>
-                                    <span class="text-dark text">Add New Reel</span>
-                                </a>
-                                <!-- End: Split Button Light -->
+                                <div class="col">
+                                    <!-- Start: Split Button Light -->
+                                    <a class="btn btn-light btn-icon-split add-reel-btn" role="button"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#addReelModal" data-production-id="{{ production.id }}">
+                                        <span class="text-black-50 icon">
+                                            <i class="fas fa-arrow-right"></i>
+                                        </span>
+                                        <span class="text-dark text">Add New Reel</span>
+                                    </a>
+                                    <!-- End: Split Button Light -->
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <!-- End: Card Warning -->
                 </div>
-                <!-- End: Card Warning -->
             </div>
-        </div>
-        <!-- End: Dropdown Card -->
+            <!-- End: Dropdown Card -->
+            <!-- Modals for Edit Quantity and Add Reel -->
+            <div class="modal fade" id="editQuantityModal" tabindex="-1" aria-labelledby="editQuantityModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editQuantityModalLabel">Edit Production Quantity</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form id="editQuantityForm" method="POST"
+                              action="{% url 'Corrugation:update_production_quantity' %}">
+                            {% csrf_token %}
+                            <div class="modal-body">
+                                <input type="hidden" id="editProductionId" name="pk" value="{{ production.pk }}">
+                                <div class="mb-3">
+                                    <label for="editProductionQuantity" class="form-label">Production Quantity</label>
+                                    <input type="number" class="form-control" id="editProductionQuantity"
+                                           name="production_quantity" placeholder="Enter new production quantity">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="addReelModal" tabindex="-1" aria-labelledby="addReelModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addReelModalLabel">Add New Reel</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form id="addReelForm" method="post" action="{% url 'Corrugation:add_reel_to_production' %}">
+                            {% csrf_token %}
+                            <div class="modal-body">
+                                <input type="hidden" id="addReelProductionId" name="pk" value="{{ production.pk }}">
+                                <div class="mb-3">
+                                    <label for="newReelSelect" class="form-label">Reel</label>
+                                    <select class="form-select" id="newReelSelect" name="reel_number">
+                                        <option value="" selected disabled>Select a reel</option>
+                                        {% for reel in reels %}
+                                            <option value="{{ reel.reel_number }}">{{ reel.reel_number }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confirmation Modal for Closing Production -->
+            <div class="modal fade" id="closeProductionModal" tabindex="-1" aria-labelledby="closeProductionModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="closeProductionModalLabel">Close Production</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form method="post" action="{% url 'Corrugation:delete_production' %}">
+                            {% csrf_token %}
+                            <div class="modal-body">
+                                Are you sure you want to close this production?
+                            </div>
+                            <input type="hidden" name="pk" value="{{ production.pk }}">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-danger" id="confirmCloseProductionBtn">Close
+                                    Production
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}
