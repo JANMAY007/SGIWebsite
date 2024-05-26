@@ -147,3 +147,15 @@ class ProductionReels(models.Model):
 
     def __str__(self):
         return f'{self.production} - {self.reel}'
+
+
+class Stock(models.Model):
+    class Meta:
+        verbose_name = 'Stock'
+        verbose_name_plural = 'Stocks'
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    stock_quantity = models.PositiveIntegerField()
+    objects = models.manager
+
+    def __str__(self):
+        return f'{self.product} - {self.stock_quantity}'

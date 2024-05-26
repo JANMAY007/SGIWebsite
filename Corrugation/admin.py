@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import (PaperReels, Product, Partition, PurchaseOrder, Dispatch,
-                     Program, Production, ProductionReels)
+                     Program, Production, ProductionReels, Stock)
 
 
 class PartitionInline(admin.StackedInline):
@@ -31,3 +31,4 @@ admin.site.register(PaperReels)
 admin.site.register(PurchaseOrder)
 admin.site.register(Dispatch)
 admin.site.register(Program)
+admin.site.register(Stock)

@@ -4,37 +4,51 @@
 {% endblock %}
 {% block content %}
     <div class="row">
-        <div class="col-md-6 col-xl-3 mb-4">
-            <div class="card shadow border-start-warning py-2">
-                <div class="card-body">
-                    <div class="text-uppercase text-warning fw-bold text-xs mb-1"><span>Parle G 50 gm</span></div>
-                    <div class="text-dark fw-bold h5 mb-0"><span>2500</span></div>
+        {% for stock in stocks %}
+            <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-warning py-2">
+                    <div class="card-body">
+                        <div class="text-uppercase text-warning fw-bold text-xs mb-1">
+                            <span>{{ stock.product__product_name }}</span>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
+                            <span>{{ stock.stock_quantity }}</span>
+                        </div>
+                        <button type="button" class="btn btn-warning btn-sm mt-2" data-bs-toggle="modal"
+                                data-bs-target="#editModal">
+                            Edit Quantity
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6 col-xl-3 mb-4">
-            <div class="card shadow border-start-warning py-2">
-                <div class="card-body">
-                    <div class="text-uppercase text-warning fw-bold text-xs mb-1"><span>Parle G 50 gm</span></div>
-                    <div class="text-dark fw-bold h5 mb-0"><span>2500</span></div>
+            <!-- Modal -->
+            <div class="modal fade" id="editModal" tabindex="-1"
+                 aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel">Edit Quantity
+                                for {{ stock.product__product_name }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form method="POST" action="{% url 'Corrugation:index' %}">
+                            {% csrf_token %}
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <input type="hidden" name="product_name" value="{{ stock.product__product_name }}">
+                                    <label for="stockQuantity" class="form-label">Stock Quantity</label>
+                                    <input type="number" class="form-control" id="stockQuantity"
+                                           name="stock_quantity" value="{{ stock.stock_quantity }}" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-warning">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6 col-xl-3 mb-4">
-            <div class="card shadow border-start-warning py-2">
-                <div class="card-body">
-                    <div class="text-uppercase text-warning fw-bold text-xs mb-1"><span>Parle G 50 gm</span></div>
-                    <div class="text-dark fw-bold h5 mb-0"><span>2500</span></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-xl-3 mb-4">
-            <div class="card shadow border-start-warning py-2">
-                <div class="card-body">
-                    <div class="text-uppercase text-warning fw-bold text-xs mb-1"><span>Parle G 50 gm</span></div>
-                    <div class="text-dark fw-bold h5 mb-0"><span>2500</span></div>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 {% endblock %}

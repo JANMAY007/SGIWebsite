@@ -5,11 +5,26 @@ from django.db.models import Count
 from django.db.models.functions import ExtractMonth
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import (PaperReels, Product, Partition, PurchaseOrder, Dispatch,
-                     Program, Production, ProductionReels)
+                     Program, Production, ProductionReels, Stock)
 
 
 def index(request):
-    return render(request, 'index.html')
+    if request.method == 'POST':
+        product_name = request.POST.get('product_name')
+        stock_quantity = request.POST.get('stock_quantity')
+        try:
+            stock_quantity = int(stock_quantity)
+            product = Product.objects.get(product_name=product_name)
+            stock, created = Stock.objects.get_or_create(product=product)
+            stock.stock_quantity = stock_quantity
+            stock.save()
+        except (ValueError, TypeError):
+            pass
+        return redirect('Corrugation:index')
+    context = {
+        'stocks': Stock.objects.all().values('product__product_name', 'stock_quantity'),
+    }
+    return render(request, 'index.html', context)
 
 
 def paper_reels(request):
