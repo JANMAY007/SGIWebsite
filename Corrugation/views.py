@@ -370,8 +370,6 @@ def production(request):
 def update_production_quantity(request):
     if request.method == 'POST':
         production_object = get_object_or_404(Production, pk=request.POST.get('pk'))
-        print(production_object.production_quantity)
-        print(production_object.product.product_name)
         product = Product.objects.get(product_name=production_object.product.product_name)
         stock, created = Stock.objects.get_or_create(product=product)
         stock.stock_quantity -= int(production_object.production_quantity)
