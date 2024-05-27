@@ -142,28 +142,30 @@ def add_product(request):
             cs=cs
         )
 
-        partition_size = request.POST.getlist('partition_size')
-        partition_od = request.POST.getlist('partition_od')
-        deckle_cut = request.POST.getlist('deckle_cut')
-        length_cut = request.POST.getlist('length_cut')
-        partition_type = request.POST.getlist('partition_type')
-        ply_no = request.POST.getlist('ply_no')
-        partition_weight = request.POST.getlist('partition_weight')
-        partition_gsm = request.POST.getlist('partition_gsm')
-        partition_bf = request.POST.getlist('partition_bf')
+        partition_data = zip(
+            request.POST.getlist('partition_size'),
+            request.POST.getlist('partition_od'),
+            request.POST.getlist('deckle_cut'),
+            request.POST.getlist('length_cut'),
+            request.POST.getlist('partition_type'),
+            request.POST.getlist('ply_no'),
+            request.POST.getlist('partition_weight'),
+            request.POST.getlist('partition_gsm'),
+            request.POST.getlist('partition_bf')
+        )
 
-        for i in range(len(partition_size)):
+        for partition in partition_data:
             Partition.objects.create(
                 product_name=product,
-                partition_size=partition_size[i],
-                partition_od=partition_od[i],
-                deckle_cut=deckle_cut[i],
-                length_cut=length_cut[i],
-                partition_type=partition_type[i],
-                ply_no=ply_no[i],
-                partition_weight=partition_weight[i],
-                gsm=partition_gsm[i],
-                bf=partition_bf[i]
+                partition_size=partition[0],
+                partition_od=partition[1],
+                deckle_cut=partition[2],
+                length_cut=partition[3],
+                partition_type=partition[4],
+                ply_no=partition[5],
+                partition_weight=partition[6],
+                gsm=partition[7],
+                bf=partition[8]
             )
         return redirect('Corrugation:purchase_order')
     return redirect('Corrugation:purchase_order')
