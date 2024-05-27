@@ -22,21 +22,21 @@ class Product(models.Model):
         verbose_name = 'Product'
         verbose_name_plural = 'Products'
     product_name = models.CharField(max_length=100, unique=True)
-    box_no = models.CharField(max_length=8)
-    material_code = models.CharField(max_length=10)
-    size = models.CharField(max_length=10)  # change this
-    inner_length = models.PositiveSmallIntegerField()
-    inner_breadth = models.PositiveSmallIntegerField()
-    inner_depth = models.PositiveSmallIntegerField()
-    outer_length = models.PositiveSmallIntegerField()
-    outer_breadth = models.PositiveSmallIntegerField()
-    outer_depth = models.PositiveSmallIntegerField()
-    color = models.CharField(max_length=20)
-    weight = models.CharField(max_length=7)
-    ply = models.CharField(max_length=15)
-    gsm = models.PositiveSmallIntegerField()
-    bf = models.PositiveSmallIntegerField()
-    cs = models.PositiveSmallIntegerField()
+    box_no = models.CharField(max_length=8, blank=True)
+    material_code = models.CharField(max_length=10, blank=True)
+    size = models.CharField(max_length=10, blank=True)  # change this
+    inner_length = models.PositiveSmallIntegerField(blank=True)
+    inner_breadth = models.PositiveSmallIntegerField(blank=True)
+    inner_depth = models.PositiveSmallIntegerField(blank=True)
+    outer_length = models.PositiveSmallIntegerField(blank=True)
+    outer_breadth = models.PositiveSmallIntegerField(blank=True)
+    outer_depth = models.PositiveSmallIntegerField(blank=True)
+    color = models.CharField(max_length=20, blank=True)
+    weight = models.CharField(max_length=7, blank=True)
+    ply = models.CharField(max_length=15, blank=True)
+    gsm = models.CharField(max_length=20, blank=True)
+    bf = models.CharField(max_length=5, blank=True)
+    cs = models.CharField(max_length=5, blank=True)
     objects = models.manager
 
     def __str__(self):

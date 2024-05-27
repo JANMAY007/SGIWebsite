@@ -107,22 +107,22 @@ def delete_reel(request, pk):
 
 def add_product(request):
     if request.method == 'POST':
-        product_name = request.POST['product_name']
-        box_no = request.POST['box_no']
-        material_code = request.POST['material_code']
-        size = request.POST['size']
-        inner_length = request.POST['inner_length']
-        inner_breadth = request.POST['inner_breadth']
-        inner_depth = request.POST['inner_depth']
-        outer_length = request.POST['outer_length']
-        outer_breadth = request.POST['outer_breadth']
-        outer_depth = request.POST['outer_depth']
-        color = request.POST['color']
-        weight = request.POST['weight']
-        ply = request.POST['ply']
-        gsm = request.POST['gsm']
-        bf = request.POST['bf']
-        cs = request.POST['cs']
+        product_name = request.POST.get('product_name')
+        box_no = request.POST.get('box_no')
+        material_code = request.POST.get('material_code')
+        size = request.POST.get('size')
+        inner_length = request.POST.get('inner_length', None)
+        inner_breadth = request.POST.get('inner_breadth', None)
+        inner_depth = request.POST.get('inner_depth', None)
+        outer_length = request.POST.get('outer_length', None)
+        outer_breadth = request.POST.get('outer_breadth', None)
+        outer_depth = request.POST.get('outer_depth', None)
+        color = request.POST.get('color', '')
+        weight = request.POST.get('weight', None)
+        ply = request.POST.get('ply', None)
+        gsm = request.POST.get('gsm', None)
+        bf = request.POST.get('bf', None)
+        cs = request.POST.get('cs', None)
         product = Product.objects.create(
             product_name=product_name,
             box_no=box_no,
