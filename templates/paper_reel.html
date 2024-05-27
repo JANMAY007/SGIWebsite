@@ -6,7 +6,7 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="text-md-end dataTables_filter" id="dataTable_filter">
                 <label class="form-label">
                     <input type="search" id="search-input" class="form-control form-control-sm"
@@ -14,15 +14,21 @@
                 </label>
             </div>
         </div>
-    <div class="col-md-6">
+    <div class="col-md-5">
         <div class="text-md-start">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addReelModal">
                 Add Reel
             </button>
         </div>
     </div>
+    <div class="col-md-3">
+        <div class="text-md-start">
+            <span>Total Used Reels: {{ used_reels }}</span>
+            <br>
+            <span>Total Un-used Reels: {{ unused_reels }}</span>
+        </div>
     </div>
-
+    </div>
     <div>
         <h2>Search Results</h2>
         <ul id="results-list"></ul>

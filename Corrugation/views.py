@@ -80,6 +80,8 @@ def paper_reels(request):
     reels = PaperReels.objects.all()
     context = {
         'reels': reels,
+        'used_reels': PaperReels.objects.filter(used=True).count(),
+        'unused_reels': PaperReels.objects.filter(used=False).count(),
     }
     return render(request, 'paper_reel.html', context)
 
