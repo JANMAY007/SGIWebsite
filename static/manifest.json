@@ -3,15 +3,15 @@
   "name": "SGI",
   "icons": [
     {
-      "src": "/static/img/logo.png?h=7b3a05042dd79230d60eb276d4c089f7",
+      "src": "/static/logo/logo.png",
       "type": "image/png",
-      "sizes": "500x500",
+      "sizes": "436x437",
       "purpose": "any maskable"
     },
     {
-      "src": "/static/img/logo.png?h=7b3a05042dd79230d60eb276d4c089f7",
+      "src": "/static/logo/logo.png",
       "type": "image/png",
-      "sizes": "500x500",
+      "sizes": "436x437",
       "purpose": "any maskable"
     }
   ],
