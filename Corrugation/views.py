@@ -115,7 +115,6 @@ def add_product(request):
         outer_length = request.POST['outer_length']
         outer_breadth = request.POST['outer_breadth']
         outer_depth = request.POST['outer_depth']
-        box = request.POST['box']
         color = request.POST['color']
         weight = request.POST['weight']
         ply = request.POST['ply']
@@ -133,7 +132,6 @@ def add_product(request):
             outer_length=outer_length,
             outer_breadth=outer_breadth,
             outer_depth=outer_depth,
-            box=box,
             color=color,
             weight=weight,
             ply=ply,
@@ -167,8 +165,21 @@ def add_product(request):
                 gsm=partition[7],
                 bf=partition[8]
             )
-        return redirect('Corrugation:purchase_order')
-    return redirect('Corrugation:purchase_order')
+        return redirect('Corrugation:add_product')
+    context = {
+        'products': Product.objects.all().values('product_name', 'pk'),
+    }
+    return render(request, 'products.html', context)
+
+
+def products_detail(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    partitions = Partition.objects.filter(product_name=product)
+    context = {
+        'product': product,
+        'partitions': partitions
+    }
+    return render(request, 'product_detail.html', context)
 
 
 def purchase_order(request):
@@ -346,7 +357,8 @@ def daily_program(request):
             'outer_length': product.outer_length,
             'outer_breadth': product.outer_breadth,
             'outer_depth': product.outer_depth,
-            'box': product.box,
+            'gsm': product.gsm,
+            'bf': product.bf,
             'color': product.color,
             'weight': product.weight,
             'partitions': partitions_data,

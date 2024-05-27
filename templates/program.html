@@ -79,7 +79,7 @@
                     <div class="card-body">
                         <div class="row align-items-center no-gutters">
                             <div class="col me-2">
-                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Size</span></div>
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Size</span></div>
                                 <div class="text-dark fw-bold h5 mb-0">
                                     <span>{{ program.size }}</span>
                                     {% comment %}
@@ -91,30 +91,30 @@
                                 </div>
                             </div>
                             <div class="col me-2">
-                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Box No.</span></div>
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Code</span></div>
                                 <div class="text-dark fw-bold h5 mb-0"><span>{{ program.box_no }}</span></div>
                             </div>
                         </div>
                         <div class="row align-items-center no-gutters">
                             <div class="col me-2">
-                                <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>OD</span></div>
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>OD</span></div>
                                 <div class="text-dark fw-bold h5 mb-0">
                                     <span>{{ program.outer_length }} X {{ program.outer_breadth }} X {{ program.outer_depth }}</span>
                                 </div>
                             </div>
                             <div class="col me-2">
-                                <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>BOX</span></div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>{{ program.box }}</span></div>
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>GSM</span></div>
+                                <div class="text-dark fw-bold h5 mb-0"><span>{{ program.gsm }}/{{ program.bf }}</span></div>
                             </div>
                         </div>
                         <div class="row align-items-center no-gutters">
                             <div class="col me-2">
-                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span class="text-danger">Colour</span>
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span class="text-primary">Colour</span>
                                 </div>
                                 <div class="text-dark fw-bold h5 mb-0"><span>{{ program.color }}</span></div>
                             </div>
                             <div class="col me-2">
-                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span class="text-danger">Weight</span>
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span class="text-primary">Weight</span>
                                 </div>
                                 <div class="text-dark fw-bold h5 mb-0"><span>{{ program.weight }}</span></div>
                             </div>
@@ -139,7 +139,7 @@
                         <div class="card-body">
                             <div class="row align-items-center no-gutters">
                                 <div class="col me-2">
-                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Size</span>
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Size</span>
                                     </div>
                                     <div class="text-dark fw-bold h5 mb-0">
                                         <span>{{ partition.partition_size }}</span>
@@ -152,21 +152,21 @@
                                     </div>
                                 </div>
                                 <div class="col me-2">
-                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>OD</span></div>
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>OD</span></div>
                                     <div class="text-dark fw-bold h5 mb-0">
                                         <span>{{ partition.partition_od }}</span></div>
                                 </div>
                             </div>
                             <div class="row align-items-center no-gutters">
                                 <div class="col me-2">
-                                    <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>Cuts</span>
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Cuts</span>
                                     </div>
                                     <div class="text-dark fw-bold h5 mb-0">
                                         <span>D - {{ partition.deckle_cut }}, L - {{ partition.length_cut }}</span>
                                     </div>
                                 </div>
                                 <div class="col me-2">
-                                    <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>Type</span>
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Type</span>
                                     </div>
                                     <div class="text-dark fw-bold h5 mb-0">
                                         <span>{{ partition.partition_type }}</span></div>
@@ -174,14 +174,14 @@
                             </div>
                             <div class="row align-items-center no-gutters">
                                 <div class="col me-2">
-                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span
-                                            class="text-danger">Ply</span></div>
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span
+                                            class="text-primary">Ply</span></div>
                                     <div class="text-dark fw-bold h5 mb-0"><span>{{ partition.ply_no }}</span>
                                     </div>
                                 </div>
                                 <div class="col me-2">
-                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span
-                                            class="text-danger">Weight</span>
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span
+                                            class="text-primary">Weight</span>
                                     </div>
                                     <div class="text-dark fw-bold h5 mb-0">
                                         <span>{{ partition.partition_weight }}</span></div>

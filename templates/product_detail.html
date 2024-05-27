@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ product.product_name }}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <!-- Start: Product Details Card -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="text-primary m-0 fw-bold">{{ product.product_name }}<span
+                        class="float-end">Code - {{ product.box_no }}</span></h6>
+            </div>
+            <div class="card-body">
+                <!-- Start: Product Primary Details -->
+                <div class="card shadow border-start-primary py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col me-2">
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Material Code</span>
+                                </div>
+                                <div class="text-dark fw-bold h5 mb-0"><span>{{ product.material_code }}</span></div>
+                            </div>
+                            <div class="col me-2">
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Size</span></div>
+                                <div class="text-dark fw-bold h5 mb-0"><span>{{ product.size }}</span></div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center no-gutters">
+                            <div class="col me-2">
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1">
+                                    <span>ID</span></div>
+                                <div class="text-dark fw-bold h5 mb-0">
+                                    <span>{{ product.inner_length }} x {{ product.inner_breadth }} x {{ product.inner_depth }}</span>
+                                </div>
+                            </div>
+                            <div class="col me-2">
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1">
+                                    <span>OD</span></div>
+                                <div class="text-dark fw-bold h5 mb-0">
+                                    <span>{{ product.outer_length }} x {{ product.outer_breadth }} x {{ product.outer_depth }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center no-gutters">
+                            <div class="col me-2">
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Color</span></div>
+                                <div class="text-dark fw-bold h5 mb-0"><span>{{ product.color }}</span></div>
+                            </div>
+                            <div class="col me-2">
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Weight</span></div>
+                                <div class="text-dark fw-bold h5 mb-0"><span>{{ product.weight }}</span></div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center no-gutters">
+                            <div class="col me-2">
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Ply</span></div>
+                                <div class="text-dark fw-bold h5 mb-0"><span>{{ product.ply }}</span></div>
+                            </div>
+                            <div class="col me-2">
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>CS</span></div>
+                                <div class="text-dark fw-bold h5 mb-0"><span>{{ product.cs }}</span></div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center no-gutters">
+                            <div class="col me-2">
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>GSM</span></div>
+                                <div class="text-dark fw-bold h5 mb-0"><span>{{ product.gsm }}</span></div>
+                            </div>
+                            <div class="col me-2">
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>BF</span></div>
+                                <div class="text-dark fw-bold h5 mb-0"><span>{{ product.bf }}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End: Product Primary Details -->
+            </div>
+        </div><!-- End: Product Details Card -->
+        <hr>
+        <!-- Start: Partitions Details Card -->
+        {% for partition in partitions %}
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="text-primary m-0 fw-bold">Partition - {{ partition.partition_type }}</h6>
+                </div>
+                <div class="card-body">
+                    <div class="card shadow border-start-primary py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center no-gutters">
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1">
+                                        <span>Partition Size</span></div>
+                                    <div class="text-dark fw-bold h5 mb-0"><span>{{ partition.partition_size }}</span>
+                                    </div>
+                                </div>
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1">
+                                        <span>Partition OD</span></div>
+                                    <div class="text-dark fw-bold h5 mb-0"><span>{{ partition.partition_od }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center no-gutters">
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1">
+                                        <span>Deckle Cut</span></div>
+                                    <div class="text-dark fw-bold h5 mb-0"><span>{{ partition.deckle_cut }}</span></div>
+                                </div>
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1">
+                                        <span>Length Cut</span></div>
+                                    <div class="text-dark fw-bold h5 mb-0"><span>{{ partition.length_cut }}</span></div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center no-gutters">
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Ply No.</span>
+                                    </div>
+                                    <div class="text-dark fw-bold h5 mb-0">
+                                        <span>{{ partition.get_ply_no_display }}</span></div>
+                                </div>
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1">
+                                        <span>Partition Weight</span></div>
+                                    <div class="text-dark fw-bold h5 mb-0"><span>{{ partition.partition_weight }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center no-gutters">
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>GSM</span></div>
+                                    <div class="text-dark fw-bold h5 mb-0"><span>{{ partition.gsm }}</span></div>
+                                </div>
+                                <div class="col me-2">
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>BF</span></div>
+                                    <div class="text-dark fw-bold h5 mb-0"><span>{{ partition.bf }}</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End: Partitions Details Card -->
+        {% endfor %}
+    </div>
+{% endblock %}

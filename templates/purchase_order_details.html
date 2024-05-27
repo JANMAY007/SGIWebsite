@@ -19,42 +19,42 @@
                         <div class="card-body">
                             <div class="row align-items-center no-gutters">
                                 <div class="col me-2">
-                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1">
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1">
                                         <span>Material Code</span>
                                     </div>
                                     <div class="text-dark fw-bold h5 mb-0"><span>4013995</span></div>
                                 </div>
                                 <div class="col me-2">
-                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Box No.</span>
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Box Code</span>
                                     </div>
                                     <div class="text-dark fw-bold h5 mb-0"><span>BH-177</span></div>
                                 </div>
                             </div>
                             <div class="row align-items-center no-gutters">
                                 <div class="col me-2">
-                                    <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>PO Number</span>
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>PO Number</span>
                                     </div>
                                     <div class="text-dark fw-bold h5 mb-0"><span>{{ purchase_order.po_number }}</span>
                                     </div>
                                 </div>
                                 <div class="col me-2">
-                                    <div class="text-uppercase text-success fw-bold text-xs mb-1"><span>Rate</span>
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Rate</span>
                                     </div>
                                     <div class="text-dark fw-bold h5 mb-0"><span>{{ purchase_order.rate }}</span></div>
                                 </div>
                             </div>
                             <div class="row align-items-center no-gutters">
                                 <div class="col me-2">
-                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span
-                                            class="text-danger">PO Quantity (given)</span>
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span
+                                            class="text-primary">PO Quantity (given)</span>
                                     </div>
                                     <div class="text-dark fw-bold h5 mb-0">
                                         <span>{{ purchase_order.po_quantity }}</span>
                                     </div>
                                 </div>
                                 <div class="col me-2">
-                                    <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span
-                                            class="text-danger">po quantity (allowed +5%)</span>
+                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span
+                                            class="text-primary">po quantity (allowed +5%)</span>
                                     </div>
                                     <div class="text-dark fw-bold h5 mb-0">
                                         <span>{{ purchase_order.po_quantity|add_percent:5|floatformat:2 }}</span>

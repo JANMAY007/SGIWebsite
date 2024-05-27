@@ -30,7 +30,6 @@ class Product(models.Model):
     outer_length = models.PositiveSmallIntegerField()
     outer_breadth = models.PositiveSmallIntegerField()
     outer_depth = models.PositiveSmallIntegerField()
-    box = models.CharField(max_length=20)  # check this
     color = models.CharField(max_length=20)
     weight = models.CharField(max_length=7)
     ply = models.CharField(max_length=15)
@@ -40,7 +39,7 @@ class Product(models.Model):
     objects = models.manager
 
     def __str__(self):
-        return f'{self.product_name} - {self.box_no}'
+        return f'{self.product_name}'
 
 
 class Partition(models.Model):

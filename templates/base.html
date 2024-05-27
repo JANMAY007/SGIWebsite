@@ -43,9 +43,6 @@
                 class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
                 href="{% url 'Corrugation:index' %}">
             <div class="sidebar-brand-icon rotate-n-15">
-                {% comment %}
-                	<i class="fas fa-box-open"></i>
-                {% endcomment %}
                 <img src="{% static 'logo/logo.png' %}" alt="logo" style="max-width: 35px">
             </div>
             <div class="sidebar-brand-text mx-3"><span>SP</span></div>
@@ -62,6 +59,12 @@
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'Corrugation:daily_program' %}"><i
                         class="far fa-envelope"></i><span>Program</span></a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'Corrugation:add_product' %}" class="nav-link">
+                        <i class="fas fa-box-open"></i>
+                        <span>Products</span>
+                    </a>
                 </li>
             </ul>
             <div class="text-center d-none d-md-inline">
