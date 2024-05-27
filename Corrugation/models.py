@@ -33,6 +33,10 @@ class Product(models.Model):
     box = models.CharField(max_length=20)  # check this
     color = models.CharField(max_length=20)
     weight = models.CharField(max_length=7)
+    ply = models.CharField(max_length=15)
+    gsm = models.PositiveSmallIntegerField()
+    bf = models.PositiveSmallIntegerField()
+    cs = models.PositiveSmallIntegerField()
     objects = models.manager
 
     def __str__(self):
@@ -59,6 +63,8 @@ class Partition(models.Model):
     )
     ply_no = models.CharField(max_length=1, choices=ply_no_choices)
     partition_weight = models.CharField(max_length=7)
+    gsm = models.PositiveSmallIntegerField()
+    bf = models.PositiveSmallIntegerField()
     object = models.manager
 
     def __str__(self):

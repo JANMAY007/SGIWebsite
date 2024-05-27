@@ -118,7 +118,10 @@ def add_product(request):
         box = request.POST['box']
         color = request.POST['color']
         weight = request.POST['weight']
-
+        ply = request.POST['ply']
+        gsm = request.POST['gsm']
+        bf = request.POST['bf']
+        cs = request.POST['cs']
         product = Product.objects.create(
             product_name=product_name,
             box_no=box_no,
@@ -132,7 +135,11 @@ def add_product(request):
             outer_depth=outer_depth,
             box=box,
             color=color,
-            weight=weight
+            weight=weight,
+            ply=ply,
+            gsm=gsm,
+            bf=bf,
+            cs=cs
         )
 
         partition_size = request.POST.getlist('partition_size')
@@ -142,6 +149,8 @@ def add_product(request):
         partition_type = request.POST.getlist('partition_type')
         ply_no = request.POST.getlist('ply_no')
         partition_weight = request.POST.getlist('partition_weight')
+        partition_gsm = request.POST.getlist('partition_gsm')
+        partition_bf = request.POST.getlist('partition_bf')
 
         for i in range(len(partition_size)):
             Partition.objects.create(
@@ -152,7 +161,9 @@ def add_product(request):
                 length_cut=length_cut[i],
                 partition_type=partition_type[i],
                 ply_no=ply_no[i],
-                partition_weight=partition_weight[i]
+                partition_weight=partition_weight[i],
+                gsm=partition_gsm[i],
+                bf=partition_bf[i]
             )
         return redirect('Corrugation:purchase_order')
     return redirect('Corrugation:purchase_order')
