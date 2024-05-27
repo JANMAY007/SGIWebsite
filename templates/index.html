@@ -8,13 +8,13 @@
             <div class="col-md-6 col-xl-3 mb-4">
                 <div class="card shadow border-start-warning py-2">
                     <div class="card-body">
-                        <div class="text-uppercase text-warning fw-bold text-xs mb-1">
+                        <div class="text-uppercase text-primary fw-bold text-sm mb-1">
                             <span>{{ stock.product__product_name }}</span>
                         </div>
                         <div class="text-dark fw-bold h5 mb-0">
                             <span>{{ stock.stock_quantity }}</span>
                         </div>
-                        <button type="button" class="btn btn-warning btn-sm mt-2" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-outline-primary btn-sm mt-2" data-bs-toggle="modal"
                                 data-bs-target="#editModal{{ forloop.counter }}">
                             Edit Quantity
                         </button>
