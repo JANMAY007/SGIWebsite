@@ -10,6 +10,7 @@ class PaperReels(models.Model):
     gsm = models.PositiveSmallIntegerField(default=120)
     size = models.PositiveSmallIntegerField(default=41)
     weight = models.PositiveSmallIntegerField(default=545)
+    used = models.BooleanField(default=False)
     object = models.manager
 
     def __str__(self):
@@ -136,6 +137,7 @@ class Production(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     production_date = models.DateField()
     production_quantity = models.PositiveIntegerField()
+    active = models.BooleanField(default=True)
     objects = models.manager
 
     def __str__(self):

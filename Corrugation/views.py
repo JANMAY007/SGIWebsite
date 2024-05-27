@@ -98,7 +98,8 @@ def update_reel(request, pk):
 def delete_reel(request, pk):
     reel = get_object_or_404(PaperReels, pk=pk)
     if request.method == 'POST':
-        reel.delete()
+        reel.used = True
+        reel.save()
         return redirect('Corrugation:paper_reels')
     return redirect('Corrugation:paper_reels')
 
@@ -379,7 +380,7 @@ def production(request):
         # Extract data from POST request
         data = request.POST
         product_name = data.get('product')
-        reel_numbers = data.getlist('reel')  # getlist to handle multiple reels
+        reel_numbers = data.getlist('reels')  # getlist to handle multiple reels
         production_quantity = data.get('production_quantity')
 
         # Create a new Production instance
@@ -401,7 +402,7 @@ def production(request):
             )
         return redirect('Corrugation:production')
 
-    production_objects = Production.objects.all()
+    production_objects = Production.objects.filter(active=True)
     production_data = []
     for production_object in production_objects:
         production_reels = ProductionReels.objects.filter(production=production_object)
@@ -456,9 +457,9 @@ def delete_production(request):
         # delete reels that are used in production
         used_reels = ProductionReels.objects.filter(production=production_object)
         for reel in used_reels:
-            PaperReels.objects.get(reel_number=reel.reel.reel_number).delete()
-            reel.reel.delete()
+            PaperReels.objects.get(reel_number=reel.reel.reel_number).used = True
         ProductionReels.objects.filter(production=production_object).delete()
-        production_object.delete()
+        production_object.active = False
+        production_object.save()
         return redirect('Corrugation:production')
     return redirect('Corrugation:production')
