@@ -37,7 +37,8 @@ def search_reels(request):
             Q(bf__icontains=query) |
             Q(gsm__icontains=query) |
             Q(size__icontains=query) |
-            Q(weight__icontains=query)
+            Q(weight__icontains=query),
+            used=False
         )
         results_data = [
             {
