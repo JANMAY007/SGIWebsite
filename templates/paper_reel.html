@@ -98,7 +98,9 @@
             </thead>
             <tbody>
             {% for reel in reels %}
-                <tr>
+                <tr {% if reel.used %}
+                	class="table-danger"
+                {% endif %} >
                     <td>{{ forloop.counter }}</td>
                     <td>{{ reel.reel_number }}</td>
                     <td>{{ reel.bf }}</td>
@@ -112,7 +114,7 @@
                         </button>
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                 data-bs-target="#deleteReelModal{{ reel.id }}">
-                            Delete
+                            Used
                         </button>
                     </td>
                 </tr>
@@ -175,13 +177,13 @@
                                         aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <p>Are you sure you want to delete the reel
-                                    <strong>{{ reel.reel_number }}</strong>?</p>
+                                <p>Are you sure you want to make the reel
+                                    <strong>{{ reel.reel_number }}</strong> used?</p>
                             </div>
                             <div class="modal-footer">
                                 <form method="post" action="{% url 'Corrugation:delete_reel' reel.id %}">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                    <button type="submit" class="btn btn-danger">Make Used</button>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                         Cancel
                                     </button>
