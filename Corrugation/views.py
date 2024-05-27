@@ -23,6 +23,7 @@ def index(request):
             pass
         return redirect('Corrugation:index')
     context = {
+        'products': Product.objects.all().values('product_name'),
         'stocks': Stock.objects.all().values('product__product_name', 'stock_quantity'),
     }
     return render(request, 'index.html', context)
