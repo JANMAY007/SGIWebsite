@@ -16,8 +16,8 @@
         </div>
         <div class="row">
             {% for product in products %}
-                <a href="{% url 'Corrugation:products_detail' product.pk %}" class="link-light">
-                    <div class="col-md-6 col-xl-2 mb-2">
+                <div class="col-md-6 col-xl-2 mb-2">
+                    <a href="{% url 'Corrugation:products_detail' product.pk %}" class="link-light">
                         <div class="card shadow border-start-warning py-2">
                             <div class="card-body">
                                 <div class="text-uppercase text-dark fw-bold text-xs mb-1">
@@ -25,8 +25,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
             {% endfor %}
         </div>
         <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
