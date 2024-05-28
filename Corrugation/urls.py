@@ -28,5 +28,5 @@ urlpatterns = [
     path('delete-production/', delete_production, name='delete_production'),
     path('login/', login_view, name='login'),
     # path('register/', register_view, name='register'),
-    # path('logout/', logout_view, name='logout'),
+    path('logout/', logout_view, name='logout'),
 ]

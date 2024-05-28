@@ -10,6 +10,7 @@ from .models import (PaperReels, Product, Partition, PurchaseOrder, Dispatch,
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
 def login_view(request):
@@ -52,9 +53,10 @@ def register_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('Corrugation:login')
 
 
+@login_required
 def index(request):
     if request.method == 'POST':
         product_name = request.POST.get('product_name')
@@ -75,6 +77,7 @@ def index(request):
     return render(request, 'index.html', context)
 
 
+@login_required
 def search_reels(request):
     query = request.GET.get('q', '')
     if query:
@@ -101,6 +104,7 @@ def search_reels(request):
     return JsonResponse({'results': results_data})
 
 
+@login_required
 def paper_reels(request):
     if request.method == 'POST':
         reel_number = request.POST.get('reel_number')
@@ -132,6 +136,7 @@ def paper_reels(request):
     return render(request, 'paper_reel.html', context)
 
 
+@login_required
 def update_reel(request, pk):
     reel = get_object_or_404(PaperReels, pk=pk)
     if request.method == 'POST':
@@ -145,6 +150,7 @@ def update_reel(request, pk):
     return redirect('Corrugation:paper_reels')
 
 
+@login_required
 def delete_reel(request, pk):
     reel = get_object_or_404(PaperReels, pk=pk)
     if request.method == 'POST':
@@ -154,6 +160,7 @@ def delete_reel(request, pk):
     return redirect('Corrugation:paper_reels')
 
 
+@login_required
 def add_product(request):
     if request.method == 'POST':
         product_name = request.POST.get('product_name')
@@ -223,6 +230,7 @@ def add_product(request):
     return render(request, 'products.html', context)
 
 
+@login_required
 def products_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
     partitions = Partition.objects.filter(product_name=product)
@@ -233,6 +241,7 @@ def products_detail(request, pk):
     return render(request, 'product_detail.html', context)
 
 
+@login_required
 def purchase_order(request):
     # Get all purchase orders month-wise for each po_given_by
     months_with_counts = PurchaseOrder.objects.filter(active=True).annotate(
@@ -252,6 +261,7 @@ def purchase_order(request):
     return render(request, 'purchase_order.html', context)
 
 
+@login_required
 def add_purchase_order_detailed(request):
     if request.method == 'POST':
         product_id = request.POST['product_name']
@@ -274,6 +284,7 @@ def add_purchase_order_detailed(request):
         return redirect('Corrugation:purchase_order')
 
 
+@login_required
 def add_purchase_order_detail(request):
     if request.method == 'POST':
         month_word = request.POST['month']
@@ -326,6 +337,7 @@ def add_purchase_order_detail(request):
         return render(request, 'purchase_order_details.html', context)
 
 
+@login_required
 def delete_purchase_order(request, pk):
     if request.method == 'POST':
         po = get_object_or_404(PurchaseOrder, pk=pk)
@@ -334,6 +346,7 @@ def delete_purchase_order(request, pk):
         return redirect('Corrugation:purchase_order')
 
 
+@login_required
 def add_dispatch(request):
     if request.method == 'POST':
         pk = request.POST.get('pk')
@@ -354,6 +367,7 @@ def add_dispatch(request):
     return redirect('Corrugation:purchase_order')
 
 
+@login_required
 def daily_program(request):
     if request.method == 'POST':
         # Extract data from POST request
@@ -425,6 +439,7 @@ def daily_program(request):
     return render(request, 'program.html', context)
 
 
+@login_required
 def production(request):
     if request.method == 'POST':
         # Extract data from POST request
@@ -473,6 +488,7 @@ def production(request):
     return render(request, 'production.html', context)
 
 
+@login_required
 def update_production_quantity(request):
     if request.method == 'POST':
         production_object = get_object_or_404(Production, pk=request.POST.get('pk'))
@@ -487,6 +503,7 @@ def update_production_quantity(request):
     return redirect('Corrugation:production')
 
 
+@login_required
 def add_reel_to_production(request):
     if request.method == 'POST':
         production_object = get_object_or_404(Production, pk=request.POST.get('pk'))
@@ -501,6 +518,7 @@ def add_reel_to_production(request):
     return redirect('Corrugation:production')
 
 
+@login_required
 def delete_production(request):
     if request.method == 'POST':
         production_object = get_object_or_404(Production, pk=request.POST.get('pk'))
