@@ -42,9 +42,9 @@ def register_view(request):
             messages.error(request, 'Email is already taken')
             return render(request, 'register.html')
 
-        user = User.objects.create_user(username=first_name + last_name, first_name=first_name, last_name=last_name, email=email, password=password)
+        user = User.objects.create_user(username=first_name + last_name, first_name=first_name, last_name=last_name,
+                                        email=email, password=password)
         user.save()
-        print(user)
         login(request, user)
         return redirect('Corrugation:index')
     return render(request, 'register.html')
