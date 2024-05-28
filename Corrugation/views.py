@@ -7,6 +7,52 @@ from django.db.models.functions import ExtractMonth
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import (PaperReels, Product, Partition, PurchaseOrder, Dispatch,
                      Program, Production, ProductionReels, Stock)
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib import messages
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('Corrugation:index')
+        else:
+            messages.error(request, 'Invalid email or password')
+    return render(request, 'login.html')
+
+
+def register_view(request):
+    if request.method == 'POST':
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+        password = request.POST['password']
+        password_repeat = request.POST['password_repeat']
+
+        if password != password_repeat:
+            messages.error(request, 'Passwords do not match')
+            return render(request, 'register.html')
+
+        if User.objects.filter(username=email).exists():
+            messages.error(request, 'Email is already taken')
+            return render(request, 'register.html')
+
+        user = User.objects.create_user(username=email, email=email, password=password)
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+        login(request, user)
+        return redirect('Corrugation:index')
+    return render(request, 'register.html')
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
 
 
 def index(request):
