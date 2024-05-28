@@ -38,14 +38,13 @@ def register_view(request):
             messages.error(request, 'Passwords do not match')
             return render(request, 'register.html')
 
-        if User.objects.filter(username=email).exists():
+        if User.objects.filter(email=email).exists():
             messages.error(request, 'Email is already taken')
             return render(request, 'register.html')
 
-        user = User.objects.create_user(username=email, email=email, password=password)
-        user.first_name = first_name
-        user.last_name = last_name
+        user = User.objects.create_user(username=first_name + last_name, first_name=first_name, last_name=last_name, email=email, password=password)
         user.save()
+        print(user)
         login(request, user)
         return redirect('Corrugation:index')
     return render(request, 'register.html')

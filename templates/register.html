@@ -22,6 +22,7 @@
                                 <h4 class="text-dark mb-4">Create an Account!</h4>
                             </div>
                             <form class="user" method="post" action="{% url 'Corrugation:register' %}">
+                                {% csrf_token %}
                                 <div class="row mb-3">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <label for="exampleFirstName"></label>

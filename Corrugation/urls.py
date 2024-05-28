@@ -27,6 +27,6 @@ urlpatterns = [
     path('add-reel-to-production/', add_reel_to_production, name='add_reel_to_production'),
     path('delete-production/', delete_production, name='delete_production'),
     path('login/', login_view, name='login'),
-    # path('register/', register_view, name='register'),
+    path('register/', register_view, name='register'),
     path('logout/', logout_view, name='logout'),
 ]
