@@ -21,16 +21,14 @@
                           class="card shadow border-start-warning py-2">
                         {% csrf_token %}
                         <input type="hidden" name="po_given_by" value="{{ purchase_order.po_given_by }}">
-                        <input type="hidden" name="month" value="{{ purchase_order.month }}">
                         <div class="card-body">
                             <div class="text-uppercase text-dark fw-bold mb-1">
                                 {{ purchase_order.po_given_by }}
                             </div>
                             <div class="text-dark fw-bold text-sm mb-0">
-                    <span class="text-light-emphasis">
-                        {{ purchase_order.product_name__product_name }} &nbsp; -- &nbsp;
-                        {{ purchase_order.month }}
-                    </span>
+                                <span class="text-light-emphasis">
+                                    {{ purchase_order.pk }}
+                                </span>
                             </div>
                             <button type="submit" class="btn btn-outline-primary">View Details</button>
                         </div>

@@ -1,5 +1,7 @@
 from calendar import month_abbr
 from datetime import datetime
+
+import django.db.utils
 from django.http import JsonResponse
 from django.utils import timezone
 from django.db.models import Count, Q
@@ -250,7 +252,6 @@ def update_products(request, pk):
         product.bf = request.POST.get('bf', None)
         product.cs = request.POST.get('cs', None)
         product.save()
-        print(request.POST)
         # Handle partitions
         partition_data = zip(
             request.POST.getlist('partition_size'),
@@ -263,7 +264,6 @@ def update_products(request, pk):
             request.POST.getlist('partition_gsm'),
             request.POST.getlist('partition_bf')
         )
-        print(partition_data)
         for partition in partition_data:
             Partition.objects.create(
                 product_name=product,
@@ -304,18 +304,12 @@ def products_detail(request, pk):
 
 @login_required
 def purchase_order(request):
-    # Get all purchase orders month-wise for each po_given_by
-    months_with_counts = PurchaseOrder.objects.filter(active=True).annotate(
-        month=ExtractMonth('po_date')
-    ).values('month', 'po_given_by', 'product_name__product_name').annotate(
-        po_count=Count('id')
-    ).order_by('month', 'po_given_by')
-
-    for item in months_with_counts:
-        item['month'] = month_abbr[item['month']]
+    po_active_count_by_given_by = PurchaseOrder.objects.filter(active=True) \
+        .values('po_given_by', 'pk') \
+        .annotate(po_active_count=Count('pk'))
 
     context = {
-        'purchase_order_list': months_with_counts,
+        'purchase_order_list': po_active_count_by_given_by,
         'products': Product.objects.all(),
         'po_given_by_choices': PurchaseOrder.po_given_by_choices,
     }
@@ -348,35 +342,15 @@ def add_purchase_order_detailed(request):
 @login_required
 def add_purchase_order_detail(request):
     if request.method == 'POST':
-        month_word = request.POST['month']
         po_given_by = request.POST['po_given_by']
-
-        # Convert month_word to a numeric month
-        month_dict = {
-            'Jan': 1,
-            'Feb': 2,
-            'Mar': 3,
-            'Apr': 4,
-            'May': 5,
-            'Jun': 6,
-            'Jul': 7,
-            'Aug': 8,
-            'Sep': 9,
-            'Oct': 10,
-            'Nov': 11,
-            'Dec': 12,
-        }
-        month_numeric = month_dict.get(month_word)
-
         # Get purchase orders for the given month and po_given_by
         purchase_orders = PurchaseOrder.objects.filter(
-            po_date__month=month_numeric,
             po_given_by=po_given_by,
             active=True
         ).select_related('product_name')
 
         # Get dispatches for the selected purchase orders
-        purchase_order_ids = purchase_orders.values_list('id', flat=True)
+        purchase_order_ids = purchase_orders.values_list('pk', flat=True)
         dispatches = Dispatch.objects.filter(po_id__in=purchase_order_ids).select_related('po')
         # Group dispatches by purchase order
         dispatches_dict = {}
@@ -420,10 +394,12 @@ def add_dispatch(request):
             dispatch_date=dispatch_date,
             dispatch_quantity=dispatch_quantity
         )
-        # remove dispatch quantity from stock of particular product
-        stock = Stock.objects.get(product=po.product_name)
-        stock.stock_quantity -= int(dispatch_quantity)
-        stock.save()
+        try:
+            stock = Stock.objects.get(product=po.product_name)
+            stock.stock_quantity -= int(dispatch_quantity)
+            stock.save()
+        except django.db.utils.IntegrityError:
+            pass
         return redirect('Corrugation:purchase_order')
     return redirect('Corrugation:purchase_order')
 

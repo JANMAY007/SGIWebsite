@@ -6,6 +6,7 @@
 
 {% block content %}
     <div class="container-fluid">
+        <label for="searchInput"></label><input type="text" id="searchInput" placeholder="Search by Product Name" class="form-control mb-3">
         {% for purchase_order in purchase_orders %}
             <!-- Start: Basic Card -->
             <div class="card shadow mb-4">
@@ -153,4 +154,31 @@
             </div><!-- End: Basic Card -->
         {% endfor %}
     </div>
+    <script>
+        // Get the input field and declare a variable to store search text
+        const searchInput = document.getElementById('searchInput');
+        let search_text = '';
+
+        // Add an event listener to capture input in the search bar
+        searchInput.addEventListener('input', function (event) {
+            // Update the search_text variable with the input value
+            search_text = event.target.value.trim().toLowerCase();
+
+            // Get all cards
+            const cards = document.querySelectorAll('.card');
+
+            // Loop through each card and check if product name contains search text
+            cards.forEach(card => {
+                // Get the product name from card
+                const productName = card.querySelector('.card-header h6').textContent.toLowerCase();
+
+                // If product name contains search text, show the card, otherwise hide it
+                if (productName.includes(search_text)) {
+                    card.classList.remove('d-none');
+                } else {
+                    card.classList.add('d-none');
+                }
+            });
+        });
+    </script>
 {% endblock %}
