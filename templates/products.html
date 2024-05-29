@@ -29,12 +29,13 @@
         </div>
         <div class="row" id="productContainer">
             {% for product in products %}
-                <div class="col-md-6 col-xl-2 mb-2 product-card">
-                    <a href="{% url 'Corrugation:products_detail' product.pk %}" class="link-light">
-                        <div class="card shadow border-start-warning py-2">
-                            <div class="card-body">
+                <div class="col-md-6 col-xl-2 mb-2">
+                    <a href="{% url 'Corrugation:products_detail' product.pk %}"
+                       class="link-light text-decoration-none">
+                        <div class="card shadow border-start-warning py-2 h-100">
+                            <div class="card-body d-flex flex-column justify-content-between">
                                 <div class="text-uppercase text-dark fw-bold text-xs mb-1">
-                                    <h6>{{ product.product_name }}</h6>
+                                    <h6 class="mb-0">{{ product.product_name }}</h6>
                                 </div>
                             </div>
                         </div>

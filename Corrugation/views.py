@@ -224,14 +224,76 @@ def add_product(request):
             )
         return redirect('Corrugation:add_product')
     context = {
-        'products': Product.objects.all().values('product_name', 'pk'),
+        'products': Product.objects.filter(archive=False).values('product_name', 'pk'),
     }
     return render(request, 'products.html', context)
 
 
 @login_required
+def update_products(request, pk):
+    if request.method == 'POST':
+        product = get_object_or_404(Product, pk=pk)
+        product.product_name = request.POST.get('product_name')
+        product.box_no = request.POST.get('box_no')
+        product.material_code = request.POST.get('material_code')
+        product.size = request.POST.get('size')
+        product.inner_length = request.POST.get('inner_length', None)
+        product.inner_breadth = request.POST.get('inner_breadth', None)
+        product.inner_depth = request.POST.get('inner_depth', None)
+        product.outer_length = request.POST.get('outer_length', None)
+        product.outer_breadth = request.POST.get('outer_breadth', None)
+        product.outer_depth = request.POST.get('outer_depth', None)
+        product.color = request.POST.get('color', '')
+        product.weight = request.POST.get('weight', None)
+        product.ply = request.POST.get('ply', None)
+        product.gsm = request.POST.get('gsm', None)
+        product.bf = request.POST.get('bf', None)
+        product.cs = request.POST.get('cs', None)
+        product.save()
+        print(request.POST)
+        # Handle partitions
+        partition_data = zip(
+            request.POST.getlist('partition_size'),
+            request.POST.getlist('partition_od'),
+            request.POST.getlist('deckle_cut'),
+            request.POST.getlist('length_cut'),
+            request.POST.getlist('partition_type'),
+            request.POST.getlist('ply_no'),
+            request.POST.getlist('partition_weight'),
+            request.POST.getlist('partition_gsm'),
+            request.POST.getlist('partition_bf')
+        )
+        print(partition_data)
+        for partition in partition_data:
+            Partition.objects.create(
+                product_name=product,
+                partition_size=partition[0],
+                partition_od=partition[1],
+                deckle_cut=partition[2],
+                length_cut=partition[3],
+                partition_type=partition[4],
+                ply_no=partition[5],
+                partition_weight=partition[6],
+                gsm=partition[7],
+                bf=partition[8]
+            )
+        return redirect('Corrugation:products_detail', pk=pk)
+    return redirect('Corrugation:add_product')
+
+
+@login_required
+def delete_products(request, pk):
+    if request.method == 'POST':
+        product = get_object_or_404(Product, pk=pk)
+        product.archive = True
+        product.save()
+        return redirect('Corrugation:add_product')
+    return redirect('Corrugation:add_product')
+
+
+@login_required
 def products_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
+    product = get_object_or_404(Product, pk=pk, archive=False)
     partitions = Partition.objects.filter(product_name=product)
     context = {
         'product': product,

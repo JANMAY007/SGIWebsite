@@ -37,6 +37,7 @@ class Product(models.Model):
     gsm = models.CharField(max_length=20, blank=True)
     bf = models.CharField(max_length=5, blank=True)
     cs = models.CharField(max_length=5, blank=True)
+    archive = models.BooleanField(default=False)
     objects = models.manager
 
     def __str__(self):

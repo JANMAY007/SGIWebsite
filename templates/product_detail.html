@@ -73,6 +73,12 @@
                                 <div class="text-dark fw-bold h5 mb-0"><span>{{ product.bf }}</span></div>
                             </div>
                         </div>
+                        <div class="mt-3">
+                            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateProductModal">
+                                Update Product
+                            </button>
+                            <button class="btn btn-danger" onclick="openDeleteModal()">Delete Product</button>
+                        </div>
                     </div>
                 </div><!-- End: Product Primary Details -->
             </div>
@@ -142,5 +148,276 @@
                 </div>
             </div><!-- End: Partitions Details Card -->
         {% endfor %}
+
+        <!-- Delete Product Modal -->
+        <div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteProductModalLabel">Delete Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this product?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <form id="deleteProductForm" method="post"
+                              action="{% url 'Corrugation:delete_products' product.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Update Product Modal -->
+        <div class="modal fade" id="updateProductModal" tabindex="-1" aria-labelledby="updateProductModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateProductModalLabel">Update Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form id="updateProductForm" method="post"
+                          action="{% url 'Corrugation:update_products' product.pk %}">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <!-- Product Fields -->
+                            <div class="mb-3">
+                                <label for="product_name" class="form-label">Product Name</label>
+                                <input type="text" class="form-control" id="product_name" name="product_name"
+                                       value="{{ product.product_name }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="box_no" class="form-label">Box Number</label>
+                                <input type="text" class="form-control" id="box_no" name="box_no"
+                                       value="{{ product.box_no }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="material_code" class="form-label">Material Code</label>
+                                <input type="text" class="form-control" id="material_code" name="material_code"
+                                       value="{{ product.material_code }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="size" class="form-label">Size</label>
+                                <input type="text" class="form-control" id="size" name="size"
+                                       value="{{ product.size }}">
+                            </div>
+                            <!-- Inner Dimensions -->
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <label for="inner_length" class="form-label">Inner Length</label>
+                                    <input type="number" class="form-control" id="inner_length" name="inner_length"
+                                           value="{{ product.inner_length }}">
+                                </div>
+                                <div class="col">
+                                    <label for="inner_breadth" class="form-label">Inner Width</label>
+                                    <input type="number" class="form-control" id="inner_breadth" name="inner_breadth"
+                                           value="{{ product.inner_breadth }}">
+                                </div>
+                                <div class="col">
+                                    <label for="inner_depth" class="form-label">Inner Height</label>
+                                    <input type="number" class="form-control" id="inner_depth" name="inner_depth"
+                                           value="{{ product.inner_depth }}">
+                                </div>
+                            </div>
+                            <!-- Outer Dimensions -->
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <label for="outer_length" class="form-label">Outer Length</label>
+                                    <input type="number" class="form-control" id="outer_length" name="outer_length"
+                                           value="{{ product.outer_length }}">
+                                </div>
+                                <div class="col">
+                                    <label for="outer_breadth" class="form-label">Outer Width</label>
+                                    <input type="number" class="form-control" id="outer_breadth" name="outer_breadth"
+                                           value="{{ product.outer_breadth }}">
+                                </div>
+                                <div class="col">
+                                    <label for="outer_depth" class="form-label">Outer Height</label>
+                                    <input type="number" class="form-control" id="outer_depth" name="outer_depth"
+                                           value="{{ product.outer_depth }}">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="color" class="form-label">Color</label>
+                                <input type="text" class="form-control" id="color" name="color"
+                                       value="{{ product.color }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="weight" class="form-label">Weight</label>
+                                <input type="text" class="form-control" id="weight" name="weight"
+                                       value="{{ product.weight }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="ply" class="form-label">Ply</label>
+                                <input type="text" class="form-control" id="ply" name="ply" value="{{ product.ply }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="gsm" class="form-label">GSM</label>
+                                <input type="text" class="form-control" id="gsm" name="gsm" value="{{ product.gsm }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="bf" class="form-label">BF</label>
+                                <input type="number" class="form-control" id="bf" name="bf" value="{{ product.bf }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="cs" class="form-label">CS</label>
+                                <input type="number" class="form-control" id="cs" name="cs" value="{{ product.cs }}">
+                            </div>
+                            <hr>
+                            <!-- Partition Fields -->
+                            <div id="partitions">
+                                {% for partition in partitions.all %}
+                                    <div class="partition mb-3" id="partition_{{ forloop.counter0 }}">
+                                        <h6>Partition {{ forloop.counter }}</h6>
+                                        <input type="hidden" name="partitions-{{ forloop.counter0 }}-id"
+                                               value="{{ partition.pk }}">
+                                        <div class="mb-3">
+                                            <label for="partitions-{{ forloop.counter0 }}-partition_size"
+                                                   class="form-label">Partition Size</label>
+                                            <input type="text" class="form-control"
+                                                   id="partitions-{{ forloop.counter0 }}-partition_size"
+                                                   name="partitions-{{ forloop.counter0 }}-partition_size"
+                                                   value="{{ partition.partition_size }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="partitions-{{ forloop.counter0 }}-partition_od"
+                                                   class="form-label">Partition OD</label>
+                                            <input type="text" class="form-control"
+                                                   id="partitions-{{ forloop.counter0 }}-partition_od"
+                                                   name="partitions-{{ forloop.counter0 }}-partition_od"
+                                                   value="{{ partition.partition_od }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="partitions-{{ forloop.counter0 }}-deckle_cut"
+                                                   class="form-label">Deckle Cut</label>
+                                            <input type="text" class="form-control"
+                                                   id="partitions-{{ forloop.counter0 }}-deckle_cut"
+                                                   name="partitions-{{ forloop.counter0 }}-deckle_cut"
+                                                   value="{{ partition.deckle_cut }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="partitions-{{ forloop.counter0 }}-length_cut"
+                                                   class="form-label">Length Cut</label>
+                                            <input type="text" class="form-control"
+                                                   id="partitions-{{ forloop.counter0 }}-length_cut"
+                                                   name="partitions-{{ forloop.counter0 }}-length_cut"
+                                                   value="{{ partition.length_cut }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="partitions-{{ forloop.counter0 }}-partition_type"
+                                                   class="form-label">Partition Type</label>
+                                            <input type="text" class="form-control"
+                                                   id="partitions-{{ forloop.counter0 }}-partition_type"
+                                                   name="partitions-{{ forloop.counter0 }}-partition_type"
+                                                   value="{{ partition.partition_type }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="partitions-{{ forloop.counter0 }}-ply_no"
+                                                   class="form-label">Ply No.</label>
+                                            <input type="text" class="form-control"
+                                                   id="partitions-{{ forloop.counter0 }}-ply_no"
+                                                   name="partitions-{{ forloop.counter0 }}-ply_no"
+                                                   value="{{ partition.get_ply_no_display }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="partitions-{{ forloop.counter0 }}-partition_weight"
+                                                   class="form-label">Partition Weight</label>
+                                            <input type="text" class="form-control"
+                                                   id="partitions-{{ forloop.counter0 }}-partition_weight"
+                                                   name="partitions-{{ forloop.counter0 }}-partition_weight"
+                                                   value="{{ partition.partition_weight }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="partitions-{{ forloop.counter0 }}-gsm"
+                                                   class="form-label">GSM</label>
+                                            <input type="text" class="form-control"
+                                                   id="partitions-{{ forloop.counter0 }}-gsm"
+                                                   name="partitions-{{ forloop.counter0 }}-gsm"
+                                                   value="{{ partition.gsm }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="partitions-{{ forloop.counter0 }}-bf"
+                                                   class="form-label">BF</label>
+                                            <input type="text" class="form-control"
+                                                   id="partitions-{{ forloop.counter0 }}-bf"
+                                                   name="partitions-{{ forloop.counter0 }}-bf"
+                                                   value="{{ partition.bf }}">
+                                        </div>
+                                        <hr>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <button type="button" class="btn btn-secondary" onclick="addPartition()">Add Partition
+                            </button>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function openDeleteModal() {
+            var deleteProductModal = new bootstrap.Modal(document.getElementById('deleteProductModal'), {
+                keyboard: false
+            });
+            deleteProductModal.show();
+        }
+
+        function addPartition() {
+            const partitionIndex = document.querySelectorAll('.partition').length;
+            const partitionHtml = `
+            <div class="partition mb-3" id="partition_${partitionIndex}">
+                <h6>Partition ${partitionIndex + 1}</h6>
+                <div class="mb-3">
+                    <label for="partitions-${partitionIndex}-partition_size" class="form-label">Partition Size</label>
+                    <input type="text" class="form-control" id="partitions-${partitionIndex}-partition_size" name="partitions-${partitionIndex}-partition_size" value="">
+                </div>
+                <div class="mb-3">
+                    <label for="partitions-${partitionIndex}-partition_od" class="form-label">Partition OD</label>
+                    <input type="text" class="form-control" id="partitions-${partitionIndex}-partition_od" name="partitions-${partitionIndex}-partition_od" value="">
+                </div>
+                <div class="mb-3">
+                    <label for="partitions-${partitionIndex}-deckle_cut" class="form-label">Deckle Cut</label>
+                    <input type="text" class="form-control" id="partitions-${partitionIndex}-deckle_cut" name="partitions-${partitionIndex}-deckle_cut" value="">
+                </div>
+                <div class="mb-3">
+                    <label for="partitions-${partitionIndex}-length_cut" class="form-label">Length Cut</label>
+                    <input type="text" class="form-control" id="partitions-${partitionIndex}-length_cut" name="partitions-${partitionIndex}-length_cut" value="">
+                </div>
+                <div class="mb-3">
+                    <label for="partitions-${partitionIndex}-partition_type" class="form-label">Partition Type</label>
+                    <input type="text" class="form-control" id="partitions-${partitionIndex}-partition_type" name="partitions-${partitionIndex}-partition_type" value="">
+                </div>
+                <div class="mb-3">
+                    <label for="partitions-${partitionIndex}-ply_no" class="form-label">Ply No.</label>
+                    <input type="text" class="form-control" id="partitions-${partitionIndex}-ply_no" name="partitions-${partitionIndex}-ply_no" value="">
+                </div>
+                <div class="mb-3">
+                    <label for="partitions-${partitionIndex}-partition_weight" class="form-label">Partition Weight</label>
+                    <input type="text" class="form-control" id="partitions-${partitionIndex}-partition_weight" name="partitions-${partitionIndex}-partition_weight" value="">
+                </div>
+                <div class="mb-3">
+                    <label for="partitions-${partitionIndex}-gsm" class="form-label">GSM</label>
+                    <input type="text" class="form-control" id="partitions-${partitionIndex}-gsm" name="partitions-${partitionIndex}-gsm" value="">
+                </div>
+                <div class="mb-3">
+                    <label for="partitions-${partitionIndex}-bf" class="form-label">BF</label>
+                    <input type="text" class="form-control" id="partitions-${partitionIndex}-bf" name="partitions-${partitionIndex}-bf" value="">
+                </div>
+                <hr>
+            </div>
+        `;
+            document.getElementById('partitions').insertAdjacentHTML('beforeend', partitionHtml);
+        }
+    </script>
 {% endblock %}
