@@ -1,11 +1,9 @@
-from calendar import month_abbr
 from datetime import datetime
-
 import django.db.utils
 from django.http import JsonResponse
+from django.urls import reverse
 from django.utils import timezone
 from django.db.models import Count, Q
-from django.db.models.functions import ExtractMonth
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import (PaperReels, Product, Partition, PurchaseOrder, Dispatch,
                      Program, Production, ProductionReels, Stock)
@@ -73,9 +71,19 @@ def index(request):
         return redirect('Corrugation:index')
     context = {
         'products': Product.objects.all().values('product_name'),
-        'stocks': Stock.objects.all().values('product__product_name', 'stock_quantity'),
+        'stocks': Stock.objects.all().values('product__product_name', 'stock_quantity', 'pk'),
     }
     return render(request, 'index.html', context)
+
+
+@login_required
+def delete_stock(request, pk):
+    stock = Stock.objects.get(pk=pk)
+    if request.method == 'POST':
+        stock.delete()
+        messages.success(request, 'Stock item deleted successfully.')
+        return redirect(reverse('Corrugation:index'))  # Adjust the URL name if needed
+    return render(request, 'index.html', {'stock': stock})
 
 
 @login_required

@@ -27,6 +27,12 @@
                                 data-bs-target="#editModal{{ forloop.counter }}">
                             Edit Quantity
                         </button>
+                        <form method="POST" action="{% url 'Corrugation:delete_stock' stock.pk %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm mt-2 ms-2">
+                                Delete
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
