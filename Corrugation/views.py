@@ -384,6 +384,7 @@ def add_purchase_order_detail(request):
             'purchase_orders': purchase_orders,
         }
         return render(request, 'purchase_order_details.html', context)
+    return redirect('Corrugation:purchase_order')
 
 
 @login_required
