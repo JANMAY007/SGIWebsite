@@ -260,31 +260,37 @@ def update_products(request, pk):
         product.bf = request.POST.get('bf', None)
         product.cs = request.POST.get('cs', None)
         product.save()
-        # Handle partitions
-        partition_data = zip(
-            request.POST.getlist('partition_size'),
-            request.POST.getlist('partition_od'),
-            request.POST.getlist('deckle_cut'),
-            request.POST.getlist('length_cut'),
-            request.POST.getlist('partition_type'),
-            request.POST.getlist('ply_no'),
-            request.POST.getlist('partition_weight'),
-            request.POST.getlist('partition_gsm'),
-            request.POST.getlist('partition_bf')
-        )
-        for partition in partition_data:
-            Partition.objects.create(
-                product_name=product,
-                partition_size=partition[0],
-                partition_od=partition[1],
-                deckle_cut=partition[2],
-                length_cut=partition[3],
-                partition_type=partition[4],
-                ply_no=partition[5],
-                partition_weight=partition[6],
-                gsm=partition[7],
-                bf=partition[8]
-            )
+        partitions_data = {}
+
+        # Iterate through POST data to organize it by partition
+        for key, value in request.POST.items():
+            if key.startswith('partitions['):
+                # Extract the partition index and the field name
+                part_idx = key.split('[')[1].split(']')[0]
+                field_name = key.split('[')[2].split(']')[0]
+
+                # Initialize the dictionary for this partition if not already
+                if part_idx not in partitions_data:
+                    partitions_data[part_idx] = {}
+
+                # Assign the value to the appropriate field in the partition
+                partitions_data[part_idx][field_name] = value
+
+        # Now process each partition
+        for partition_data in partitions_data.values():
+            # Retrieve or create a new Partition instance
+            partition = get_object_or_404(Partition, product_name=product)
+            partition.partition_type = partition_data.get('type')
+            partition.partition_size = partition_data.get('size')
+            partition.partition_od = partition_data.get('od')
+            partition.deckle_cut = partition_data.get('deckle_cut')
+            partition.length_cut = partition_data.get('length_cut')
+            partition.ply_no = partition_data.get('ply_no')
+            partition.partition_weight = partition_data.get('weight')
+            partition.gsm = partition_data.get('gsm')
+            partition.bf = partition_data.get('bf')
+            partition.product_name = product
+            partition.save()
         return redirect('Corrugation:products_detail', pk=pk)
     return redirect('Corrugation:add_product')
 
