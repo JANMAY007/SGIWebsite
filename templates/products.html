@@ -29,7 +29,7 @@
         </div>
         <div class="row" id="productContainer">
             {% for product in products %}
-                <div class="col-md-6 col-xl-2 mb-2">
+                <div class="col-md-6 col-xl-2 mb-2 product-card">
                     <a href="{% url 'Corrugation:products_detail' product.pk %}"
                        class="link-light text-decoration-none">
                         <div class="card shadow border-start-warning py-2 h-100">
@@ -174,118 +174,26 @@
                                             <label for="ply_no_0" class="form-label">Ply Number</label>
                                             <input type="text" class="form-control" id="ply_no_0" name="ply_no">
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="partition_weight_0" class="form-label">Partition Weight</label>
-                                            <input type="text" class="form-control" id="partition_weight_0"
-                                                   name="partition_weight">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="partition_gsm_0" class="form-label">Partition GSM</label>
-                                            <input type="number" class="form-control" id="partition_gsm_0"
-                                                   name="partition_gsm">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="partition_bf_0" class="form-label">Partition BF</label>
-                                            <input type="number" class="form-control" id="partition_bf_0"
-                                                   name="partition_bf">
-                                        </div>
+                                        <hr>
                                     </div>
                                 </div>
+                                <div class="d-grid gap-2 d-md-block">
+                                    <button type="button" class="btn btn-outline-primary" id="addPartitionBtn">Add
+                                        Partition
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger" id="removePartitionBtn">Remove
+                                        Partition
+                                    </button>
+                                </div>
                             </div>
-                            <hr>
-                            <button type="button" class="btn btn-secondary" id="addPartitionBtn">
-                                Add Another Partition
-                            </button>
-
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="saveProductBtn">Save Product</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Modal Structure -->
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let partitionCount = 1;
-
-            document.getElementById('addPartitionBtn').addEventListener('click', function () {
-                var partitionsDiv = document.getElementById('partitions');
-                var newPartitionIndex = partitionsDiv.children.length;
-
-                var newPartitionHTML = `
-                    <div class="partition mb-3" id="partition_${newPartitionIndex}">
-                        <h6>Partition ${newPartitionIndex + 1}</h6>
-                        <div class="mb-3">
-                            <label for="partition_size_${newPartitionIndex}" class="form-label">Partition Size</label>
-                            <input type="text" class="form-control" id="partition_size_${newPartitionIndex}" name="partition_size" >
-                        </div>
-                        <div class="mb-3">
-                            <label for="partition_od_${newPartitionIndex}" class="form-label">Partition OD</label>
-                            <input type="text" class="form-control" id="partition_od_${newPartitionIndex}" name="partition_od" >
-                        </div>
-                        <div class="mb-3">
-                            <label for="deckle_cut_${newPartitionIndex}" class="form-label">Deckle Cut</label>
-                            <input type="text" class="form-control" id="deckle_cut_${newPartitionIndex}" name="deckle_cut" >
-                        </div>
-                        <div class="mb-3">
-                            <label for="length_cut_${newPartitionIndex}" class="form-label">Length Cut</label>
-                            <input type="text" class="form-control" id="length_cut_${newPartitionIndex}" name="length_cut" >
-                        </div>
-                        <div class="mb-3">
-                            <label for="partition_type_${newPartitionIndex}" class="form-label">Partition Type</label>
-                            <input type="text" class="form-control" id="partition_type_${newPartitionIndex}" name="partition_type" >
-                        </div>
-                        <div class="mb-3">
-                            <label for="ply_no_${newPartitionIndex}" class="form-label">Ply Number</label>
-                            <input type="text" class="form-control" id="ply_no_${newPartitionIndex}" name="ply_no" >
-                        </div>
-                        <div class="mb-3">
-                            <label for="partition_weight_${newPartitionIndex}" class="form-label">Partition Weight</label>
-                            <input type="text" class="form-control" id="partition_weight_${newPartitionIndex}" name="partition_weight" >
-                        </div>
-                        <div class="mb-3">
-                            <label for="partition_gsm_${newPartitionIndex}" class="form-label">Partition GSM</label>
-                            <input type="number" class="form-control" id="partition_gsm_${newPartitionIndex}" name="partition_gsm" >
-                        </div>
-                        <div class="mb-3">
-                            <label for="partition_bf_${newPartitionIndex}" class="form-label">Partition BF</label>
-                            <input type="number" class="form-control" id="partition_bf_${newPartitionIndex}" name="partition_bf" >
-                        </div>
-                    </div>
-                `;
-                partitionsDiv.insertAdjacentHTML('beforeend', newPartitionHTML);
-            });
-
-            document.getElementById('saveProductBtn').addEventListener('click', function () {
-                const form = document.getElementById('addProductForm');
-                const formData = new FormData(form);
-
-                fetch('/add-product/', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    },
-                    body: formData
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            alert('Product added successfully.');
-                            window.location.reload();  // Optionally reload the page to see the new product
-                        } else {
-                            alert('Failed to add product.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        window.location.reload();
-                    });
-            });
-        });
-    </script>
 {% endblock %}

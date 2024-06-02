@@ -6,10 +6,14 @@
 
 {% block content %}
     <div class="container-fluid">
-        <label for="searchInput"></label><input type="text" id="searchInput" placeholder="Search by Product Name" class="form-control mb-3">
+        <!-- Search Input Field -->
+        <label for="searchInput"></label>
+        <input type="text" id="searchInput" placeholder="Search by Product Name" class="form-control mb-3">
+        
+        <!-- Loop through each purchase order and display them as cards -->
         {% for purchase_order in purchase_orders %}
             <!-- Start: Basic Card -->
-            <div class="card shadow mb-4">
+            <div class="card shadow mb-4" data-product-name="{{ purchase_order.product_name }}">
                 <div class="card-header py-3">
                     <h6 class="text-primary m-0 fw-bold">Product name - {{ purchase_order.product_name }}<span
                             class="float-end">{{ purchase_order.po_date }}</span></h6>
@@ -154,6 +158,8 @@
             </div><!-- End: Basic Card -->
         {% endfor %}
     </div>
+
+    <!-- JavaScript for Filtering Products -->
     <script>
         // Get the input field and declare a variable to store search text
         const searchInput = document.getElementById('searchInput');
@@ -169,8 +175,8 @@
 
             // Loop through each card and check if product name contains search text
             cards.forEach(card => {
-                // Get the product name from card
-                const productName = card.querySelector('.card-header h6').textContent.toLowerCase();
+                // Get the product name from card's data attribute
+                const productName = card.getAttribute('data-product-name').toLowerCase();
 
                 // If product name contains search text, show the card, otherwise hide it
                 if (productName.includes(search_text)) {
