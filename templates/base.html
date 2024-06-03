@@ -52,19 +52,62 @@
                         class="fas fa-tachometer-alt"></i><span>Stock</span></a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'Corrugation:paper_reels' %}"><i
                         class="fas fa-table"></i><span>Paper Reel</span></a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'Corrugation:purchase_order' %}"><i
-                        class="fas fa-book-reader"></i><span>Purchase Order</span></a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'Corrugation:production' %}"><i
-                        class="fas fa-tools"></i><span>Production</span></a>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'Corrugation:daily_program' %}"><i
-                        class="far fa-envelope"></i><span>Program</span></a>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#purchaseOrderDropdown"
+                       aria-expanded="true" aria-controls="purchaseOrderDropdown">
+                        <i class="fas fa-book-reader"></i>
+                        <span>Purchase Order</span>
+                    </a>
+                    <div id="purchaseOrderDropdown" class="collapse" aria-labelledby="headingOne"
+                         data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="{% url 'Corrugation:purchase_order' %}">View Purchase
+                                Orders</a>
+                            <a class="collapse-item" href="{% url 'Corrugation:purchase_order_archive' %}">Archive</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'Corrugation:add_product' %}" class="nav-link">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#productionDropdown"
+                       aria-expanded="true" aria-controls="productionDropdown">
+                        <i class="fas fa-tools"></i>
+                        <span>Production</span>
+                    </a>
+                    <div id="productionDropdown" class="collapse" aria-labelledby="headingTwo"
+                         data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="{% url 'Corrugation:production' %}">View Production</a>
+                            <a class="collapse-item" href="{% url 'Corrugation:production_archive' %}">Archive</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#programDropdown"
+                       aria-expanded="true" aria-controls="programDropdown">
+                        <i class="far fa-envelope"></i>
+                        <span>Program</span>
+                    </a>
+                    <div id="programDropdown" class="collapse" aria-labelledby="headingThree"
+                         data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="{% url 'Corrugation:daily_program' %}">View Programs</a>
+                            <a class="collapse-item" href="{% url 'Corrugation:program_archive' %}">Archive</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#productDropdown"
+                       aria-expanded="true" aria-controls="productDropdown">
                         <i class="fas fa-box-open"></i>
                         <span>Products</span>
                     </a>
+                    <div id="productDropdown" class="collapse" aria-labelledby="headingFour"
+                         data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="{% url 'Corrugation:add_product' %}">Add Products</a>
+                            <a class="collapse-item" href="{% url 'Corrugation:product_archive' %}">Archive</a>
+                        </div>
+                    </div>
                 </li>
             </ul>
             <div class="text-center d-none d-md-inline">
