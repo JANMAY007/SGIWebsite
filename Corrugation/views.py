@@ -380,6 +380,9 @@ def add_purchase_order_detail(request):
             total_dispatch_quantity = sum(dispatch.dispatch_quantity for dispatch in po.dispatches)
             po.remaining_quantity = po.po_quantity - total_dispatch_quantity
             po.max_remaining_quantity = po.po_quantity + (po.po_quantity * 5 / 100) - total_dispatch_quantity
+            # add material code and box no in po
+            po.material_code = po.product_name.material_code
+            po.box_no = po.product_name.box_no
         context = {
             'purchase_orders': purchase_orders,
         }
