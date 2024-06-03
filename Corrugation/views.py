@@ -493,6 +493,35 @@ def daily_program(request):
 
 
 @login_required
+def edit_program_view(request):
+    if request.method == 'POST':
+        product_name = request.POST.get('product_name')
+        program_quantity = request.POST.get('program_quantity')
+        program_date = request.POST.get('program_date')
+        program_notes = request.POST.get('program_notes')
+        program = get_object_or_404(Program, product__product_name=product_name)
+        print(program)
+        program.product_name = product_name
+        program.program_quantity = program_quantity
+        program.program_date = program_date
+        program.program_notes = program_notes
+        program.save()
+        return redirect(reverse('Corrugation:daily_program'))
+    return redirect(reverse('Corrugation:daily_program'))
+
+
+@login_required
+def delete_program_view(request):
+    if request.method == 'POST':
+        product_name = request.POST.get('product_name')
+        program = Program.objects.get(product__product_name=product_name)
+        program.active = False
+        program.save()
+        return redirect(reverse('Corrugation:daily_program'))
+    return redirect(reverse('Corrugation:daily_program'))
+
+
+@login_required
 def production(request):
     if request.method == 'POST':
         # Extract data from POST request
