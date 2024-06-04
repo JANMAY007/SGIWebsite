@@ -1,5 +1,4 @@
 {% load static %}
-{% load breadcrumbs %}
 <!DOCTYPE html>
 <html data-bs-theme="light" lang="en">
 
@@ -125,23 +124,9 @@
                 <div class="container-fluid">
                     <button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i
                             class="fas fa-bars"></i></button>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-center align-items-center">
-                            {% breadcrumbs as breadcrumb_urls %}
-                            <li class="breadcrumb-item"><a href="{% url 'Corrugation:index' %}">Home</a></li>
-                            {% for name, path in breadcrumb_urls %}
-                                {% if forloop.last %}
-                                    <li class="breadcrumb-item active" aria-current="page">
-                                        <a href="{{ path }}">{{ name }}</a>
-                                    </li>
-                                {% else %}
-                                    <li class="breadcrumb-item">
-                                        <a href="{{ path }}">{{ name }}</a>
-                                    </li>
-                                {% endif %}
-                            {% endfor %}
-                        </ol>
-                    </nav>
+                    <button type="button" class="btn btn-refresh" onclick="location.reload();">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
                 </div>
             </nav>
             <div class="container-fluid">
