@@ -138,7 +138,7 @@ def paper_reels(request):
         except (ValueError, TypeError):
             return render(request, 'paper_reel.html', {'error': 'Invalid input. Please enter valid numbers.'})
     reels_list = PaperReels.objects.all()
-    paginator = Paginator(reels_list, 5)  # Show 20 reels per page
+    paginator = Paginator(reels_list, 20)  # Show 20 reels per page
     page = request.GET.get('page')
     try:
         reels = paginator.page(page)
