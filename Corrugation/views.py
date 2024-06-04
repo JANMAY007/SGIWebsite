@@ -750,8 +750,8 @@ def delete_production(request):
         # delete reels that are used in production
         used_reels = ProductionReels.objects.filter(production=production_object)
         for reel in used_reels:
-            PaperReels.objects.get(reel_number=reel.reel.reel_number).used = True
-        ProductionReels.objects.filter(production=production_object).delete()
+            PaperReels.objects.filter(reel_number=reel.reel.reel_number).used = True
+        # ProductionReels.objects.filter(production=production_object).delete()
         production_object.active = False
         production_object.save()
         return redirect('Corrugation:production')
