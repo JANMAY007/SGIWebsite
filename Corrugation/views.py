@@ -240,6 +240,15 @@ def add_product(request):
 
 
 @login_required
+def product_archive(request):
+    products = Product.objects.filter(archive=True).values('product_name', 'pk')
+    context = {
+        'products': products,
+    }
+    return render(request, 'products_archive.html', context)
+
+
+@login_required
 def update_products(request, pk):
     if request.method == 'POST':
         product = get_object_or_404(Product, pk=pk)
@@ -317,6 +326,17 @@ def products_detail(request, pk):
 
 
 @login_required
+def product_detail_archive(request, pk):
+    product = get_object_or_404(Product, pk=pk, archive=True)
+    partitions = Partition.objects.filter(product_name=product)
+    context = {
+        'product': product,
+        'partitions': partitions
+    }
+    return render(request, 'product_detail_archive.html', context)
+
+
+@login_required
 def purchase_order(request):
     po_active_count_by_given_by = (PurchaseOrder.objects.filter(active=True)
                                    .values_list('po_given_by', flat=True).distinct())
@@ -327,6 +347,18 @@ def purchase_order(request):
         'po_given_by_choices': PurchaseOrder.po_given_by_choices,
     }
     return render(request, 'purchase_order.html', context)
+
+
+@login_required
+def purchase_order_archive(request):
+    po_active_count_by_given_by = (PurchaseOrder.objects.filter(active=False)
+                                   .values_list('po_given_by', flat=True).distinct())
+    context = {
+        'purchase_order_list': po_active_count_by_given_by,
+        'products': Product.objects.all(),
+        'po_given_by_choices': PurchaseOrder.po_given_by_choices,
+    }
+    return render(request, 'purchase_order_archive.html', context)
 
 
 @login_required
@@ -386,6 +418,42 @@ def add_purchase_order_detail(request):
         }
         return render(request, 'purchase_order_details.html', context)
     return redirect('Corrugation:purchase_order')
+
+
+@login_required
+def purchase_order_detail_archive(request):
+    if request.method == 'POST':
+        po_given_by = request.POST['po_given_by']
+        # Get purchase orders for the given month and po_given_by
+        purchase_orders = PurchaseOrder.objects.filter(
+            po_given_by=po_given_by,
+            active=False
+        ).select_related('product_name')
+
+        # Get dispatches for the selected purchase orders
+        purchase_order_ids = purchase_orders.values_list('pk', flat=True)
+        dispatches = Dispatch.objects.filter(po_id__in=purchase_order_ids).select_related('po')
+        # Group dispatches by purchase order
+        dispatches_dict = {}
+        for dispatch in dispatches:
+            if dispatch.po_id not in dispatches_dict:
+                dispatches_dict[dispatch.po_id] = []
+            dispatches_dict[dispatch.po_id].append(dispatch)
+
+        # Add dispatches to purchase orders
+        for po in purchase_orders:
+            po.dispatches = dispatches_dict.get(po.id, [])
+        for po in purchase_orders:
+            total_dispatch_quantity = sum(dispatch.dispatch_quantity for dispatch in po.dispatches)
+            po.remaining_quantity = po.po_quantity - total_dispatch_quantity
+            po.max_remaining_quantity = po.po_quantity + (po.po_quantity * 5 / 100) - total_dispatch_quantity
+            po.material_code = po.product_name.material_code
+            po.box_no = po.product_name.box_no
+        context = {
+            'purchase_orders': purchase_orders,
+        }
+        return render(request, 'purchase_order_details_archive.html', context)
+    return redirect('Corrugation:purchase_order_archive')
 
 
 @login_required
@@ -493,6 +561,52 @@ def daily_program(request):
 
 
 @login_required
+def program_archive(request):
+    programs = Program.objects.filter(active=False)
+    programs_data = []
+    for program in programs:
+        product = program.product
+        partitions = Partition.objects.filter(product_name=product)
+        partitions_data = []
+        for partition in partitions:
+            partition_data = {
+                'partition_size': partition.partition_size,
+                'partition_od': partition.partition_od,
+                'deckle_cut': partition.deckle_cut,
+                'length_cut': partition.length_cut,
+                'partition_type': partition.get_partition_type_display(),
+                'ply_no': partition.get_ply_no_display(),
+                'partition_weight': partition.partition_weight
+            }
+            partitions_data.append(partition_data)
+        program_data = {
+            'product_name': product.product_name,
+            'box_no': product.box_no,
+            'material_code': product.material_code,
+            'size': product.size,
+            'inner_length': product.inner_length,
+            'inner_breadth': product.inner_breadth,
+            'inner_depth': product.inner_depth,
+            'outer_length': product.outer_length,
+            'outer_breadth': product.outer_breadth,
+            'outer_depth': product.outer_depth,
+            'gsm': product.gsm,
+            'bf': product.bf,
+            'color': product.color,
+            'weight': product.weight,
+            'partitions': partitions_data,
+            'program_quantity': program.program_quantity,
+            'program_date': program.program_date.strftime('%Y-%m-%d'),
+            'program_notes': program.program_notes,
+        }
+        programs_data.append(program_data)
+    context = {
+        'programs': programs_data,
+    }
+    return render(request, 'program_archive.html', context)
+
+
+@login_required
 def edit_program_view(request):
     if request.method == 'POST':
         product_name = request.POST.get('product_name')
@@ -500,7 +614,6 @@ def edit_program_view(request):
         program_date = request.POST.get('program_date')
         program_notes = request.POST.get('program_notes')
         program = get_object_or_404(Program, product__product_name=product_name)
-        print(program)
         program.product_name = product_name
         program.program_quantity = program_quantity
         program.program_date = program_date
@@ -568,6 +681,27 @@ def production(request):
         'productions': production_data,
     }
     return render(request, 'production.html', context)
+
+
+@login_required
+def production_archive(request):
+    production_objects = Production.objects.filter(active=False)
+    production_data = []
+    for production_object in production_objects:
+        production_reels = ProductionReels.objects.filter(production=production_object)
+        reels_data = [reel.reel.reel_number for reel in production_reels]
+        production_data.append({
+            'pk': production_object.pk,
+            'product_name': production_object.product.product_name,
+            'production_quantity': production_object.production_quantity,
+            'production_date': production_object.production_date,
+            'reels': reels_data,
+        })
+
+    context = {
+        'productions': production_data,
+    }
+    return render(request, 'production_archive.html', context)
 
 
 @login_required
