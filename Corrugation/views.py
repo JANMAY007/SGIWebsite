@@ -21,6 +21,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            messages.success(request, 'Logged in successfully')
             return redirect('Corrugation:index')
         else:
             messages.error(request, 'Invalid email or password')
@@ -47,12 +48,14 @@ def register_view(request):
                                         email=email, password=password)
         user.save()
         login(request, user)
+        messages.success(request, 'Account created successfully')
         return redirect('Corrugation:index')
     return render(request, 'register.html')
 
 
 def logout_view(request):
     logout(request)
+    messages.success(request, 'Logged out successfully')
     return redirect('Corrugation:login')
 
 
@@ -69,6 +72,7 @@ def index(request):
             stock.save()
         except (ValueError, TypeError):
             pass
+        messages.info(request, 'Stock updated successfully.')
         return redirect('Corrugation:index')
     context = {
         'products': Product.objects.all().values('product_name'),
@@ -82,7 +86,7 @@ def delete_stock(request, pk):
     stock = Stock.objects.get(pk=pk)
     if request.method == 'POST':
         stock.delete()
-        messages.success(request, 'Stock item deleted successfully.')
+        messages.error(request, 'Stock item deleted successfully.')
         return redirect(reverse('Corrugation:index'))  # Adjust the URL name if needed
     return render(request, 'index.html', {'stock': stock})
 
@@ -134,9 +138,11 @@ def paper_reels(request):
                 size=size,
                 weight=weight
             )
+            messages.success(request, 'Paper reel added successfully.')
             return redirect('Corrugation:paper_reels')
         except (ValueError, TypeError):
-            return render(request, 'paper_reel.html', {'error': 'Invalid input. Please enter valid numbers.'})
+            messages.error(request, 'Invalid input. Please enter valid values.')
+            return render(request, 'paper_reel.html')
     reels_list = PaperReels.objects.all()
     paginator = Paginator(reels_list, 20)  # Show 20 reels per page
     page = request.GET.get('page')
@@ -164,6 +170,7 @@ def update_reel(request, pk):
         reel.size = request.POST.get('size')
         reel.weight = request.POST.get('weight')
         reel.save()
+        messages.info(request, 'Paper reel updated successfully.')
         return redirect('Corrugation:paper_reels')
     return redirect('Corrugation:paper_reels')
 
@@ -174,6 +181,7 @@ def delete_reel(request, pk):
     if request.method == 'POST':
         reel.used = True
         reel.save()
+        messages.error(request, 'Paper reel deleted successfully.')
         return redirect('Corrugation:paper_reels')
     return redirect('Corrugation:paper_reels')
 
@@ -241,6 +249,7 @@ def add_product(request):
                 gsm=partition[7],
                 bf=partition[8]
             )
+        messages.success(request, 'Product added successfully.')
         return redirect('Corrugation:add_product')
     context = {
         'products': Product.objects.filter(archive=False).values('product_name', 'pk'),
@@ -309,6 +318,7 @@ def update_products(request, pk):
             partition.bf = partition_data.get('bf')
             partition.product_name = product
             partition.save()
+        messages.info(request, 'Product updated successfully.')
         return redirect('Corrugation:products_detail', pk=pk)
     return redirect('Corrugation:add_product')
 
@@ -319,6 +329,7 @@ def delete_products(request, pk):
         product = get_object_or_404(Product, pk=pk)
         product.archive = True
         product.save()
+        messages.error(request, 'Product archived successfully.')
         return redirect('Corrugation:add_product')
     return redirect('Corrugation:add_product')
 
@@ -389,7 +400,7 @@ def add_purchase_order_detailed(request):
             rate=rate,
             po_quantity=po_quantity
         )
-
+        messages.success(request, 'Purchase order added successfully.')
         return redirect('Corrugation:purchase_order')
 
 
@@ -425,6 +436,7 @@ def add_purchase_order_detail(request):
         context = {
             'purchase_orders': purchase_orders,
         }
+        messages.success(request, 'Purchase order added successfully.')
         return render(request, 'purchase_order_details.html', context)
     return redirect('Corrugation:purchase_order')
 
@@ -461,6 +473,7 @@ def purchase_order_detail_archive(request):
         context = {
             'purchase_orders': purchase_orders,
         }
+        messages.success(request, 'Purchase order added successfully.')
         return render(request, 'purchase_order_details_archive.html', context)
     return redirect('Corrugation:purchase_order_archive')
 
@@ -471,6 +484,7 @@ def delete_purchase_order(request, pk):
         po = get_object_or_404(PurchaseOrder, pk=pk)
         po.active = False
         po.save()
+        messages.error(request, 'Purchase order deleted successfully.')
         return redirect('Corrugation:purchase_order')
 
 
@@ -493,6 +507,7 @@ def add_dispatch(request):
             stock.save()
         except django.db.utils.IntegrityError:
             pass
+        messages.success(request, 'Dispatch added successfully.')
         return redirect('Corrugation:purchase_order')
     return redirect('Corrugation:purchase_order')
 
@@ -515,6 +530,7 @@ def daily_program(request):
             program_date=program_date,
             program_notes=program_notes
         )
+        messages.success(request, 'Program added successfully.')
         return redirect('Corrugation:daily_program')
     programs = Program.objects.filter(active=True)
     # Prepare data to return
@@ -628,6 +644,7 @@ def edit_program_view(request):
         program.program_date = program_date
         program.program_notes = program_notes
         program.save()
+        messages.info(request, 'Program updated successfully.')
         return redirect(reverse('Corrugation:daily_program'))
     return redirect(reverse('Corrugation:daily_program'))
 
@@ -639,6 +656,7 @@ def delete_program_view(request):
         program = Program.objects.get(product__product_name=product_name)
         program.active = False
         program.save()
+        messages.error(request, 'Program deleted successfully.')
         return redirect(reverse('Corrugation:daily_program'))
     return redirect(reverse('Corrugation:daily_program'))
 
@@ -669,6 +687,7 @@ def production(request):
                 production=production_object,
                 reel=reel_instance,
             )
+        messages.success(request, 'Production added successfully.')
         return redirect('Corrugation:production')
 
     production_objects = Production.objects.filter(active=True)
@@ -724,6 +743,7 @@ def update_production_quantity(request):
         production_object.save()
         stock.stock_quantity += int(production_object.production_quantity)
         stock.save()
+        messages.info(request, 'Production quantity updated successfully.')
         return redirect('Corrugation:production')
     return redirect('Corrugation:production')
 
@@ -739,6 +759,7 @@ def add_reel_to_production(request):
         except PaperReels.DoesNotExist:
             # Optionally handle the error if reel does not exist
             pass
+        messages.success(request, 'Reel added to production successfully.')
         return redirect('Corrugation:production')
     return redirect('Corrugation:production')
 
@@ -754,5 +775,6 @@ def delete_production(request):
         # ProductionReels.objects.filter(production=production_object).delete()
         production_object.active = False
         production_object.save()
+        messages.error(request, 'Production deleted successfully.')
         return redirect('Corrugation:production')
     return redirect('Corrugation:production')
