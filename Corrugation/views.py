@@ -11,6 +11,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 def login_view(request):
@@ -136,7 +137,15 @@ def paper_reels(request):
             return redirect('Corrugation:paper_reels')
         except (ValueError, TypeError):
             return render(request, 'paper_reel.html', {'error': 'Invalid input. Please enter valid numbers.'})
-    reels = PaperReels.objects.all()
+    reels_list = PaperReels.objects.all()
+    paginator = Paginator(reels_list, 5)  # Show 20 reels per page
+    page = request.GET.get('page')
+    try:
+        reels = paginator.page(page)
+    except PageNotAnInteger:
+        reels = paginator.page(1)
+    except EmptyPage:
+        reels = paginator.page(paginator.num_pages)
     context = {
         'reels': reels,
         'used_reels': PaperReels.objects.filter(used=True).count(),

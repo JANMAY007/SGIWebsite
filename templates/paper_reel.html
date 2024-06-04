@@ -14,20 +14,20 @@
                 </label>
             </div>
         </div>
-    <div class="col-md-5">
-        <div class="text-md-start">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addReelModal">
-                Add Reel
-            </button>
+        <div class="col-md-5">
+            <div class="text-md-start">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addReelModal">
+                    Add Reel
+                </button>
+            </div>
         </div>
-    </div>
-    <div class="col-md-3">
-        <div class="text-md-start">
-            <span>Total Used Reels: {{ used_reels }}</span>
-            <br>
-            <span>Total Un-used Reels: {{ unused_reels }}</span>
+        <div class="col-md-3">
+            <div class="text-md-start">
+                <span>Total Used Reels: {{ used_reels }}</span>
+                <br>
+                <span>Total Un-used Reels: {{ unused_reels }}</span>
+            </div>
         </div>
-    </div>
     </div>
     <div>
         <h2>Search Results</h2>
@@ -104,9 +104,7 @@
             </thead>
             <tbody>
             {% for reel in reels %}
-                <tr {% if reel.used %}
-                	class="table-danger"
-                {% endif %} >
+                <tr {% if reel.used %} class="table-danger" {% endif %}>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ reel.size }} Inch</td>
                     <td>{{ reel.gsm }}</td>
@@ -131,10 +129,8 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="editReelModalLabel{{ reel.id }}">Edit Paper
-                                    Reel</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
+                                <h5 class="modal-title" id="editReelModalLabel{{ reel.id }}">Edit Paper Reel</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <form method="post" action="{% url 'Corrugation:update_reel' reel.id %}">
@@ -177,8 +173,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="deleteReelModalLabel{{ reel.id }}">Delete Paper
-                                    Reel</h5>
+                                <h5 class="modal-title" id="deleteReelModalLabel{{ reel.id }}">Delete Paper Reel</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                             </div>
@@ -202,6 +197,61 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Pagination Controls -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if reels.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="First">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ reels.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link" aria-label="First">&laquo;&laquo;</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link" aria-label="Previous">&laquo;</span>
+                </li>
+            {% endif %}
+            {% for num in reels.paginator.page_range %}
+                {% if reels.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% elif num > reels.number|add:'-3' and num < reels.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            {% if reels.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ reels.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ reels.paginator.num_pages }}" aria-label="Last">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link" aria-label="Next">&raquo;</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link" aria-label="Last">&raquo;&raquo;</span>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
 
     <div class="modal fade" id="addReelModal" tabindex="-1" aria-labelledby="addReelModalLabel" aria-hidden="true">
         <div class="modal-dialog">
