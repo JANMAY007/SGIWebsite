@@ -25,7 +25,7 @@
         <div class="row" id="productContainer">
             {% for product in products %}
                 <div class="col-md-6 col-xl-2 mb-2 product-card">
-                    <a href="{% url 'Corrugation:products_detail' product.pk %}"
+                    <a href="{% url 'Corrugation:product_detail_archive' product.pk %}"
                        class="link-light text-decoration-none">
                         <div class="card shadow border-start-warning py-2 h-100">
                             <div class="card-body d-flex flex-column justify-content-between">
