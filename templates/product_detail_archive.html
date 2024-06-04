@@ -1,10 +1,22 @@
 {% extends 'base.html' %}
 
 {% block title %}
-	Product Detail Archive
+    Product Detail Archive
 {% endblock %}
 
 {% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible fade show">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <script>
+            setTimeout(function() {
+                bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
+            }, 2500)
+        </script>
+    {% endif %}
     <div class="container-fluid">
         <!-- Start: Product Details Card -->
         <div class="card shadow mb-4">
@@ -142,5 +154,5 @@
                 </div>
             </div><!-- End: Partitions Details Card -->
         {% endfor %}
-   </div>
+    </div>
 {% endblock %}

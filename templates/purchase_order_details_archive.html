@@ -1,15 +1,27 @@
 {% extends 'base.html' %}
 {% load custom_filters %}
 {% block title %}
-	Purchase Order Details Archive
+    Purchase Order Details Archive
 {% endblock %}
 
 {% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible fade show">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <script>
+            setTimeout(function() {
+                bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
+            }, 2500)
+        </script>
+    {% endif %}
     <div class="container-fluid">
         <!-- Search Input Field -->
         <label for="searchInput">Search by Product Name:</label>
         <input type="text" id="searchInput" placeholder="Search by Product Name" class="form-control mb-3">
-        
+
         <!-- Loop through each purchase order and display them as cards -->
         {% for purchase_order in purchase_orders %}
             <!-- Start: Basic Card -->
@@ -27,12 +39,14 @@
                                     <div class="text-uppercase text-primary fw-bold text-sm mb-1">
                                         <span>Material Code</span>
                                     </div>
-                                    <div class="text-dark fw-bold h5 mb-0"><span>{{ purchase_order.material_code }}</span></div>
+                                    <div class="text-dark fw-bold h5 mb-0">
+                                        <span>{{ purchase_order.material_code }}</span></div>
                                 </div>
                                 <div class="col me-2">
                                     <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Box Code</span>
                                     </div>
-                                    <div class="text-dark fw-bold h5 mb-0"><span>{{ purchase_order.box_no }}</span></div>
+                                    <div class="text-dark fw-bold h5 mb-0"><span>{{ purchase_order.box_no }}</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row align-items-center no-gutters">

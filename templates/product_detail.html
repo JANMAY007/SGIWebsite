@@ -5,6 +5,18 @@
 {% endblock %}
 
 {% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible fade show">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <script>
+            setTimeout(function() {
+                bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
+            }, 2500)
+        </script>
+    {% endif %}
     <div class="container-fluid">
         <!-- Start: Product Details Card -->
         <div class="card shadow mb-4">
@@ -177,7 +189,8 @@
                             </div>
                             <div class="mb-3">
                                 <label for="size" class="form-label fw-bold">Size</label>
-                                <input type="text" class="form-control" id="size" name="size" value="{{ product.size }}">
+                                <input type="text" class="form-control" id="size" name="size"
+                                       value="{{ product.size }}">
                             </div>
                             <div class="mb-3">
                                 <label for="inner_length" class="form-label fw-bold">Inner Length</label>
@@ -211,11 +224,13 @@
                             </div>
                             <div class="mb-3">
                                 <label for="color" class="form-label fw-bold">Color</label>
-                                <input type="text" class="form-control" id="color" name="color" value="{{ product.color }}">
+                                <input type="text" class="form-control" id="color" name="color"
+                                       value="{{ product.color }}">
                             </div>
                             <div class="mb-3">
                                 <label for="weight" class="form-label fw-bold">Weight</label>
-                                <input type="text" class="form-control" id="weight" name="weight" value="{{ product.weight }}">
+                                <input type="text" class="form-control" id="weight" name="weight"
+                                       value="{{ product.weight }}">
                             </div>
                             <div class="mb-3">
                                 <label for="ply" class="form-label fw-bold">Ply</label>
@@ -238,45 +253,79 @@
                             <div id="partitions">
                                 {% for partition in partitions %}
                                     <div class="mb-3 partition">
-                                        <label for="partition_{{ forloop.counter }}_type" class="form-label fw-bold">Partition Type</label>
-                                        <input type="text" class="form-control" id="partition_{{ forloop.counter }}_type" name="partitions[{{ forloop.counter }}][type]" value="{{ partition.partition_type }}">
+                                        <label for="partition_{{ forloop.counter }}_type" class="form-label fw-bold">Partition
+                                            Type</label>
+                                        <input type="text" class="form-control"
+                                               id="partition_{{ forloop.counter }}_type"
+                                               name="partitions[{{ forloop.counter }}][type]"
+                                               value="{{ partition.partition_type }}">
                                     </div>
                                     <div class="mb-3 partition">
-                                        <label for="partition_{{ forloop.counter }}_size" class="form-label fw-bold">Partition Size</label>
-                                        <input type="text" class="form-control" id="partition_{{ forloop.counter }}_size" name="partitions[{{ forloop.counter }}][size]" value="{{ partition.partition_size }}">
+                                        <label for="partition_{{ forloop.counter }}_size" class="form-label fw-bold">Partition
+                                            Size</label>
+                                        <input type="text" class="form-control"
+                                               id="partition_{{ forloop.counter }}_size"
+                                               name="partitions[{{ forloop.counter }}][size]"
+                                               value="{{ partition.partition_size }}">
                                     </div>
                                     <div class="mb-3 partition">
-                                        <label for="partition_{{ forloop.counter }}_od" class="form-label fw-bold">Partition OD</label>
-                                        <input type="text" class="form-control" id="partition_{{ forloop.counter }}_od" name="partitions[{{ forloop.counter }}][od]" value="{{ partition.partition_od }}">
+                                        <label for="partition_{{ forloop.counter }}_od" class="form-label fw-bold">Partition
+                                            OD</label>
+                                        <input type="text" class="form-control" id="partition_{{ forloop.counter }}_od"
+                                               name="partitions[{{ forloop.counter }}][od]"
+                                               value="{{ partition.partition_od }}">
                                     </div>
                                     <div class="mb-3 partition">
-                                        <label for="partition_{{ forloop.counter }}_deckle_cut" class="form-label fw-bold">Deckle Cut</label>
-                                        <input type="text" class="form-control" id="partition_{{ forloop.counter }}_deckle_cut" name="partitions[{{ forloop.counter }}][deckle_cut]" value="{{ partition.deckle_cut }}">
+                                        <label for="partition_{{ forloop.counter }}_deckle_cut"
+                                               class="form-label fw-bold">Deckle Cut</label>
+                                        <input type="text" class="form-control"
+                                               id="partition_{{ forloop.counter }}_deckle_cut"
+                                               name="partitions[{{ forloop.counter }}][deckle_cut]"
+                                               value="{{ partition.deckle_cut }}">
                                     </div>
                                     <div class="mb-3 partition">
-                                        <label for="partition_{{ forloop.counter }}_length_cut" class="form-label fw-bold">Length Cut</label>
-                                        <input type="text" class="form-control" id="partition_{{ forloop.counter }}_length_cut" name="partitions[{{ forloop.counter }}][length_cut]" value="{{ partition.length_cut }}">
+                                        <label for="partition_{{ forloop.counter }}_length_cut"
+                                               class="form-label fw-bold">Length Cut</label>
+                                        <input type="text" class="form-control"
+                                               id="partition_{{ forloop.counter }}_length_cut"
+                                               name="partitions[{{ forloop.counter }}][length_cut]"
+                                               value="{{ partition.length_cut }}">
                                     </div>
                                     <div class="mb-3 partition">
-                                        <label for="partition_{{ forloop.counter }}_ply_no" class="form-label fw-bold">Ply No.</label>
-                                        <select class="form-select" id="partition_{{ forloop.counter }}_ply_no" name="partitions[{{ forloop.counter }}][ply_no]">
-                                            <option value="1" {% if partition.ply_no == 1 %}selected{% endif %}>1</option>
-                                            <option value="2" {% if partition.ply_no == 2 %}selected{% endif %}>2</option>
-                                            <option value="3" {% if partition.ply_no == 3 %}selected{% endif %}>3</option>
-                                            <option value="4" {% if partition.ply_no == 4 %}selected{% endif %}>4</option>
+                                        <label for="partition_{{ forloop.counter }}_ply_no" class="form-label fw-bold">Ply
+                                            No.</label>
+                                        <select class="form-select" id="partition_{{ forloop.counter }}_ply_no"
+                                                name="partitions[{{ forloop.counter }}][ply_no]">
+                                            <option value="1" {% if partition.ply_no == 1 %}selected{% endif %}>1
+                                            </option>
+                                            <option value="2" {% if partition.ply_no == 2 %}selected{% endif %}>2
+                                            </option>
+                                            <option value="3" {% if partition.ply_no == 3 %}selected{% endif %}>3
+                                            </option>
+                                            <option value="4" {% if partition.ply_no == 4 %}selected{% endif %}>4
+                                            </option>
                                         </select>
                                     </div>
                                     <div class="mb-3 partition">
-                                        <label for="partition_{{ forloop.counter }}_weight" class="form-label fw-bold">Partition Weight</label>
-                                        <input type="text" class="form-control" id="partition_{{ forloop.counter }}_weight" name="partitions[{{ forloop.counter }}][weight]" value="{{ partition.partition_weight }}">
+                                        <label for="partition_{{ forloop.counter }}_weight" class="form-label fw-bold">Partition
+                                            Weight</label>
+                                        <input type="text" class="form-control"
+                                               id="partition_{{ forloop.counter }}_weight"
+                                               name="partitions[{{ forloop.counter }}][weight]"
+                                               value="{{ partition.partition_weight }}">
                                     </div>
                                     <div class="mb-3 partition">
-                                        <label for="partition_{{ forloop.counter }}_gsm" class="form-label fw-bold">GSM</label>
-                                        <input type="text" class="form-control" id="partition_{{ forloop.counter }}_gsm" name="partitions[{{ forloop.counter }}][gsm]" value="{{ partition.gsm }}">
+                                        <label for="partition_{{ forloop.counter }}_gsm"
+                                               class="form-label fw-bold">GSM</label>
+                                        <input type="text" class="form-control" id="partition_{{ forloop.counter }}_gsm"
+                                               name="partitions[{{ forloop.counter }}][gsm]"
+                                               value="{{ partition.gsm }}">
                                     </div>
                                     <div class="mb-3 partition">
-                                        <label for="partition_{{ forloop.counter }}_bf" class="form-label fw-bold">BF</label>
-                                        <input type="text" class="form-control" id="partition_{{ forloop.counter }}_bf" name="partitions[{{ forloop.counter }}][bf]" value="{{ partition.bf }}">
+                                        <label for="partition_{{ forloop.counter }}_bf"
+                                               class="form-label fw-bold">BF</label>
+                                        <input type="text" class="form-control" id="partition_{{ forloop.counter }}_bf"
+                                               name="partitions[{{ forloop.counter }}][bf]" value="{{ partition.bf }}">
                                     </div>
                                 {% endfor %}
                             </div>
@@ -312,7 +361,7 @@
                 </div>
             </div>
         </div>
-   </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function openDeleteModal() {

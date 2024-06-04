@@ -5,6 +5,18 @@
 {% endblock %}
 
 {% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible fade show">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <script>
+            setTimeout(function() {
+                bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
+            }, 2500)
+        </script>
+    {% endif %}
     <div class="row">
         <div class="col-md-4">
             <div class="text-md-end dataTables_filter" id="dataTable_filter">
@@ -130,7 +142,8 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="editReelModalLabel{{ reel.id }}">Edit Paper Reel</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <form method="post" action="{% url 'Corrugation:update_reel' reel.id %}">
