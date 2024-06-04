@@ -94,11 +94,11 @@
             <thead>
             <tr>
                 <th>No.</th>
-                <th>Reel No.</th>
-                <th>BF</th>
-                <th>GSM</th>
                 <th>Size</th>
+                <th>GSM</th>
+                <th>BF</th>
                 <th>Weight</th>
+                <th>Reel No.</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -108,11 +108,11 @@
                 	class="table-danger"
                 {% endif %} >
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ reel.reel_number }}</td>
-                    <td>{{ reel.bf }}</td>
-                    <td>{{ reel.gsm }}</td>
                     <td>{{ reel.size }} Inch</td>
+                    <td>{{ reel.gsm }}</td>
+                    <td>{{ reel.bf }}</td>
                     <td>{{ reel.weight }}</td>
+                    <td>{{ reel.reel_number }}</td>
                     <td>
                         <button type="button" class="btn btn-warning" data-bs-toggle="modal"
                                 data-bs-target="#editReelModal{{ reel.id }}">
