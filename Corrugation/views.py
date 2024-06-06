@@ -129,7 +129,7 @@ def paper_reels(request):
         try:
             bf = int(bf)
             gsm = int(gsm)
-            size = int(size)
+            size = float(size)
             weight = int(weight)
             PaperReels.objects.create(
                 reel_number=reel_number,
@@ -182,6 +182,17 @@ def delete_reel(request, pk):
         reel.used = True
         reel.save()
         messages.error(request, 'Paper reel deleted successfully.')
+        return redirect('Corrugation:paper_reels')
+    return redirect('Corrugation:paper_reels')
+
+
+@login_required
+def restore_reel(request, pk):
+    reel = get_object_or_404(PaperReels, pk=pk)
+    if request.method == 'POST':
+        reel.used = False
+        reel.save()
+        messages.success(request, 'Paper reel restored successfully.')
         return redirect('Corrugation:paper_reels')
     return redirect('Corrugation:paper_reels')
 

@@ -12,7 +12,7 @@
             </div>
         {% endfor %}
         <script>
-            setTimeout(function() {
+            setTimeout(function () {
                 bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
             }, 2500)
         </script>
@@ -128,10 +128,17 @@
                                 data-bs-target="#editReelModal{{ reel.id }}">
                             Edit
                         </button>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                data-bs-target="#deleteReelModal{{ reel.id }}">
-                            Used
-                        </button>
+                        {% if reel.used %}
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#restoreReelModal{{ reel.id }}">
+                                Un Use
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#deleteReelModal{{ reel.id }}">
+                                Use
+                            </button>
+                        {% endif %}
                     </td>
                 </tr>
 
@@ -166,7 +173,7 @@
                                     <div class="mb-3">
                                         <label for="size" class="form-label">Size (Inch)</label>
                                         <input type="number" class="form-control" id="size" name="size"
-                                               value="{{ reel.size }}" required>
+                                               value="{{ reel.size }}" step="0.01" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="weight" class="form-label">Weight</label>
@@ -198,6 +205,33 @@
                                 <form method="post" action="{% url 'Corrugation:delete_reel' reel.id %}">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-danger">Make Used</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        Cancel
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Restore Reel Modal -->
+                <div class="modal fade" id="restoreReelModal{{ reel.id }}" tabindex="-1"
+                     aria-labelledby="restoreReelModalLabel{{ reel.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="restoreReelModalLabel{{ reel.id }}">Restore Paper Reel</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure you want to make the reel
+                                    <strong>{{ reel.reel_number }}</strong> Un used?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <form method="post" action="{% url 'Corrugation:restore_reel' reel.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Make Un Used</button>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                         Cancel
                                     </button>
@@ -290,7 +324,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="size" class="form-label">Size (Inch)</label>
-                            <input type="number" class="form-control" id="size" name="size" required>
+                            <input type="number" class="form-control" id="size" name="size" step="0.01" required>
                         </div>
                         <div class="mb-3">
                             <label for="weight" class="form-label">Weight</label>

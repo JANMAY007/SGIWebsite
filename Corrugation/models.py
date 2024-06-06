@@ -8,7 +8,7 @@ class PaperReels(models.Model):
     reel_number = models.CharField(max_length=10)
     bf = models.PositiveSmallIntegerField(default=18)
     gsm = models.PositiveSmallIntegerField(default=120)
-    size = models.PositiveSmallIntegerField(default=41)
+    size = models.FloatField(default=41)
     weight = models.PositiveSmallIntegerField(default=545)
     used = models.BooleanField(default=False)
     object = models.manager

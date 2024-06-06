@@ -8,7 +8,7 @@ from .views import (index, paper_reels, search_reels, update_reel, delete_reel,
                     logout_view, update_products, delete_products, delete_stock,
                     edit_program_view, delete_program_view, product_archive,
                     product_detail_archive, purchase_order_archive, purchase_order_detail_archive,
-                    program_archive, production_archive)
+                    program_archive, production_archive, restore_reel)
 
 app_name = 'Corrugation'
 
@@ -19,6 +19,7 @@ urlpatterns = [
     path('search_reels/', search_reels, name='search_reels'),
     path('update-reel/<int:pk>/', update_reel, name='update_reel'),
     path('delete-reel/<int:pk>/', delete_reel, name='delete_reel'),
+    path('restore-reel/<int:pk>/', restore_reel, name='restore_reel'),
     path('purchase-order/', purchase_order, name='purchase_order'),
     path('purchase-order-archive/', purchase_order_archive, name='purchase_order_archive'),
     path('purchase-order-detail-archive/', purchase_order_detail_archive, name='purchase_order_detail_archive'),
