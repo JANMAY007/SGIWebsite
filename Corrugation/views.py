@@ -346,6 +346,17 @@ def delete_products(request, pk):
 
 
 @login_required
+def restore_products(request, pk):
+    if request.method == 'POST':
+        product = get_object_or_404(Product, pk=pk)
+        product.archive = False
+        product.save()
+        messages.success(request, 'Product restored successfully.')
+        return redirect('Corrugation:add_product')
+    return redirect('Corrugation:add_product')
+
+
+@login_required
 def products_detail(request, pk):
     product = get_object_or_404(Product, pk=pk, archive=False)
     partitions = Partition.objects.filter(product_name=product)
