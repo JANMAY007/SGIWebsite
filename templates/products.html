@@ -68,6 +68,53 @@
                     }
                 });
             });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                let partitionCount = 1;
+
+                document.getElementById('addPartitionBtn').addEventListener('click', function () {
+                    partitionCount++;
+                    const newPartition = document.createElement('div');
+                    newPartition.classList.add('partition', 'mb-3');
+                    newPartition.id = `partition_${partitionCount}`;
+                    newPartition.innerHTML = `
+                        <h6>Partition ${partitionCount}</h6>
+                        <div class="mb-3">
+                            <label for="partition_size_${partitionCount}" class="form-label">Partition Size</label>
+                            <input type="text" class="form-control" id="partition_size_${partitionCount}" name="partition_size">
+                        </div>
+                        <div class="mb-3">
+                            <label for="partition_od_${partitionCount}" class="form-label">Partition OD</label>
+                            <input type="text" class="form-control" id="partition_od_${partitionCount}" name="partition_od">
+                        </div>
+                        <div class="mb-3">
+                            <label for="deckle_cut_${partitionCount}" class="form-label">Deckle Cut</label>
+                            <input type="text" class="form-control" id="deckle_cut_${partitionCount}" name="deckle_cut">
+                        </div>
+                        <div class="mb-3">
+                            <label for="length_cut_${partitionCount}" class="form-label">Length Cut</label>
+                            <input type="text" class="form-control" id="length_cut_${partitionCount}" name="length_cut">
+                        </div>
+                        <div class="mb-3">
+                            <label for="partition_type_${partitionCount}" class="form-label">Partition Type</label>
+                            <input type="text" class="form-control" id="partition_type_${partitionCount}" name="partition_type">
+                        </div>
+                        <div class="mb-3">
+                            <label for="ply_no_${partitionCount}" class="form-label">Ply Number</label>
+                            <input type="text" class="form-control" id="ply_no_${partitionCount}" name="ply_no">
+                        </div>
+                        <hr>
+                    `;
+                    document.getElementById('partitions').appendChild(newPartition);
+                });
+
+                document.getElementById('removePartitionBtn').addEventListener('click', function () {
+                    if (partitionCount > 1) {
+                        document.getElementById(`partition_${partitionCount}`).remove();
+                        partitionCount--;
+                    }
+                });
+            });
         </script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
@@ -156,47 +203,41 @@
                             <hr>
                             <!-- Partition Fields -->
                             <div id="partitions">
-                                <div id="partitions">
-                                    <div class="partition mb-3" id="partition_0">
-                                        <h6>Partition 1</h6>
-                                        <div class="mb-3">
-                                            <label for="partition_size_0" class="form-label">Partition Size</label>
-                                            <input type="text" class="form-control" id="partition_size_0"
-                                                   name="partition_size">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="partition_od_0" class="form-label">Partition OD</label>
-                                            <input type="text" class="form-control" id="partition_od_0"
-                                                   name="partition_od">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="deckle_cut_0" class="form-label">Deckle Cut</label>
-                                            <input type="text" class="form-control" id="deckle_cut_0" name="deckle_cut">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="length_cut_0" class="form-label">Length Cut</label>
-                                            <input type="text" class="form-control" id="length_cut_0" name="length_cut">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="partition_type_0" class="form-label">Partition Type</label>
-                                            <input type="text" class="form-control" id="partition_type_0"
-                                                   name="partition_type">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="ply_no_0" class="form-label">Ply Number</label>
-                                            <input type="text" class="form-control" id="ply_no_0" name="ply_no">
-                                        </div>
-                                        <hr>
+                                <div class="partition mb-3" id="partition_0">
+                                    <h6>Partition 1</h6>
+                                    <div class="mb-3">
+                                        <label for="partition_size_0" class="form-label">Partition Size</label>
+                                        <input type="text" class="form-control" id="partition_size_0"
+                                               name="partition_size">
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="partition_od_0" class="form-label">Partition OD</label>
+                                        <input type="text" class="form-control" id="partition_od_0"
+                                               name="partition_od">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="deckle_cut_0" class="form-label">Deckle Cut</label>
+                                        <input type="text" class="form-control" id="deckle_cut_0" name="deckle_cut">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="length_cut_0" class="form-label">Length Cut</label>
+                                        <input type="text" class="form-control" id="length_cut_0" name="length_cut">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="partition_type_0" class="form-label">Partition Type</label>
+                                        <input type="text" class="form-control" id="partition_type_0"
+                                               name="partition_type">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="ply_no_0" class="form-label">Ply Number</label>
+                                        <input type="text" class="form-control" id="ply_no_0" name="ply_no">
+                                    </div>
+                                    <hr>
                                 </div>
-                                <div class="d-grid gap-2 d-md-block">
-                                    <button type="button" class="btn btn-outline-primary" id="addPartitionBtn">Add
-                                        Partition
-                                    </button>
-                                    <button type="button" class="btn btn-outline-danger" id="removePartitionBtn">Remove
-                                        Partition
-                                    </button>
-                                </div>
+                            </div>
+                            <div class="d-grid gap-2 d-md-block">
+                                <button type="button" class="btn btn-outline-primary" id="addPartitionBtn">Add Partition</button>
+                                <button type="button" class="btn btn-outline-danger" id="removePartitionBtn">Remove Partition</button>
                             </div>
                         </div>
                         <div class="modal-footer">
