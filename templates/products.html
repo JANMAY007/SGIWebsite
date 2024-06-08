@@ -12,7 +12,7 @@
             </div>
         {% endfor %}
         <script>
-            setTimeout(function() {
+            setTimeout(function () {
                 bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
             }, 2500)
         </script>
@@ -97,11 +97,32 @@
                         </div>
                         <div class="mb-3">
                             <label for="partition_type_${partitionCount}" class="form-label">Partition Type</label>
-                            <input type="text" class="form-control" id="partition_type_${partitionCount}" name="partition_type">
+                            <select class="form-control" id="partition_type_${partitionCount}" name="partition_type">
+                                <option value="vertical">Vertical</option>
+                                <option value="horizontal">Horizontal</option>
+                                <option value="z-type">Z-Type</option>
+                                <option value="crisscross">Criss-Cross</option>
+                            </select>                        
                         </div>
                         <div class="mb-3">
                             <label for="ply_no_${partitionCount}" class="form-label">Ply Number</label>
-                            <input type="text" class="form-control" id="ply_no_${partitionCount}" name="ply_no">
+                            <select class="form-control" id="ply_no_${partitionCount}" name="ply_no">
+                                <option value="3">3 Ply</option>
+                                <option value="5">5 Ply</option>
+                                <option value="7">7 Ply</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="partition_weight_${partitionCount}" class="form-label">Ply Weight</label>
+                            <input type="text" class="form-control" id="partition_weight_${partitionCount}" name="partition_weight">
+                        </div>
+                        <div class="mb-3">
+                            <label for="partition_gsm_${partitionCount}" class="form-label">Ply GSM</label>
+                            <input type="text" class="form-control" id="partition_gsm_${partitionCount}" name="partition_gsm">
+                        </div>
+                        <div class="mb-3">
+                            <label for="partition_bf_${partitionCount}" class="form-label">Ply BF</label>
+                            <input type="text" class="form-control" id="partition_bf_${partitionCount}" name="partition_bf">
                         </div>
                         <hr>
                     `;
@@ -225,19 +246,44 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="partition_type_0" class="form-label">Partition Type</label>
-                                        <input type="text" class="form-control" id="partition_type_0"
-                                               name="partition_type">
+                                        <select class="form-control" id="partition_type_0" name="partition_type">
+                                            <option value="vertical">Vertical</option>
+                                            <option value="horizontal">Horizontal</option>
+                                            <option value="z-type">Z-Type</option>
+                                            <option value="crisscross">Criss-Cross</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
                                         <label for="ply_no_0" class="form-label">Ply Number</label>
-                                        <input type="text" class="form-control" id="ply_no_0" name="ply_no">
+                                        <select class="form-control" id="ply_no_0" name="ply_no">
+                                            <option value="3">3 Ply</option>
+                                            <option value="5">5 Ply</option>
+                                            <option value="7">7 Ply</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="partition_weight_0" class="form-label">Ply Weight</label>
+                                        <input type="text" class="form-control" id="partition_weight_0"
+                                               name="partition_weight">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="partition_gsm_0" class="form-label">Ply GSM</label>
+                                        <input type="text" class="form-control" id="partition_gsm_0" name="partition_gsm">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="partition_bf_0" class="form-label">Ply BF</label>
+                                        <input type="text" class="form-control" id="partition_bf_0" name="partition_bf">
                                     </div>
                                     <hr>
                                 </div>
                             </div>
                             <div class="d-grid gap-2 d-md-block">
-                                <button type="button" class="btn btn-outline-primary" id="addPartitionBtn">Add Partition</button>
-                                <button type="button" class="btn btn-outline-danger" id="removePartitionBtn">Remove Partition</button>
+                                <button type="button" class="btn btn-outline-primary" id="addPartitionBtn">Add
+                                    Partition
+                                </button>
+                                <button type="button" class="btn btn-outline-danger" id="removePartitionBtn">Remove
+                                    Partition
+                                </button>
                             </div>
                         </div>
                         <div class="modal-footer">
