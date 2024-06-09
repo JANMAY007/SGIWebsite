@@ -12,7 +12,7 @@
             </div>
         {% endfor %}
         <script>
-            setTimeout(function() {
+            setTimeout(function () {
                 bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
             }, 2500)
         </script>
@@ -29,10 +29,7 @@
         <div class="row">
             {% for purchase_order in purchase_order_list %}
                 <div class="col-md-6 col-xl-3 col-sm-12 mb-4">
-                    <form method="POST" action="{% url 'Corrugation:add_purchase_order_detail' %}"
-                          class="card shadow border-start-warning py-2">
-                        {% csrf_token %}
-                        <input type="hidden" name="po_given_by" value="{{ purchase_order }}">
+                    <div class="card shadow border-start-warning py-2">
                         <div class="card-body">
                             <div class="text-uppercase text-dark fw-bold mb-1">
                                 {{ purchase_order }}
@@ -42,9 +39,10 @@
                                     {{ purchase_order.pk }}
                                 </span>
                             </div>
-                            <button type="submit" class="btn btn-outline-primary">View Details</button>
+                            <a href="{% url 'Corrugation:add_purchase_order_detail' purchase_order %}"
+                               class="btn btn-outline-primary">View Details</a>
                         </div>
-                    </form>
+                    </div>
                 </div>
             {% endfor %}
         </div>
