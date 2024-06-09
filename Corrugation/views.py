@@ -510,6 +510,16 @@ def delete_purchase_order(request, pk):
 
 
 @login_required
+def restore_purchase_order(request, pk):
+    if request.method == 'POST':
+        po = get_object_or_404(PurchaseOrder, pk=pk)
+        po.active = True
+        po.save()
+        messages.success(request, 'Purchase order Restored successfully.')
+        return redirect('Corrugation:purchase_order')
+
+
+@login_required
 def add_dispatch(request):
     if request.method == 'POST':
         pk = request.POST.get('pk')
@@ -523,7 +533,7 @@ def add_dispatch(request):
             dispatch_quantity=dispatch_quantity
         )
         try:
-            stock = Stock.objects.get(product=po.product_name)
+            stock, created = Stock.objects.get_or_create(product=po.product_name)
             stock.stock_quantity -= int(dispatch_quantity)
             stock.save()
         except django.db.utils.IntegrityError:
