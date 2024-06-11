@@ -258,7 +258,7 @@
                             <div class="form-group">
                                 <label for="edit_program_notes">Program Notes</label>
                                 <textarea class="form-control" id="edit_program_notes" name="program_notes" rows="3"
-                                          required placeholder="{{ program.program_notes }}"></textarea>
+                                          required>{{ program.program_notes }}</textarea>
                             </div>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -292,9 +292,7 @@
             </div>
         </div>
     {% endfor %}
-{% endblock %}
 
-{% block extra_js %}
     <script>
         // Fill edit modal with data
         $('#editProgramModal').on('show.bs.modal', function (event) {
