@@ -11,14 +11,14 @@
             </div>
         {% endfor %}
         <script>
-            setTimeout(function() {
+            setTimeout(function () {
                 bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
             }, 2500)
         </script>
     {% endif %}
-    <div class="container float-end">
+    <div class="container mb-3">
         <!-- Button to trigger add modal -->
-        <button type="button" class="float-end btn btn-primary btn-icon-split" data-bs-toggle="modal"
+        <button type="button" class="btn btn-primary btn-icon-split" data-bs-toggle="modal"
                 data-bs-target="#addProgramModal">
         <span class="text-white-50 icon">
             <i class="fas fa-book-open"></i>
@@ -83,20 +83,25 @@
                     <h5 class="m-0 fw-bold">
                         <span>{{ program.program_date }}</span>
                     </h5>
+                    <div class="btn-group">
+                        <!-- Edit and Delete Buttons -->
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                data-bs-target="#editProgramModal"
+                                data-id="{{ program.id }}" data-product_name="{{ program.product_name }}"
+                                data-program_quantity="{{ program.program_quantity }}"
+                                data-program_date="{{ program.program_date }}"
+                                data-program_notes="{{ program.program_notes }}">
+                            Edit Program
+                        </button>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#deleteProgramModal"
+                                data-id="{{ program.id }}">
+                            Delete Program
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="card-body">
-                <!-- Edit and Delete Buttons -->
-                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editProgramModal"
-                        data-id="{{ program.id }}" data-product_name="{{ program.product_name }}"
-                        data-program_quantity="{{ program.program_quantity }}"
-                        data-program_date="{{ program.program_date }}" data-program_notes="{{ program.program_notes }}">
-                    Edit
-                </button>
-                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProgramModal"
-                        data-id="{{ program.id }}">
-                    Delete
-                </button>
                 <!-- Start: Card Primary -->
                 <div class="card shadow border-start-primary py-2">
                     <div class="card-body">
@@ -154,61 +159,62 @@
 
                 <!-- Start: Card Primary -->
                 {% if program.partitions %}
-                	<div class="card shadow border-start-primary py-2">
-                    <div class="card-header py-3">
-                        <h6 class="text-primary m-0 fw-bold">Partitions</h6>
-                    </div>
-                    {% for partition in program.partitions %}
-                        <div class="card-body">
-                            <div class="row align-items-center no-gutters">
-                                <div class="col me-2">
-                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Size</span>
-                                    </div>
-                                    <div class="text-dark fw-bold h5 mb-0">
-                                        <span>{{ partition.partition_size }}</span>
-                                    </div>
-                                </div>
-                                <div class="col me-2">
-                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>OD</span></div>
-                                    <div class="text-dark fw-bold h5 mb-0">
-                                        <span>{{ partition.partition_od }}</span></div>
-                                </div>
-                            </div>
-                            <div class="row align-items-center no-gutters">
-                                <div class="col me-2">
-                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Cuts</span>
-                                    </div>
-                                    <div class="text-dark fw-bold h5 mb-0">
-                                        <span>D - {{ partition.deckle_cut }}, L - {{ partition.length_cut }}</span>
-                                    </div>
-                                </div>
-                                <div class="col me-2">
-                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Type</span>
-                                    </div>
-                                    <div class="text-dark fw-bold h5 mb-0">
-                                        <span>{{ partition.partition_type }}</span></div>
-                                </div>
-                            </div>
-                            <div class="row align-items-center no-gutters">
-                                <div class="col me-2">
-                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span
-                                            class="text-primary">Ply</span></div>
-                                    <div class="text-dark fw-bold h5 mb-0"><span>{{ partition.ply_no }}</span>
-                                    </div>
-                                </div>
-                                <div class="col me-2">
-                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span
-                                            class="text-primary">Weight</span>
-                                    </div>
-                                    <div class="text-dark fw-bold h5 mb-0">
-                                        <span>{{ partition.partition_weight }}</span></div>
-                                </div>
-                            </div>
+                    <div class="card shadow border-start-primary py-2">
+                        <div class="card-header py-3">
+                            <h6 class="text-primary m-0 fw-bold">Partitions</h6>
                         </div>
-                        <hr>
-                    {% endfor %}
-                </div>
-                {% endif %} 
+                        {% for partition in program.partitions %}
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col me-2">
+                                        <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Size</span>
+                                        </div>
+                                        <div class="text-dark fw-bold h5 mb-0">
+                                            <span>{{ partition.partition_size }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col me-2">
+                                        <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>OD</span>
+                                        </div>
+                                        <div class="text-dark fw-bold h5 mb-0">
+                                            <span>{{ partition.partition_od }}</span></div>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col me-2">
+                                        <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Cuts</span>
+                                        </div>
+                                        <div class="text-dark fw-bold h5 mb-0">
+                                            <span>D - {{ partition.deckle_cut }}, L - {{ partition.length_cut }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col me-2">
+                                        <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span>Type</span>
+                                        </div>
+                                        <div class="text-dark fw-bold h5 mb-0">
+                                            <span>{{ partition.partition_type }}</span></div>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col me-2">
+                                        <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span
+                                                class="text-primary">Ply</span></div>
+                                        <div class="text-dark fw-bold h5 mb-0"><span>{{ partition.ply_no }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col me-2">
+                                        <div class="text-uppercase text-primary fw-bold text-sm mb-1"><span
+                                                class="text-primary">Weight</span>
+                                        </div>
+                                        <div class="text-dark fw-bold h5 mb-0">
+                                            <span>{{ partition.partition_weight }}</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 <!-- End: Card Primary -->
             </div>
         </div>
