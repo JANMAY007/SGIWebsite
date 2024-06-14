@@ -41,10 +41,14 @@
             </div>
         </div>
     </div>
-    <div>
+    <div id="search-results-section" style="display: none;">
         <h2>Search Results</h2>
         <ul id="results-list"></ul>
         <p id="no-results" style="display: none;">No results found.</p>
+        <div id="size-counts">
+            <h3>Total Reels by Size</h3>
+            <ul id="size-counts-list"></ul>
+        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -66,17 +70,26 @@
         const csrftoken = getCookie('csrftoken');
 
         $(document).ready(function () {
-            function updateResults(results) {
+            function updateResults(results, sizeCounts) {
                 var resultsList = $('#results-list');
+                var sizeCountsList = $('#size-counts-list');
                 resultsList.empty();
+                sizeCountsList.empty();
+                
                 if (results.length > 0) {
                     $('#no-results').hide();
+                    $('#search-results-section').show();
                     results.forEach(function (result) {
                         var listItem = $('<li></li>').text(result.reel_number + ' - BF: ' + result.bf + ', GSM: ' + result.gsm + ', Size: ' + result.size + ', Weight: ' + result.weight);
                         resultsList.append(listItem);
                     });
+                    for (var size in sizeCounts) {
+                        var countItem = $('<li></li>').text('Size: ' + size + ' - Total: ' + sizeCounts[size]);
+                        sizeCountsList.append(countItem);
+                    }
                 } else {
                     $('#no-results').show();
+                    $('#search-results-section').show();
                 }
             }
 
@@ -91,12 +104,14 @@
                             xhr.setRequestHeader("X-CSRFToken", csrftoken);
                         },
                         success: function (data) {
-                            updateResults(data.results);
+                            updateResults(data.results, data.size_counts);
                         }
                     });
                 } else {
                     $('#results-list').empty();
+                    $('#size-counts-list').empty();
                     $('#no-results').hide();
+                    $('#search-results-section').hide();
                 }
             });
         });

@@ -3,7 +3,7 @@ import django.db.utils
 from django.http import JsonResponse
 from django.urls import reverse
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import (PaperReels, Product, Partition, PurchaseOrder, Dispatch,
                      Program, Production, ProductionReels, Stock)
@@ -103,6 +103,7 @@ def search_reels(request):
             Q(weight__icontains=query),
             used=False
         )
+
         results_data = [
             {
                 'reel_number': reel.reel_number,
@@ -113,9 +114,14 @@ def search_reels(request):
             }
             for reel in results
         ]
+
+        # Calculate the total reels by size
+        size_counts = results.values('size').annotate(total=Count('size')).order_by('size')
+        size_counts_data = {size['size']: size['total'] for size in size_counts}
     else:
         results_data = []
-    return JsonResponse({'results': results_data})
+        size_counts_data = {}
+    return JsonResponse({'results': results_data, 'size_counts': size_counts_data})
 
 
 @login_required
