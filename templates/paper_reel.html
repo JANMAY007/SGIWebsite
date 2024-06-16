@@ -61,68 +61,58 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
                 }
             }
-            return cookieValue;
         }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
 
-        const csrftoken = getCookie('csrftoken');
-
-        $(document).ready(function () {
-            function updateResults(results, sizeCounts) {
-                var resultsList = $('#results-list');
-                var sizeCountsList = $('#size-counts-list');
-                resultsList.empty();
-                sizeCountsList.empty();
-
-                if (results.length > 0) {
-                    $('#no-results').hide();
-                    $('#search-results-section').show();
-                    results.forEach(function (result) {
-                        var listItem = $('<li></li>').text(result.reel_number + ' - BF: ' + result.bf + ', GSM: ' + result.gsm + ', Size: ' + result.size + ', Weight: ' + result.weight);
-                        resultsList.append(listItem);
+    $(document).ready(function () {
+        $('#search-input').on('input', function () {
+            const query = $(this).val();
+            $.ajax({
+                url: "{% url 'Corrugation:search_reels' %}",
+                data: {'q': query},
+                success: function (data) {
+                    const results = data.results;
+                    let tableBody = '';
+                    results.forEach(function (reel, index) {
+                        tableBody += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${reel.size} Inch</td>
+                                <td>${reel.gsm}</td>
+                                <td>${reel.bf}</td>
+                                <td>${reel.weight}</td>
+                                <td>${reel.reel_number}</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editReelModal${reel.id}">Edit</button>
+                                    ${reel.used ? `
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#restoreReelModal${reel.id}">Un Use</button>
+                                    ` : `
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteReelModal${reel.id}">Use</button>
+                                    `}
+                                </td>
+                            </tr>
+                        `;
                     });
-                    for (var size in sizeCounts) {
-                        var countItem = $('<li></li>').text('Size: ' + size + ' - Total: ' + sizeCounts[size]);
-                        sizeCountsList.append(countItem);
-                    }
-                } else {
-                    $('#no-results').show();
-                    $('#search-results-section').show();
-                }
-            }
-
-            $('#search-input').on('input', function () {
-                var query = $(this).val();
-                if (query.trim()) {
-                    $.ajax({
-                        url: "{% url 'Corrugation:search_reels' %}",
-                        data: {'q': query},
-                        dataType: 'json',
-                        beforeSend: function (xhr) {
-                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                        },
-                        success: function (data) {
-                            updateResults(data.results, data.size_counts);
-                        }
-                    });
-                } else {
-                    $('#results-list').empty();
-                    $('#size-counts-list').empty();
-                    $('#no-results').hide();
-                    $('#search-results-section').hide();
+                    $('#reel-table-body').html(tableBody);
                 }
             });
         });
+
+        // Trigger initial load of all reels
+        $('#search-input').trigger('input');
+    });
         $(document).ready(function () {
             $('#bulkReelForm').on('submit', function (e) {
                 e.preventDefault();
@@ -170,7 +160,7 @@
                 <th>Actions</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="reel-table-body">
             {% for reel in reels %}
                 <tr {% if reel.used %} class="table-danger" {% endif %}>
                     <td>{{ forloop.counter }}</td>

@@ -92,37 +92,22 @@ def delete_stock(request, pk):
     return render(request, 'index.html', {'stock': stock})
 
 
-@login_required
 def search_reels(request):
     query = request.GET.get('q', '')
     if query:
         results = PaperReels.objects.filter(
             Q(reel_number__icontains=query) |
-            Q(bf__icontains=query) |
-            Q(gsm__icontains=query) |
             Q(size__icontains=query) |
-            Q(weight__icontains=query),
-            used=False
+            Q(gsm__icontains=query) |
+            Q(bf__icontains=query) |
+            Q(weight__icontains=query)
         )
-
-        results_data = [
-            {
-                'reel_number': reel.reel_number,
-                'bf': reel.bf,
-                'gsm': reel.gsm,
-                'size': reel.size,
-                'weight': reel.weight,
-            }
-            for reel in results
-        ]
-
-        # Calculate the total reels by size
-        size_counts = results.values('size').annotate(total=Count('size')).order_by('size')
-        size_counts_data = {size['size']: size['total'] for size in size_counts}
     else:
-        results_data = []
-        size_counts_data = {}
-    return JsonResponse({'results': results_data, 'size_counts': size_counts_data})
+        results = PaperReels.objects.all()
+
+    size_counts = results.values('size').annotate(count=Count('size'))
+    results_data = list(results.values('id', 'size', 'gsm', 'bf', 'weight', 'reel_number', 'used'))
+    return JsonResponse({'results': results_data, 'size_counts': list(size_counts)})
 
 
 @login_required
