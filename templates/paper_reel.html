@@ -78,16 +78,16 @@
         const csrftoken = getCookie('csrftoken');
 
         $(document).ready(function () {
-    $('#search-input').on('input', function () {
-        const query = $(this).val();
-        $.ajax({
-            url: "{% url 'Corrugation:search_reels' %}",
-            data: {'q': query},
-            success: function (data) {
-                const results = data.results;
-                let tableBody = '';
-                results.forEach(function (reel, index) {
-                    tableBody += `
+            $('#search-input').on('input', function () {
+                const query = $(this).val();
+                $.ajax({
+                    url: "{% url 'Corrugation:search_reels' %}",
+                    data: {'q': query},
+                    success: function (data) {
+                        const results = data.results;
+                        let tableBody = '';
+                        results.forEach(function (reel, index) {
+                            tableBody += `
                         <tr class="${reel.used ? 'table-danger' : ''}">
                             <td>${index + 1}</td>
                             <td>${reel.size} Inch</td>
@@ -108,15 +108,15 @@
                         ${getModalHTML(reel, 'delete')}
                         ${getModalHTML(reel, 'restore')}
                     `;
+                        });
+                        $('#reel-table-body').html(tableBody);
+                    }
                 });
-                $('#reel-table-body').html(tableBody);
-            }
-        });
-    });
+            });
 
-    function getModalHTML(reel, action) {
-        const actionCapitalized = action.charAt(0).toUpperCase() + action.slice(1);
-        return `
+            function getModalHTML(reel, action) {
+                const actionCapitalized = action.charAt(0).toUpperCase() + action.slice(1);
+                return `
             <div class="modal fade" id="${action}ReelModal${reel.id}" tabindex="-1"
                  aria-labelledby="${action}ReelModalLabel${reel.id}" aria-hidden="true">
                 <div class="modal-dialog">
@@ -133,14 +133,14 @@
                 </div>
             </div>
         `;
-    }
+            }
 
-    function getModalBody(reel, action) {
-        const csrfToken = '{{ csrf_token }}'; // Django CSRF token
-        const reelId = reel.id ? reel.id : '';
-        switch (action) {
-            case 'edit':
-                return `
+            function getModalBody(reel, action) {
+                const csrfToken = '{{ csrf_token }}'; // Django CSRF token
+                const reelId = reel.id ? reel.id : '';
+                switch (action) {
+                    case 'edit':
+                        return `
                     <form method="post" action="/corrugation/update-reel/${reelId}/">
                         ${csrfToken}
                         <div class="mb-3">
@@ -171,8 +171,8 @@
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                     </form>
                 `;
-            case 'delete':
-                return `
+                    case 'delete':
+                        return `
                     <p>Are you sure you want to make the reel
                         <strong>${reel.reel_number}</strong> used?</p>
                     <div class="modal-footer">
@@ -185,8 +185,8 @@
                         </form>
                     </div>
                 `;
-            case 'restore':
-                return `
+                    case 'restore':
+                        return `
                     <p>Are you sure you want to make the reel
                         <strong>${reel.reel_number}</strong> Un used?</p>
                     <div class="modal-footer">
@@ -199,15 +199,14 @@
                         </form>
                     </div>
                 `;
-        }
-    }
+                }
+            }
 
-    $(document).on('click', '[data-bs-toggle="modal"]', function () {
-        const targetModal = $(this).data('bs-target');
-        $(targetModal).modal('show');
-    });
-});
-
+            $(document).on('click', '[data-bs-toggle="modal"]', function () {
+                const targetModal = $(this).data('bs-target');
+                $(targetModal).modal('show');
+            });
+        });
 
 
         $(document).ready(function () {
