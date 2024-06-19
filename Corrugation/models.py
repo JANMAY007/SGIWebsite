@@ -11,6 +11,8 @@ class PaperReels(models.Model):
     size = models.FloatField(default=41)
     weight = models.PositiveSmallIntegerField(default=545)
     used = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     object = models.manager
 
     def __str__(self):
