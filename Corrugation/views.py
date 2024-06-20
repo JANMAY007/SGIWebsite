@@ -461,7 +461,7 @@ def add_purchase_order_detailed(request):
             po_quantity=po_quantity
         )
         messages.success(request, 'Purchase order added successfully.')
-        return redirect('Corrugation:purchase_order')
+        return redirect('Corrugation:add_purchase_order_detail', po_given_by=po_given_by)
 
 
 @login_required
@@ -567,8 +567,8 @@ def add_dispatch(request, pk):
             messages.success(request, 'Dispatch added successfully.')
         else:
             # If not enough stock, show an error message
-            messages.error(request, 'Dispatch added without stock.')
-        return redirect('Corrugation:purchase_order')
+            messages.info(request, 'Dispatch added without stock.')
+        return redirect('Corrugation:add_purchase_order_detail', po.po_given_by)
     return redirect('Corrugation:purchase_order')
 
 
