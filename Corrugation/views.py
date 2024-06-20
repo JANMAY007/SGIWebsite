@@ -96,15 +96,15 @@ def search_reels(request):
     query = request.GET.get('q', '')
     if query:
         results = PaperReels.objects.filter(
-            Q(size__contains=query) |
+            Q(size__exact=query) |
             Q(reel_number__exact=query) |
             Q(gsm__iexact=query) |
             Q(bf__iexact=query) |
             Q(weight__iexact=query)
         )
     else:
-        results = PaperReels.objects.all()
-
+        # send first 20 reels if no query is provided
+        results = PaperReels.objects.all()[:20]
     size_counts = results.values('size').annotate(count=Count('size'))
     results_data = list(results.values('id', 'size', 'gsm', 'bf', 'weight', 'reel_number', 'used'))
     return JsonResponse({'results': results_data, 'size_counts': list(size_counts)})
