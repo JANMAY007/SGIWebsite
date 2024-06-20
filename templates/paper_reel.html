@@ -77,53 +77,60 @@
 
         const csrftoken = getCookie('csrftoken');
 
+        let debounceTimer;
+        const debounceDelay = 500;
+
         $(document).ready(function () {
             $('#search-input').on('input', function () {
+                clearTimeout(debounceTimer);
                 const query = $(this).val();
-                $.ajax({
-                    url: "{% url 'Corrugation:search_reels' %}",
-                    data: {'q': query},
-                    success: function (data) {
-                        const results = data.results;
-                        let tableBody = '';
-                        results.forEach(function (reel, index) {
-                            tableBody += `
-        <tr class="${reel.used ? 'table-danger' : ''}">
-            <td>${index + 1}</td>
-            <td>${reel.size} Inch</td>
-            <td>${reel.gsm}</td>
-            <td>${reel.bf}</td>
-            <td>${reel.weight}</td>
-            <td>${reel.reel_number}</td>
-            <td>
-                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editReelModal${reel.id}">Edit</button>
-                ${reel.used ? `
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#restoreReelModal${reel.id}">Un Use</button>
-                ` : `
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteReelModal${reel.id}">Use</button>
-                `}
-            </td>
-        </tr>
-        ${getModalHTML(reel, 'edit')}
-        ${getModalHTML(reel, 'delete')}
-        ${getModalHTML(reel, 'restore')}
-    `;
-                        });
-                        $('#reel-table-body').html(tableBody);
-
-                        // Append the modals to the body to maintain Bootstrap functionality
-                        results.forEach(function (reel) {
-                            $('body').append(getModalHTML(reel, 'edit'));
-                            $('body').append(getModalHTML(reel, 'delete'));
-                            $('body').append(getModalHTML(reel, 'restore'));
-                        });
-                    }
-                });
+                debounceTimer = setTimeout(() => {
+                    searchReels(query);
+                }, debounceDelay);
             });
+        });
 
-            function getModalHTML(reel, action) {
-                const actionCapitalized = action.charAt(0).toUpperCase() + action.slice(1);
-                return `
+        function searchReels(query) {
+            $.ajax({
+                url: "{% url 'Corrugation:search_reels' %}",
+                data: {'q': query},
+                success: function (data) {
+                    const results = data.results;
+                    let tableBody = '';
+                    results.forEach(function (reel, index) {
+                        tableBody += `
+                        <tr class="${reel.used ? 'table-danger' : ''}">
+                            <td>${index + 1}</td>
+                            <td>${reel.size} Inch</td>
+                            <td>${reel.gsm}</td>
+                            <td>${reel.bf}</td>
+                            <td>${reel.weight}</td>
+                            <td>${reel.reel_number}</td>
+                            <td>
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editReelModal${reel.id}">Edit</button>
+                                ${reel.used ? `
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#restoreReelModal${reel.id}">Un Use</button>
+                                ` : `
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteReelModal${reel.id}">Use</button>
+                                `}
+                            </td>
+                        </tr>
+                    `;
+                    });
+                    $('#reel-table-body').html(tableBody);
+
+                    results.forEach(function (reel) {
+                        $('body').append(getModalHTML(reel, 'edit'));
+                        $('body').append(getModalHTML(reel, 'delete'));
+                        $('body').append(getModalHTML(reel, 'restore'));
+                    });
+                }
+            });
+        }
+
+        function getModalHTML(reel, action) {
+            const actionCapitalized = action.charAt(0).toUpperCase() + action.slice(1);
+            return `
             <div class="modal fade" id="${action}ReelModal${reel.id}" tabindex="-1" aria-labelledby="${action}ReelModalLabel${reel.id}" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -138,14 +145,14 @@
                 </div>
             </div>
         `;
-            }
+        }
 
-            function getModalBody(reel, action) {
-                const reelId = reel.id ? reel.id : '';
-                switch (action) {
-                    case 'edit':
-                        var updateReelUrlTemplate = "{% url 'Corrugation:update_reel' pk='999999' %}".replace('999999', reelId);
-                        return `
+        function getModalBody(reel, action) {
+            const reelId = reel.id ? reel.id : '';
+            switch (action) {
+                case 'edit':
+                    var updateReelUrlTemplate = "{% url 'Corrugation:update_reel' pk='999999' %}".replace('999999', reelId);
+                    return `
                 <form method="post" action="${updateReelUrlTemplate}">
                     {% csrf_token %}
                     <div class="mb-3">
@@ -171,9 +178,9 @@
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                 </form>
             `;
-                    case 'delete':
-                        var deleteReelUrlTemplate = "{% url 'Corrugation:delete_reel' pk='999999' %}".replace('999999', reelId);
-                        return `
+                case 'delete':
+                    var deleteReelUrlTemplate = "{% url 'Corrugation:delete_reel' pk='999999' %}".replace('999999', reelId);
+                    return `
                 <p>Are you sure you want to make the reel <strong>${reel.reel_number}</strong> used?</p>
                 <div class="modal-footer">
                     <form method="post" action="${deleteReelUrlTemplate}">
@@ -183,9 +190,9 @@
                     </form>
                 </div>
             `;
-                    case 'restore':
-                        var restoreReelUrlTemplate = "{% url 'Corrugation:restore_reel' pk='999999' %}".replace('999999', reelId);
-                        return `
+                case 'restore':
+                    var restoreReelUrlTemplate = "{% url 'Corrugation:restore_reel' pk='999999' %}".replace('999999', reelId);
+                    return `
                 <p>Are you sure you want to make the reel <strong>${reel.reel_number}</strong> Un used?</p>
                 <div class="modal-footer">
                     <form method="post" action="${restoreReelUrlTemplate}">
@@ -195,15 +202,15 @@
                     </form>
                 </div>
             `;
-                }
             }
+        }
 
-            // Use event delegation for dynamically added modals
-            $(document).on('click', '[data-bs-toggle="modal"]', function () {
-                const targetModal = $(this).data('bs-target');
-                $(targetModal).modal('show');
-            });
+        // Use event delegation for dynamically added modals
+        $(document).on('click', '[data-bs-toggle="modal"]', function () {
+            const targetModal = $(this).data('bs-target');
+            $(targetModal).modal('show');
         });
+
 
         $(document).ready(function () {
             $('#bulkReelForm').on('submit', function (e) {
