@@ -96,11 +96,11 @@ def search_reels(request):
     query = request.GET.get('q', '')
     if query:
         results = PaperReels.objects.filter(
+            Q(size__contains=query) |
             Q(reel_number__exact=query) |
-            Q(size__icontains=query) |
-            Q(gsm__exact=query) |
-            Q(bf__exact=query) |
-            Q(weight__exact=query)
+            Q(gsm__iexact=query) |
+            Q(bf__iexact=query) |
+            Q(weight__iexact=query)
         )
     else:
         results = PaperReels.objects.all()
