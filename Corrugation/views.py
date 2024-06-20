@@ -466,11 +466,11 @@ def add_purchase_order_detailed(request):
 
 @login_required
 def add_purchase_order_detail(request, po_given_by):
+    # Retrieve all active purchase orders for the given user
     purchase_orders = PurchaseOrder.objects.filter(
         po_given_by=po_given_by,
         active=True
     ).select_related('product_name')
-
     # Get dispatches for the selected purchase orders
     purchase_order_ids = purchase_orders.values_list('pk', flat=True)
     dispatches = Dispatch.objects.filter(po_id__in=purchase_order_ids).select_related('po')
@@ -480,17 +480,14 @@ def add_purchase_order_detail(request, po_given_by):
         if dispatch.po_id not in dispatches_dict:
             dispatches_dict[dispatch.po_id] = []
         dispatches_dict[dispatch.po_id].append(dispatch)
-
-    # Add dispatches to purchase orders
+    # Add dispatches to purchase orders and calculate remaining quantities
     for po in purchase_orders:
-        po.dispatches = dispatches_dict.get(po.id, [])
-    for po in purchase_orders:
+        po.dispatches = dispatches_dict.get(po.pk, [])
         total_dispatch_quantity = sum(dispatch.dispatch_quantity for dispatch in po.dispatches)
         po.remaining_quantity = po.po_quantity - total_dispatch_quantity
         po.max_remaining_quantity = po.po_quantity + (po.po_quantity * 5 / 100) - total_dispatch_quantity
         po.material_code = po.product_name.material_code
         po.box_no = po.product_name.box_no
-
     context = {
         'purchase_orders': purchase_orders,
     }
@@ -550,25 +547,27 @@ def restore_purchase_order(request, pk):
 
 
 @login_required
-def add_dispatch(request):
+def add_dispatch(request, pk):
     if request.method == 'POST':
-        pk = request.POST.get('pk')
-        po = get_object_or_404(PurchaseOrder, id=pk)
+        po = get_object_or_404(PurchaseOrder, pk=pk)
         dispatch_date = request.POST['dispatch_date']
-        dispatch_quantity = request.POST['dispatch_quantity']
-
+        dispatch_quantity = int(request.POST['dispatch_quantity'])
+        # Retrieve the stock for the product associated with the purchase order
+        stock, created = Stock.objects.get_or_create(product=po.product_name)
         Dispatch.objects.create(
             po=po,
             dispatch_date=dispatch_date,
             dispatch_quantity=dispatch_quantity
         )
-        try:
-            stock, created = Stock.objects.get_or_create(product=po.product_name)
-            stock.stock_quantity -= int(dispatch_quantity)
+        # Check if the dispatch quantity can be deducted from the stock
+        if stock.stock_quantity >= dispatch_quantity:
+            # Update stock quantity
+            stock.stock_quantity -= dispatch_quantity
             stock.save()
-        except django.db.utils.IntegrityError:
-            pass
-        messages.success(request, 'Dispatch added successfully.')
+            messages.success(request, 'Dispatch added successfully.')
+        else:
+            # If not enough stock, show an error message
+            messages.error(request, 'Dispatch added without stock.')
         return redirect('Corrugation:purchase_order')
     return redirect('Corrugation:purchase_order')
 
@@ -619,6 +618,7 @@ def daily_program(request):
 
         # Prepare program data
         program_data = {
+            'pk': program.pk,
             'product_name': product.product_name,
             'box_no': product.box_no,
             'material_code': product.material_code,
