@@ -98,6 +98,9 @@
                                 data-id="{{ program.id }}">
                             Delete Program
                         </button>
+                        <button type="button" class="btn btn-success share-whatsapp">
+                            Share via WhatsApp
+                        </button>
                     </div>
                 </div>
             </div>
@@ -292,6 +295,41 @@
             </div>
         </div>
     {% endfor %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.share-whatsapp').click(function () {
+                var card = $(this).closest('.card');
+
+                // Hide all buttons within the card
+                var buttons = card.find('button');
+                buttons.hide();
+
+                // Use html2canvas to capture the card as an image
+                html2canvas(card[0]).then(function (canvas) {
+                    // Convert the canvas to a data URL
+                    var imageDataUrl = canvas.toDataURL("image/png");
+
+                    // Create a temporary link element
+                    var link = document.createElement('a');
+                    link.href = imageDataUrl;
+                    link.download = 'program.png';
+
+                    // Append the link to the body (necessary for Firefox)
+                    document.body.appendChild(link);
+
+                    // Trigger the download by clicking the link
+                    link.click();
+
+                    // Remove the link from the document
+                    document.body.removeChild(link);
+
+                    // Show all buttons again
+                    buttons.show();
+                });
+            });
+        });
+    </script>
 
     <script>
         // Fill edit modal with data
