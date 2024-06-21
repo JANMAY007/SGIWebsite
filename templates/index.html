@@ -3,6 +3,40 @@
     Stock
 {% endblock %}
 {% block content %}
+    <style>
+        .badge-custom {
+            position: absolute;
+            top: 10px;
+            right: 5px;
+            background: #f8f9fa;
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transform: rotate(45deg);
+            transform-origin: right bottom;
+        }
+        .badge-primary {
+            background-color: #007bff !important;
+            color: white;
+        }
+        .badge-success {
+            background-color: #28a745 !important;
+            color: white;
+        }
+        .badge-info {
+            background-color: #17a2b8 !important;
+            color: white;
+        }
+        .badge-warning {
+            background-color: #ffc107 !important;
+            color: white;
+        }
+        .badge-secondary {
+            background-color: #6c757d !important;
+            color: white;
+        }
+    </style>
     {% if messages %}
         {% for message in messages %}
             <div class="alert {{ message.tags }} alert-dismissible fade show">
@@ -27,7 +61,10 @@
     <div class="row">
         {% for stock in stocks %}
             <div class="col-md-6 col-xl-3 mb-4">
-                <div class="card shadow border-start-warning py-2">
+                <div class="card shadow border-start-warning py-2 position-relative">
+                    <div class="badge-custom {% if stock.tag == 'liners' %}badge-primary{% elif stock.tag == 'top' %}badge-success{% elif stock.tag == 'sheets' %}badge-info{% elif stock.tag == 'box' %}badge-warning{% else %}badge-secondary{% endif %}" data-bs-toggle="modal" data-bs-target="#editTagModal{{ forloop.counter }}">
+                        {{ stock.tag }}
+                    </div>
                     <div class="card-body">
                         <div class="text-uppercase text-primary fw-bold text-sm mb-1">
                             <span>{{ stock.product__product_name }}</span>
@@ -67,6 +104,38 @@
                                         Quantity</label>
                                     <input type="number" class="form-control" id="stockQuantity{{ forloop.counter }}"
                                            name="stock_quantity" value="{{ stock.stock_quantity }}" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-warning">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal for editing tag -->
+            <div class="modal fade" id="editTagModal{{ forloop.counter }}" tabindex="-1"
+                 aria-labelledby="editTagModalLabel{{ forloop.counter }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editTagModalLabel{{ forloop.counter }}">Edit Tag
+                                for {{ stock.product__product_name }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form method="POST" action="{% url 'Corrugation:update_stock_tag' stock.pk %}">
+                            {% csrf_token %}
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <input type="hidden" name="product_name" value="{{ stock.product__product_name }}">
+                                    <label for="stockTag{{ forloop.counter }}" class="form-label">Tag</label>
+                                    <select class="form-select" id="stockTag{{ forloop.counter }}" name="tag" required>
+                                        <option value="liners" {% if stock.tag == 'liners' %}selected{% endif %}>Liners</option>
+                                        <option value="top" {% if stock.tag == 'top' %}selected{% endif %}>Top</option>
+                                        <option value="sheets" {% if stock.tag == 'sheets' %}selected{% endif %}>Sheets</option>
+                                        <option value="box" {% if stock.tag == 'box' %}selected{% endif %}>Box</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="modal-footer">
