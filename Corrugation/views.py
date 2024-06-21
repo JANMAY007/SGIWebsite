@@ -1,5 +1,4 @@
 from datetime import datetime
-import django.db.utils
 from django.http import JsonResponse
 from django.urls import reverse
 from django.utils import timezone
@@ -77,9 +76,20 @@ def index(request):
         return redirect('Corrugation:index')
     context = {
         'products': Product.objects.all().values('product_name'),
-        'stocks': Stock.objects.all().values('product__product_name', 'stock_quantity', 'pk'),
+        'stocks': Stock.objects.all().values('product__product_name', 'stock_quantity', 'pk', 'tag'),
     }
     return render(request, 'index.html', context)
+
+
+@login_required
+def update_stock(request, pk):
+    stock = Stock.objects.get(pk=pk)
+    if request.method == 'POST':
+        stock.tag = request.POST.get('tag')
+        stock.save()
+        messages.info(request, 'Stock tag updated')
+        return redirect(reverse('Corrugation:index'))
+    return render(request, 'index.html', {'stock': stock})
 
 
 @login_required
@@ -88,7 +98,7 @@ def delete_stock(request, pk):
     if request.method == 'POST':
         stock.delete()
         messages.error(request, 'Stock item deleted successfully.')
-        return redirect(reverse('Corrugation:index'))  # Adjust the URL name if needed
+        return redirect(reverse('Corrugation:index'))
     return render(request, 'index.html', {'stock': stock})
 
 
