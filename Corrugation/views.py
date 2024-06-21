@@ -2,7 +2,7 @@ from datetime import datetime
 from django.http import JsonResponse
 from django.urls import reverse
 from django.utils import timezone
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Sum
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import (PaperReels, Product, Partition, PurchaseOrder, Dispatch,
                      Program, Production, ProductionReels, Stock)
@@ -117,7 +117,9 @@ def search_reels(request):
         results = PaperReels.objects.all()[:20]
     size_counts = results.values('size').annotate(count=Count('size'))
     results_data = list(results.values('id', 'size', 'gsm', 'bf', 'weight', 'reel_number', 'used'))
-    return JsonResponse({'results': results_data, 'size_counts': list(size_counts)})
+    gsm_weight_totals = list(results.values('gsm').annotate(total_weight=Sum('weight')))
+    print(gsm_weight_totals)
+    return JsonResponse({'results': results_data, 'size_counts': list(size_counts), 'total_weight': gsm_weight_totals})
 
 
 @login_required

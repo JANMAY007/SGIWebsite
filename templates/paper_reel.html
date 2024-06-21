@@ -58,6 +58,9 @@
             <ul id="size-counts-list"></ul>
         </div>
     </div>
+    <div id="total-weight-section">
+        <ul id="total-weight-list"></ul>
+    </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function getCookie(name) {
@@ -95,6 +98,24 @@
                 url: "{% url 'Corrugation:search_reels' %}",
                 data: {'q': query},
                 success: function (data) {
+                    const total_weight = data.total_weight;
+
+                // Clear previous total weight list
+                $('#total-weight-list').empty();
+
+                // Check if there are total_weight entries
+                if (total_weight.length > 0) {
+                    // Show the total-weight-section div
+                    $('#total-weight-section').show();
+
+                    // Populate the total weight list
+                    total_weight.forEach(function (weight) {
+                        $('#total-weight-list').append(`<li>${weight.gsm} GSM: ${weight.total_weight} KG</li>`);
+                    });
+                } else {
+                    // Hide the total-weight-section div if there are no total weights
+                    $('#total-weight-section').hide();
+                }
                     const results = data.results;
                     let tableBody = '';
                     results.forEach(function (reel, index) {
@@ -124,6 +145,12 @@
                         $('body').append(getModalHTML(reel, 'delete'));
                         $('body').append(getModalHTML(reel, 'restore'));
                     });
+                    // Show/hide search results section
+            if (query.trim() !== '') {
+                $('#total-weight-section').show();
+            } else {
+                $('#total-weight-section').hide();
+            }
                 }
             });
         }
