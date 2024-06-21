@@ -117,8 +117,8 @@ def search_reels(request):
         results = PaperReels.objects.all()[:20]
     size_counts = results.values('size').annotate(count=Count('size'))
     results_data = list(results.values('id', 'size', 'gsm', 'bf', 'weight', 'reel_number', 'used'))
-    gsm_weight_totals = list(results.values('gsm').annotate(total_weight=Sum('weight')))
-    print(gsm_weight_totals)
+    unused_results = results.filter(used=False)
+    gsm_weight_totals = list(unused_results.values('gsm').annotate(total_weight=Sum('weight')))
     return JsonResponse({'results': results_data, 'size_counts': list(size_counts), 'total_weight': gsm_weight_totals})
 
 
