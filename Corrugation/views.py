@@ -82,7 +82,7 @@ def index(request):
 
 
 @login_required
-def update_stock(request, pk):
+def update_stock_tag(request, pk):
     stock = Stock.objects.get(pk=pk)
     if request.method == 'POST':
         stock.tag = request.POST.get('tag')
