@@ -165,6 +165,13 @@ class Stock(models.Model):
         verbose_name_plural = 'Stocks'
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     stock_quantity = models.PositiveIntegerField(default=0)
+    tag_choices = (
+        ('liners', 'liners'),
+        ('top', 'top'),
+        ('sheets', 'sheets'),
+        ('box', 'box')
+    )
+    tag = models.CharField(max_length=6, choices=tag_choices, default='box')
     objects = models.manager
 
     def __str__(self):
