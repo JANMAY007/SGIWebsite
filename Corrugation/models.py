@@ -24,21 +24,21 @@ class Product(models.Model):
         verbose_name = 'Product'
         verbose_name_plural = 'Products'
     product_name = models.CharField(max_length=100, unique=True)
-    box_no = models.CharField(max_length=8, blank=True)
-    material_code = models.CharField(max_length=10, blank=True)
-    size = models.CharField(max_length=10, blank=True)  # change this
-    inner_length = models.PositiveSmallIntegerField(blank=True)
-    inner_breadth = models.PositiveSmallIntegerField(blank=True)
-    inner_depth = models.PositiveSmallIntegerField(blank=True)
-    outer_length = models.PositiveSmallIntegerField(blank=True)
-    outer_breadth = models.PositiveSmallIntegerField(blank=True)
-    outer_depth = models.PositiveSmallIntegerField(blank=True)
-    color = models.CharField(max_length=20, blank=True)
-    weight = models.CharField(max_length=7, blank=True)
-    ply = models.CharField(max_length=15, blank=True)
-    gsm = models.CharField(max_length=20, blank=True)
-    bf = models.CharField(max_length=5, blank=True)
-    cs = models.CharField(max_length=5, blank=True)
+    box_no = models.CharField(max_length=15, blank=True)
+    material_code = models.CharField(max_length=15, blank=True)
+    size = models.CharField(max_length=15, blank=True)
+    inner_length = models.PositiveSmallIntegerField(null=True, blank=True)
+    inner_breadth = models.PositiveSmallIntegerField(null=True, blank=True)
+    inner_depth = models.PositiveSmallIntegerField(null=True, blank=True)
+    outer_length = models.PositiveSmallIntegerField(null=True, blank=True)
+    outer_breadth = models.PositiveSmallIntegerField(null=True, blank=True)
+    outer_depth = models.PositiveSmallIntegerField(null=True, blank=True)
+    color = models.CharField(max_length=20, null=True, blank=True)
+    weight = models.CharField(max_length=7, null=True, blank=True)
+    ply = models.CharField(max_length=15, null=True, blank=True)
+    gsm = models.CharField(max_length=20, null=True, blank=True)
+    bf = models.CharField(max_length=5, null=True, blank=True)
+    cs = models.CharField(max_length=5, null=True, blank=True)
     archive = models.BooleanField(default=False)
     objects = models.manager
 
@@ -48,7 +48,7 @@ class Product(models.Model):
 
 class Partition(models.Model):
     product_name = models.ForeignKey(Product, on_delete=models.CASCADE)
-    partition_size = models.CharField(max_length=10)  # change this
+    partition_size = models.CharField(max_length=10)
     partition_od = models.CharField(max_length=50)
     deckle_cut = models.CharField(max_length=1)
     length_cut = models.CharField(max_length=1)
@@ -62,7 +62,6 @@ class Partition(models.Model):
     ply_no_choices = (
         ('3', '3 Ply'),
         ('5', '5 Ply'),
-        ('7', '7 Ply'),
     )
     ply_no = models.CharField(max_length=1, choices=ply_no_choices)
     partition_weight = models.CharField(max_length=7)
