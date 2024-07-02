@@ -48,7 +48,7 @@ class Product(models.Model):
 
 class Partition(models.Model):
     product_name = models.ForeignKey(Product, on_delete=models.CASCADE)
-    partition_size = models.CharField(max_length=10)
+    partition_size = models.CharField(max_length=15)
     partition_od = models.CharField(max_length=50)
     deckle_cut = models.CharField(max_length=1)
     length_cut = models.CharField(max_length=1)

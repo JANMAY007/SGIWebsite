@@ -340,47 +340,68 @@ def update_products(request, pk):
         product.bf = request.POST.get('bf', None)
         product.cs = request.POST.get('cs', None)
         product.save()
-
-        # Collect existing partitions for the product
-        existing_partitions = list(product.partition_set.all())
-        partitions_data = {}
-
-        # Iterate through POST data to organize it by partition
-        for key, value in request.POST.items():
-            if key.startswith('partitions['):
-                # Extract the partition index and the field name
-                part_idx = key.split('[')[1].split(']')[0]
-                field_name = key.split('[')[2].split(']')[0]
-
-                # Initialize the dictionary for this partition if not already
-                if part_idx not in partitions_data:
-                    partitions_data[part_idx] = {}
-
-                # Assign the value to the appropriate field in the partition
-                partitions_data[part_idx][field_name] = value
-
-        # Now process each partition
-        for idx, partition_data in partitions_data.items():
-            if int(idx) <= len(existing_partitions):
-                # Update existing partition
-                partition = existing_partitions[int(idx) - 1]
-            else:
-                # Create new partition
-                partition = Partition(product_name=product)
-
-            partition.partition_type = partition_data.get('type')
-            partition.partition_size = partition_data.get('size')
-            partition.partition_od = partition_data.get('od')
-            partition.deckle_cut = partition_data.get('deckle_cut')
-            partition.length_cut = partition_data.get('length_cut')
-            partition.ply_no = partition_data.get('ply_no')
-            partition.partition_weight = partition_data.get('weight')
-            partition.gsm = partition_data.get('gsm')
-            partition.bf = partition_data.get('bf')
-            partition.product_name = product
-            partition.save()
         messages.info(request, 'Product updated successfully.')
         return redirect('Corrugation:products_detail', pk=pk)
+    return redirect('Corrugation:add_product')
+
+
+@login_required
+def add_partition(request):
+    if request.method == 'POST':
+        product_id = request.POST['product_id']
+        product = get_object_or_404(Product, id=product_id)
+        partition_size = request.POST['new_partition_size']
+        partition_od = request.POST['new_partition_od']
+        deckle_cut = request.POST['new_deckle_cut']
+        length_cut = request.POST['new_length_cut']
+        partition_type = request.POST['new_partition_type']
+        ply_no = request.POST['new_ply_no']
+        partition_weight = request.POST['new_partition_weight']
+        gsm = request.POST['new_gsm']
+        bf = request.POST['new_bf']
+        Partition.objects.create(
+            product_name=product,
+            partition_size=partition_size,
+            partition_od=partition_od,
+            deckle_cut=deckle_cut,
+            length_cut=length_cut,
+            partition_type=partition_type,
+            ply_no=ply_no,
+            partition_weight=partition_weight,
+            gsm=gsm,
+            bf=bf
+        )
+        messages.success(request, 'Partition added successfully.')
+        return redirect('Corrugation:products_detail', pk=product_id)
+
+
+@login_required
+def update_partition(request, pk):
+    partition = get_object_or_404(Partition, pk=pk)
+    if request.method == 'POST':
+        partition.partition_size = request.POST.get('partition_size')
+        partition.partition_od = request.POST.get('partition_od')
+        partition.deckle_cut = request.POST.get('deckle_cut')
+        partition.length_cut = request.POST.get('length_cut')
+        partition.partition_type = request.POST.get('partition_type')
+        partition.ply_no = request.POST.get('ply_no')
+        partition.partition_weight = request.POST.get('partition_weight')
+        partition.gsm = request.POST.get('gsm')
+        partition.bf = request.POST.get('bf')
+        partition.save()
+        messages.info(request, 'Partition updated successfully.')
+        return redirect('Corrugation:products_detail', pk=partition.product_name.pk)
+    return redirect('Corrugation:add_product')
+
+
+@login_required
+def delete_partition(request, pk):
+    partition = get_object_or_404(Partition, pk=pk)
+    if request.method == 'POST':
+        product_id = partition.product_name.pk
+        partition.delete()
+        messages.error(request, 'Partition deleted successfully.')
+        return redirect('Corrugation:products_detail', pk=product_id)
     return redirect('Corrugation:add_product')
 
 
