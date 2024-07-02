@@ -168,9 +168,10 @@ class Stock(models.Model):
         ('liners', 'liners'),
         ('top', 'top'),
         ('sheets', 'sheets'),
-        ('box', 'box')
+        ('box', 'box'),
+        ('partition', 'partition'),
     )
-    tag = models.CharField(max_length=6, choices=tag_choices, default='box')
+    tag = models.CharField(max_length=10, choices=tag_choices, default='box')
     objects = models.manager
 
     def __str__(self):
