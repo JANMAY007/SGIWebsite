@@ -16,22 +16,27 @@
             transform: rotate(45deg);
             transform-origin: right bottom;
         }
+
         .badge-primary {
             background-color: #007bff !important;
             color: white;
         }
+
         .badge-success {
             background-color: #28a745 !important;
             color: white;
         }
+
         .badge-info {
             background-color: #17a2b8 !important;
             color: white;
         }
+
         .badge-warning {
             background-color: #ffc107 !important;
             color: white;
         }
+
         .badge-secondary {
             background-color: #6c757d !important;
             color: white;
@@ -44,7 +49,7 @@
             </div>
         {% endfor %}
         <script>
-            setTimeout(function() {
+            setTimeout(function () {
                 bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
             }, 2500)
         </script>
@@ -62,7 +67,8 @@
         {% for stock in stocks %}
             <div class="col-md-6 col-xl-3 mb-4">
                 <div class="card shadow border-start-warning py-2 position-relative">
-                    <div class="badge-custom {% if stock.tag == 'liners' %}badge-primary{% elif stock.tag == 'top' %}badge-success{% elif stock.tag == 'sheets' %}badge-info{% elif stock.tag == 'box' %}badge-warning{% else %}badge-secondary{% endif %}" data-bs-toggle="modal" data-bs-target="#editTagModal{{ forloop.counter }}">
+                    <div class="badge-custom {% if stock.tag == 'liners' %}badge-primary{% elif stock.tag == 'top' %}badge-success{% elif stock.tag == 'sheets' %}badge-info{% elif stock.tag == 'box' %}badge-warning{% else %}badge-secondary{% endif %}"
+                         data-bs-toggle="modal" data-bs-target="#editTagModal{{ forloop.counter }}">
                         {{ stock.tag }}
                     </div>
                     <div class="card-body">
@@ -82,10 +88,39 @@
                                 Delete
                             </button>
                         </form>
+                        <button type="button" class="btn btn-outline-dark btn-sm mt-2" data-bs-toggle="modal"
+                                data-bs-target="#historyModal{{ forloop.counter }}">
+                            Stock History
+                        </button>
                     </div>
                 </div>
             </div>
-            <!-- Modal -->
+            <!-- History Modal -->
+            <div class="modal fade" id="historyModal{{ forloop.counter }}" tabindex="-1"
+                 aria-labelledby="historyModalLabel{{ forloop.counter }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="historyModalLabel{{ forloop.counter }}">Stock History
+                                for {{ stock.product__product_name }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {% for dispatch in stock.dispatches %}
+                                <ul>
+                                    <li>
+                                        {{ dispatch.dispatch_date }} ~ {{ dispatch.dispatch_quantity }} => {{ dispatch.po__po_given_by }}
+                                    </li>
+                                </ul>
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Edit Modal -->
             <div class="modal fade" id="editModal{{ forloop.counter }}" tabindex="-1"
                  aria-labelledby="editModalLabel{{ forloop.counter }}" aria-hidden="true">
                 <div class="modal-dialog">
@@ -131,11 +166,17 @@
                                     <input type="hidden" name="product_name" value="{{ stock.product__product_name }}">
                                     <label for="stockTag{{ forloop.counter }}" class="form-label">Tag</label>
                                     <select class="form-select" id="stockTag{{ forloop.counter }}" name="tag" required>
-                                        <option value="liners" {% if stock.tag == 'liners' %}selected{% endif %}>Liners</option>
+                                        <option value="liners" {% if stock.tag == 'liners' %}selected{% endif %}>
+                                            Liners
+                                        </option>
                                         <option value="top" {% if stock.tag == 'top' %}selected{% endif %}>Top</option>
-                                        <option value="sheets" {% if stock.tag == 'sheets' %}selected{% endif %}>Sheets</option>
+                                        <option value="sheets" {% if stock.tag == 'sheets' %}selected{% endif %}>
+                                            Sheets
+                                        </option>
                                         <option value="box" {% if stock.tag == 'box' %}selected{% endif %}>Box</option>
-                                        <option value="partition" {% if stock.tag == 'partition' %}selected{% endif %}>Partition</option>
+                                        <option value="partition" {% if stock.tag == 'partition' %}selected{% endif %}>
+                                            Partition
+                                        </option>
                                     </select>
                                 </div>
                             </div>

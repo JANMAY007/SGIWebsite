@@ -74,9 +74,13 @@ def index(request):
             pass
         messages.info(request, 'Stock updated successfully.')
         return redirect('Corrugation:index')
+    stocks = Stock.objects.all().values('product__product_name', 'stock_quantity', 'pk', 'tag')
+    for stock in stocks:
+        stock['dispatches'] = Dispatch.objects.filter(po__product_name__product_name=stock['product__product_name']) \
+            .values('dispatch_date', 'dispatch_quantity', 'po__po_given_by')
     context = {
         'products': Product.objects.all().values('product_name'),
-        'stocks': Stock.objects.all().values('product__product_name', 'stock_quantity', 'pk', 'tag'),
+        'stocks': stocks,
     }
     return render(request, 'index.html', context)
 
