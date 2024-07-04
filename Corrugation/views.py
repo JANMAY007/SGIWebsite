@@ -22,7 +22,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             messages.success(request, 'Logged in successfully')
-            return redirect('Corrugation:index')
+            return redirect('Corrugation:stock')
         else:
             messages.error(request, 'Invalid email or password')
     return render(request, 'login.html')
@@ -49,7 +49,7 @@ def register_view(request):
         user.save()
         login(request, user)
         messages.success(request, 'Account created successfully')
-        return redirect('Corrugation:index')
+        return redirect('Corrugation:stock')
     return render(request, 'register.html')
 
 
@@ -60,7 +60,7 @@ def logout_view(request):
 
 
 @login_required
-def index(request):
+def stocks(request):
     if request.method == 'POST':
         product_name = request.POST.get('product_name')
         stock_quantity = request.POST.get('stock_quantity')
@@ -73,7 +73,7 @@ def index(request):
         except (ValueError, TypeError):
             pass
         messages.info(request, 'Stock updated successfully.')
-        return redirect('Corrugation:index')
+        return redirect('Corrugation:stock')
     stocks = Stock.objects.all().values('product__product_name', 'stock_quantity', 'pk', 'tag')
     for stock in stocks:
         stock['dispatches'] = Dispatch.objects.filter(po__product_name__product_name=stock['product__product_name']) \
@@ -82,7 +82,7 @@ def index(request):
         'products': Product.objects.all().values('product_name'),
         'stocks': stocks,
     }
-    return render(request, 'index.html', context)
+    return render(request, 'stocks.html', context)
 
 
 @login_required
@@ -92,8 +92,8 @@ def update_stock_tag(request, pk):
         stock.tag = request.POST.get('tag')
         stock.save()
         messages.info(request, 'Stock tag updated')
-        return redirect(reverse('Corrugation:index'))
-    return render(request, 'index.html', {'stock': stock})
+        return redirect(reverse('Corrugation:stock'))
+    return render(request, 'stocks.html', {'stock': stock})
 
 
 @login_required
@@ -102,8 +102,8 @@ def delete_stock(request, pk):
     if request.method == 'POST':
         stock.delete()
         messages.error(request, 'Stock item deleted successfully.')
-        return redirect(reverse('Corrugation:index'))
-    return render(request, 'index.html', {'stock': stock})
+        return redirect(reverse('Corrugation:stock'))
+    return render(request, 'stocks.html', {'stock': stock})
 
 
 def search_reels(request):

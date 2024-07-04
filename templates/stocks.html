@@ -143,7 +143,7 @@
                                 for {{ stock.product__product_name }}</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form method="POST" action="{% url 'Corrugation:index' %}">
+                        <form method="POST" action="{% url 'Corrugation:stock' %}">
                             {% csrf_token %}
                             <div class="modal-body">
                                 <div class="mb-3">
@@ -211,7 +211,7 @@
                         <h5 class="modal-title" id="addStockModalLabel">Add New Stock</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST" action="{% url 'Corrugation:index' %}">
+                    <form method="POST" action="{% url 'Corrugation:stock' %}">
                         {% csrf_token %}
                         <div class="modal-body">
                             <div class="mb-3">
