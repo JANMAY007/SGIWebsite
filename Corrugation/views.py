@@ -245,8 +245,13 @@ def restore_reel(request, pk):
 
 @login_required
 def reels_stock(request):
+    products = Product.objects.all().values('product_name', 'size', 'gsm', 'bf', 'weight')
+    # for this products append the stock quantity and if not present then add 0
+    for product in products:
+        product['stock_quantity'] = Stock.objects.filter(product__product_name=product['product_name']).aggregate(
+            Sum('stock_quantity'))['stock_quantity__sum'] or 0
     context = {
-        'products': Product.objects.all().values('product_name', 'size', 'gsm', 'bf', 'weight'),
+        'products': products,
     }
     return render(request, 'reels_stock.html', context)
 
