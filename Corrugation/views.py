@@ -244,6 +244,14 @@ def restore_reel(request, pk):
 
 
 @login_required
+def reels_stock(request):
+    context = {
+        'products': Product.objects.all().values('product_name', 'size', 'gsm', 'bf', 'weight'),
+    }
+    return render(request, 'reels_stock.html', context)
+
+
+@login_required
 def add_product(request):
     if request.method == 'POST':
         product_name = request.POST.get('product_name')

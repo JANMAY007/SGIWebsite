@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Reels Stock
+{% endblock %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible fade show">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <script>
+            setTimeout(function () {
+                bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
+            }, 2500)
+        </script>
+    {% endif %}
+    <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+        <table class="table my-0" id="dataTable">
+            <thead>
+            <tr>
+                <th style="width: 25%">Product</th>
+                <th style="width: 25%">Deckle~GSM~BF</th>
+                <th style="width: 10%">Weight</th>
+                <th style="width: 10%">Available</th>
+                <th style="width: 20%">To Order</th>
+                <th style="width: 10%">Actions</th>
+            </tr>
+            </thead>
+            <tbody id="reel-table-body">
+            <tr>
+                <td>
+                    <label>
+                    <select class="form-control" id="product_name" name="product_name" required>
+                        <option value="" selected disabled>Select Product</option>
+                        {% for product in products %}
+                            <option value="{{ product.product_name }}"
+                                    data-size="{{ product.size }}"
+                                    data-gsm="{{ product.gsm }}"
+                                    data-bf="{{ product.bf }}"
+                                    data-weight="{{ product.weight }}">
+                                {{ product.product_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    </label>
+                </td>
+                <td>
+                    <label>
+                    <input class="form-control" type="text" id="deckle_gsm_bf" name="deckle_gsm_bf" disabled>
+                    </label>
+                </td>
+                <td>
+                    <label>
+                    <input class="form-control" type="text" id="weight" name="weight" disabled>
+                    </label>
+                </td>
+                <td>
+                    <label>
+                    <input class="form-control" type="text" id="available" name="available" disabled>
+                    </label>
+                </td>
+                <td>
+                    <label>
+                    <input class="form-control" type="text" id="to_order" name="to_order" disabled>
+                    </label>
+                </td>
+                <td>
+                    <button class="btn btn-danger" id="remove-reel">Remove</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('product_name').addEventListener('change', function () {
+                var selectedOption = this.options[this.selectedIndex];
+                var size = selectedOption.getAttribute('data-size');
+                var gsm = selectedOption.getAttribute('data-gsm');
+                var bf = selectedOption.getAttribute('data-bf');
+                var weight = selectedOption.getAttribute('data-weight');
+
+                document.getElementById('deckle_gsm_bf').value = size + '~' + gsm + '~' + bf;
+                document.getElementById('weight').value = weight;
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (stocks, paper_reels, search_reels, update_reel, delete_reel,
                     add_purchase_order_detail, add_product, add_dispatch,
-                    purchase_order, add_purchase_order_detailed,
+                    purchase_order, add_purchase_order_detailed, reels_stock,
                     delete_purchase_order, restore_purchase_order, daily_program, production,
                     update_production_quantity, add_reel_to_production,
                     delete_production, products_detail, login_view, register_view,
@@ -19,6 +19,7 @@ urlpatterns = [
     path('update-stock-tag/<int:pk>/', update_stock_tag, name='update_stock_tag'),
     path('delete-stock/<int:pk>/', delete_stock, name='delete_stock'),
     path('paper_reels/', paper_reels, name='paper_reels'),
+    path('reels_stock/', reels_stock, name='reels_stock'),
     path('upload_bulk_reels/', upload_bulk_reels, name='upload_bulk_reels'),
     path('search_reels/', search_reels, name='search_reels'),
     path('update-reel/<int:pk>/', update_reel, name='update_reel'),
