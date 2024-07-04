@@ -17,9 +17,9 @@
         </script>
     {% endif %}
     <div class="container-fluid">
-        <div class="d-flex justify-content-center align-items-center my-3">
+        <div class="d-flex align-items-center my-3">
             <!-- Start: Split Button Success -->
-            <a class="btn btn-success btn-icon-split" role="button" data-bs-toggle="modal"
+            <a class="btn btn-primary btn-icon-split" role="button" data-bs-toggle="modal"
                data-bs-target="#addProductionLineModal">
                 <span class="text-white-50 icon">
                     <i class="fas fa-check"></i>
@@ -57,7 +57,9 @@
                                     <select class="form-select reel-select" id="reels" name="reels">
                                         <option value="" selected disabled>Select a reel</option>
                                         {% for reel in reels %}
-                                            <option value="{{ reel.reel_number }}">{{ reel.reel_number }}</option>
+                                            <option value="{{ reel.reel_number }}">
+                                                {{ reel.reel_number }} - {{ reel.size }} - {{ reel.weight }}
+                                            </option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -130,7 +132,7 @@
                                     </div>
                                     {% for reel in production.reels %}
                                         <div class="text-dark fw-bold h5 mb-0">
-                                            <span>{{ reel }}</span>
+                                            <span>{{ reel.0 }} - Deckle {{ reel.1 }} - {{ reel.2 }}kg</span>
                                         </div>
                                     {% endfor %}
                                 </div>
@@ -199,7 +201,9 @@
                                     <select class="form-select" id="newReelSelect" name="reel_number">
                                         <option value="" selected disabled>Select a reel</option>
                                         {% for reel in reels %}
-                                            <option value="{{ reel.reel_number }}">{{ reel.reel_number }}</option>
+                                            <option value="{{ reel.reel_number }}">
+                                                {{ reel.reel_number }} - {{ reel.size }} - {{ reel.weight }}
+                                            </option>
                                         {% endfor %}
                                     </select>
                                 </div>

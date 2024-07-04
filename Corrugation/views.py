@@ -762,13 +762,10 @@ def delete_program_view(request):
 @login_required
 def production(request):
     if request.method == 'POST':
-        # Extract data from POST request
         data = request.POST
         product_name = data.get('product')
-        reel_numbers = data.getlist('reels')  # getlist to handle multiple reels
+        reel_numbers = data.getlist('reels')
         production_quantity = data.get('production_quantity')
-
-        # Create a new Production instance
         product_instance = Product.objects.get(product_name=product_name)
         production_object = Production.objects.create(
             product=product_instance,
@@ -778,7 +775,6 @@ def production(request):
         stock, create = Stock.objects.get_or_create(product=product_instance)
         stock.stock_quantity += int(production_quantity)
         stock.save()
-        # Create new ProductionReels instances for each reel number
         for reel_number in reel_numbers:
             reel_instance = PaperReels.objects.get(reel_number=reel_number)
             ProductionReels.objects.create(
@@ -792,7 +788,7 @@ def production(request):
     production_data = []
     for production_object in production_objects:
         production_reels = ProductionReels.objects.filter(production=production_object)
-        reels_data = [reel.reel.reel_number for reel in production_reels]
+        reels_data = [(reel.reel.reel_number, reel.reel.size, reel.reel.weight) for reel in production_reels]
         production_data.append({
             'pk': production_object.pk,
             'product_name': production_object.product.product_name,
@@ -803,7 +799,7 @@ def production(request):
 
     context = {
         'products': Product.objects.all().values('product_name'),
-        'reels': PaperReels.objects.all().values('reel_number'),
+        'reels': PaperReels.objects.filter(used=False).values('reel_number', 'size', 'weight').order_by('size'),
         'productions': production_data,
     }
     return render(request, 'production.html', context)
