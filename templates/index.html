@@ -101,18 +101,31 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="historyModalLabel{{ forloop.counter }}">Stock History
-                                for {{ stock.product__product_name }}</h5>
+                            <h5 class="modal-title"
+                                id="historyModalLabel{{ forloop.counter }}">{{ stock.product__product_name }}</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            {% for dispatch in stock.dispatches %}
-                                <ul>
-                                    <li>
-                                        {{ dispatch.dispatch_date }} ~ {{ dispatch.dispatch_quantity }} => {{ dispatch.po__po_given_by }}
-                                    </li>
-                                </ul>
-                            {% endfor %}
+                            <div class="table table-responsive mt-2" id="historyTable" role="grid">
+                                <table class="table my-0" id="historyTable">
+                                    <thead>
+                                    <tr>
+                                        <th>Dispatch Date</th>
+                                        <th>Dispatch Quantity</th>
+                                        <th>PO Given By</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for dispatch in stock.dispatches %}
+                                        <tr>
+                                            <td>{{ dispatch.dispatch_date }}</td>
+                                            <td>{{ dispatch.dispatch_quantity }}</td>
+                                            <td>{{ dispatch.po__po_given_by }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
