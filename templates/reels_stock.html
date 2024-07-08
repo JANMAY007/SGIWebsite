@@ -22,17 +22,18 @@
         <table class="table my-0" id="dataTable">
             <thead>
             <tr>
-                <th style="width: 20%">Product</th>
+                <th style="width: 15%">Product</th>
                 <th style="width: 20%">Deckle~GSM~BF</th>
                 <th style="width: 10%">Weight</th>
-                <th style="width: 10%">Available</th>
-                <th style="width: 20%">To Order</th>
+                <th style="width: 10%">Box Available</th>
+                <th style="width: 10%">Reel Available</th>
+                <th style="width: 15%">To Order</th>
                 <th style="width: 10%">Order weight</th>
                 <th style="width: 10%">Actions</th>
             </tr>
             </thead>
             <tbody id="reel-table-body">
-            <tr>
+            <tr class="reel-row">
                 <td>
                     <label>
                         <select class="form-control product_name" name="product_name" required>
@@ -43,41 +44,15 @@
                                         data-gsm="{{ product.gsm }}"
                                         data-bf="{{ product.bf }}"
                                         data-weight="{{ product.weight }}"
-                                        data-available="{{ product.stock_quantity }}">
+                                        data-stock_quantity="{{ product.stock_quantity }}"
+                                        data-reel_available="{{ product.reel_available }}">
                                     {{ product.product_name }}
                                 </option>
                             {% endfor %}
                         </select>
                     </label>
                 </td>
-                <td>
-                    <label>
-                        <input class="form-control deckle_gsm_bf" type="text" name="deckle_gsm_bf" disabled>
-                    </label>
-                </td>
-                <td>
-                    <label>
-                        <input class="form-control weight" type="text" name="weight" disabled>
-                    </label>
-                </td>
-                <td>
-                    <label>
-                        <input class="form-control available" type="text" name="available" disabled>
-                    </label>
-                </td>
-                <td>
-                    <label>
-                        <input class="form-control to_order" type="text" name="to_order">
-                    </label>
-                </td>
-                <td>
-                    <label>
-                        <input class="form-control order_weight" type="text" name="order_weight" disabled>
-                    </label>
-                </td>
-                <td>
-                    <button class="btn btn-danger remove-reel">Remove</button>
-                </td>
+                <td colspan="7"></td>
             </tr>
             </tbody>
         </table>
@@ -87,96 +62,132 @@
             var reelTableBody = document.getElementById('reel-table-body');
             var addReelButton = document.getElementById('add-reel');
 
+            function createRow(product, size, gsm, bf, weight, stock_quantity, reelAvailable, rowspan) {
+                var newRow = document.createElement('tr');
+                newRow.classList.add('reel-row');
+                newRow.innerHTML = `
+                ${rowspan ? `<td rowspan="${rowspan}">
+                    <label>${product}</label>
+                </td>` : ''}
+                <td>
+                    <label>
+                        <input class="form-control deckle_gsm_bf" type="text" name="deckle_gsm_bf" value="${size}~${gsm}~${bf}" disabled>
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        <input class="form-control weight" type="text" name="weight" value="${weight}">
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        <input class="form-control stock_quantity" type="text" name="stock_quantity" value="${stock_quantity}" disabled>
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        <input class="form-control reel_available" type="text" name="reel_available" value="${reelAvailable}" disabled>
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        <input class="form-control to_order" type="text" name="to_order">
+                    </label>
+                </td>
+                <td>
+                    <label>
+                        <input class="form-control order_weight" type="text" name="order_weight">
+                    </label>
+                </td>
+                <td>
+                    <button class="btn btn-danger remove-reel">Remove</button>
+                </td>
+            `;
+                reelTableBody.appendChild(newRow);
+                initializeRow(newRow);
+            }
+
             function initializeRow(row) {
                 var productSelect = row.querySelector('.product_name');
                 var toOrderInput = row.querySelector('.to_order');
                 var weightInput = row.querySelector('.weight');
                 var orderWeightInput = row.querySelector('.order_weight');
 
-                productSelect.addEventListener('change', function () {
-                    var selectedOption = this.options[this.selectedIndex];
-                    var size = selectedOption.getAttribute('data-size');
-                    var gsm = selectedOption.getAttribute('data-gsm');
-                    var bf = selectedOption.getAttribute('data-bf');
-                    var weight = selectedOption.getAttribute('data-weight');
-                    var available = selectedOption.getAttribute('data-available');
+                if (productSelect) {
+                    productSelect.addEventListener('change', function () {
+                        var selectedOption = this.options[this.selectedIndex];
+                        var product = selectedOption.value;
+                        var size = selectedOption.getAttribute('data-size');
+                        var gsmArray = selectedOption.getAttribute('data-gsm').replace(/[\[\]]/g, '').split(',');
+                        var bf = selectedOption.getAttribute('data-bf');
+                        var weight = selectedOption.getAttribute('data-weight');
+                        var stock_quantity = selectedOption.getAttribute('data-stock_quantity');
+                        var reelAvailableArray = selectedOption.getAttribute('data-reel_available').replace(/[\[\]]/g, '').split(',');
 
-                    row.querySelector('.deckle_gsm_bf').value = size + '~' + gsm + '~' + bf;
-                    row.querySelector('.weight').value = weight;
-                    row.querySelector('.available').value = available;
-                    calculateOrderWeight();
-                });
+                        // Create rows for each GSM without removing existing rows
+                        gsmArray.forEach(function (gsm, index) {
+                            var reelAvailable = reelAvailableArray[index] || 0; // Default to 0 if no reel is available for this index
+                            createRow(product, size, gsm, bf, weight, stock_quantity, reelAvailable, index === 0 ? gsmArray.length : 0);
+                        });
+
+                        // Remove the initial row if it is empty
+                        if (row.querySelector('.product_name').value === "") {
+                            row.remove();
+                        }
+                    });
+                }
 
                 toOrderInput.addEventListener('input', function () {
-                    calculateOrderWeight();
+                    calculateOrderWeight(row);
                 });
-
-                function calculateOrderWeight() {
-                    var toOrder = parseFloat(toOrderInput.value) || 0;
-                    var weight = parseFloat(weightInput.value) || 0;
-                    orderWeightInput.value = (toOrder * weight) / 1000 + 'kg';
-                }
 
                 row.querySelector('.remove-reel').addEventListener('click', function () {
                     row.remove();
                 });
             }
 
+            function calculateOrderWeight(row) {
+                var toOrderInput = row.querySelector('.to_order');
+                var weightInput = row.querySelector('.weight');
+                var orderWeightInput = row.querySelector('.order_weight');
+                var toOrder = parseFloat(toOrderInput.value) || 0;
+                var weight = parseFloat(weightInput.value) || 0;
+                orderWeightInput.value = (toOrder * weight) / 1000 + 'kg';
+            }
+
             addReelButton.addEventListener('click', function () {
                 var newRow = document.createElement('tr');
+                newRow.classList.add('reel-row');
                 newRow.innerHTML = `
-                    <td>
-                        <label>
-                            <select class="form-control product_name" name="product_name" required>
-                                <option value="" selected disabled>Select Product</option>
-                                {% for product in products %}
-                                    <option value="{{ product.product_name }}"
-                                            data-size="{{ product.size }}"
-                                            data-gsm="{{ product.gsm }}"
-                                            data-bf="{{ product.bf }}"
-                                            data-weight="{{ product.weight }}"
-                                            data-available="{{ product.stock_quantity }}">
-                                        {{ product.product_name }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </label>
-                    </td>
-                    <td>
-                        <label>
-                            <input class="form-control deckle_gsm_bf" type="text" name="deckle_gsm_bf" disabled>
-                        </label>
-                    </td>
-                    <td>
-                        <label>
-                            <input class="form-control weight" type="text" name="weight" disabled>
-                        </label>
-                    </td>
-                    <td>
-                        <label>
-                            <input class="form-control available" type="text" name="available" disabled>
-                        </label>
-                    </td>
-                    <td>
-                        <label>
-                            <input class="form-control to_order" type="text" name="to_order">
-                        </label>
-                    </td>
-                    <td>
-                        <label>
-                            <input class="form-control order_weight" type="text" name="order_weight" disabled>
-                        </label>
-                    </td>
-                    <td>
-                        <button class="btn btn-danger remove-reel">Remove</button>
-                    </td>
+                <td>
+                    <label>
+                        <select class="form-control product_name" name="product_name" required>
+                            <option value="" selected disabled>Select Product</option>
+                            {% for product in products %}
+                                <option value="{{ product.product_name }}"
+                                        data-size="{{ product.size }}"
+                                        data-gsm="{{ product.gsm }}"
+                                        data-bf="{{ product.bf }}"
+                                        data-weight="{{ product.weight }}"
+                                        data-stock_quantity="{{ product.stock_quantity }}"
+                                        data-reel_available="{{ product.reel_available }}">
+                                    {{ product.product_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                </td>
+                <td colspan="7"></td>
                 `;
                 reelTableBody.appendChild(newRow);
                 initializeRow(newRow);
             });
 
             // Initialize existing row
-            initializeRow(reelTableBody.querySelector('tr'));
+            var initialRow = reelTableBody.querySelector('.reel-row');
+            if (initialRow) {
+                initializeRow(initialRow);
+            }
         });
     </script>
 {% endblock %}

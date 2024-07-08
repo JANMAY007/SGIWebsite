@@ -12,6 +12,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 import pandas as pd
+import re
 
 
 def login_view(request):
@@ -243,15 +244,44 @@ def restore_reel(request, pk):
     return redirect('Corrugation:paper_reels')
 
 
+def process_gsm(gsm_value):
+    gsm_values = re.findall(r'\d+', gsm_value)
+    gsm_values = list(map(int, gsm_values))
+    unique_gsm_values = sorted(set(gsm_values))
+    for ugv in unique_gsm_values:
+        if ugv < 20:
+            unique_gsm_values.remove(ugv)
+    return unique_gsm_values
+
+
 @login_required
 def reels_stock(request):
     products = Product.objects.all().values('product_name', 'size', 'gsm', 'bf', 'weight')
-    # for this products append the stock quantity and if not present then add 0
-    for product in products:
+    product_list = list(products)
+    for product in product_list:
+        product['gsm'] = process_gsm(product['gsm'])
         product['stock_quantity'] = Stock.objects.filter(product__product_name=product['product_name']).aggregate(
             Sum('stock_quantity'))['stock_quantity__sum'] or 0
+        size_string = product['size']
+        match = re.match(r'(\d+)', size_string)
+        if match:
+            product['size'] = match.group(1)
+        # Initialize the list to store total weights for each GSM
+        product['reel_available'] = []
+        # Get the matching paper reels
+        for prod_gsm in product['gsm']:
+            matching_reels = PaperReels.objects.filter(
+                size=float(product['size']) if product['size'] else 0,
+                gsm=prod_gsm,
+                bf=product['bf'] if product['bf'] != '' else 0,
+                used=False
+            ).values('weight')
+            # Calculate the total weight for the matching reels
+            total_weight = sum(reel['weight'] for reel in matching_reels)
+            # Add the total weight to the product dictionary
+            product['reel_available'].append(total_weight)
     context = {
-        'products': products,
+        'products': product_list,
     }
     return render(request, 'reels_stock.html', context)
 
