@@ -124,16 +124,14 @@
                         var stock_quantity = selectedOption.getAttribute('data-stock_quantity');
                         var reelAvailableArray = selectedOption.getAttribute('data-reel_available').replace(/[\[\]]/g, '').split(',');
 
-                        // Create rows for each GSM without removing existing rows
+                        // Remove the initial row after a product is selected
+                        row.remove();
+
+                        // Create rows for each GSM
                         gsmArray.forEach(function (gsm, index) {
                             var reelAvailable = reelAvailableArray[index] || 0; // Default to 0 if no reel is available for this index
                             createRow(product, size, gsm, bf, weight, stock_quantity, reelAvailable, index === 0 ? gsmArray.length : 0);
                         });
-
-                        // Remove the initial row if it is empty
-                        if (row.querySelector('.product_name').value === "") {
-                            row.remove();
-                        }
                     });
                 }
 
