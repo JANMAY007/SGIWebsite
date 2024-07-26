@@ -128,6 +128,17 @@ def search_reels(request):
 
 
 @login_required
+def summary(request):
+    paper_reel_summary = PaperReels.objects.values('size', 'gsm', 'bf').annotate(total_weight=Sum('weight'))
+    context = {
+        'paper_reel_summary': paper_reel_summary,
+        'total_reels': PaperReels.objects.filter(used=False).count(),
+        'total_weight': PaperReels.objects.filter(used=False).aggregate(Sum('weight'))['weight__sum'] or 0,
+    }
+    return render(request, 'summary.html', context)
+
+
+@login_required
 def paper_reels(request):
     if request.method == 'POST':
         reel_number = request.POST.get('reel_number')

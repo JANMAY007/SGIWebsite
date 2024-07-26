@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Reels Stock
+{% endblock %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible fade show">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <script>
+            setTimeout(function () {
+                bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
+            }, 2500)
+        </script>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-3">
+            <div class="text-md-start">
+                <span>Total Used Reels: {{ total_reels }}</span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="text-md-start">
+                <span>Total Weight: {{ total_weight }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+        <table class="table my-0" id="dataTable">
+            <thead>
+            <tr>
+                <th>Size</th>
+                <th>GSM</th>
+                <th>BF</th>
+                <th>Total Weight</th>
+            </tr>
+            </thead>
+            <tbody id="reel-table-body">
+            {% for summary in paper_reel_summary %}
+                <tr>
+                    <td>{{ summary.size }} Inch</td>
+                    <td>{{ summary.gsm }}</td>
+                    <td>{{ summary.bf }}</td>
+                    <td>{{ summary.total_weight }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

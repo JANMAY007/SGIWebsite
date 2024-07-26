@@ -10,7 +10,7 @@ from .views import (stocks, paper_reels, search_reels, update_reel, delete_reel,
                     edit_program_view, delete_program_view, product_archive,
                     product_detail_archive, purchase_order_archive, purchase_order_detail_archive,
                     program_archive, production_archive, restore_reel, restore_products,
-                    upload_bulk_reels, update_stock_tag)
+                    upload_bulk_reels, update_stock_tag, summary)
 
 app_name = 'Corrugation'
 
@@ -19,6 +19,7 @@ urlpatterns = [
     path('update-stock-tag/<int:pk>/', update_stock_tag, name='update_stock_tag'),
     path('delete-stock/<int:pk>/', delete_stock, name='delete_stock'),
     path('paper_reels/', paper_reels, name='paper_reels'),
+    path('summary/', summary, name='summary'),
     path('reels_stock/', reels_stock, name='reels_stock'),
     path('upload_bulk_reels/', upload_bulk_reels, name='upload_bulk_reels'),
     path('search_reels/', search_reels, name='search_reels'),
