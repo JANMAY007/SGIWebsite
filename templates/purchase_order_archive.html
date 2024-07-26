@@ -12,31 +12,29 @@
             </div>
         {% endfor %}
         <script>
-            setTimeout(function() {
+            setTimeout(function () {
                 bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
             }, 2500)
         </script>
     {% endif %}
-    <div class="container-fluid">
-        <div class="row">
-            {% for purchase_order in purchase_order_list %}
-                <div class="col-md-6 col-xl-3 col-sm-12 mb-4">
-                    <div class="card shadow border-start-warning py-2">
-                        <div class="card-body">
-                            <div class="text-uppercase text-dark fw-bold mb-1">
-                                {{ purchase_order }}
-                            </div>
-                            <div class="text-dark fw-bold text-sm mb-0">
+    <div class="row">
+        {% for purchase_order in purchase_order_list %}
+            <div class="col-md-6 col-xl-3 col-sm-12 mb-4">
+                <div class="card shadow border-start-warning py-2">
+                    <div class="card-body">
+                        <div class="text-uppercase text-dark fw-bold mb-1">
+                            {{ purchase_order }}
+                        </div>
+                        <div class="text-dark fw-bold text-sm mb-0">
                                 <span class="text-light-emphasis">
                                     {{ purchase_order.pk }}
                                 </span>
-                            </div>
-                            <a href="{% url 'Corrugation:purchase_order_detail_archive' purchase_order %}"
-                               class="btn btn-outline-primary">View Details</a>
                         </div>
+                        <a href="{% url 'Corrugation:purchase_order_detail_archive' purchase_order %}"
+                           class="btn btn-outline-primary">View Details</a>
                     </div>
                 </div>
-            {% endfor %}
-        </div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

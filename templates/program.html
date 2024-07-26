@@ -16,7 +16,7 @@
             }, 2500)
         </script>
     {% endif %}
-    <div class="container mb-3">
+    <div class="mb-3">
         <!-- Button to trigger add modal -->
         <button type="button" class="btn btn-primary btn-icon-split" data-bs-toggle="modal"
                 data-bs-target="#addProgramModal">
@@ -71,37 +71,35 @@
     </div>
 
     {% for program in programs %}
-        <div class="card shadow mb-4 col-md-12">
+        <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="text-primary m-0 fw-bold">
+                <div class="row d-flex justify-content-between align-items-center">
+                    <h5 class="col-md-2 text-primary m-0 fw-bold">
                         Product name - {{ program.product_name }}
                     </h5>
-                    <div class="flex-grow-1 text-center">
+                    <div class="col-md-2 flex-grow-1 text-center">
                         <h5 class="text-secondary">Quantity - {{ program.program_quantity }}</h5>
                     </div>
-                    <h5 class="m-0 fw-bold">
+                    <h5 class="col-md-2 m-0 fw-bold">
                         <span>{{ program.program_date }}</span>
                     </h5>
-                    <div class="btn-group">
-                        <!-- Edit and Delete Buttons -->
-                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                data-bs-target="#editProgramModal"
-                                data-id="{{ program.id }}" data-product_name="{{ program.product_name }}"
-                                data-program_quantity="{{ program.program_quantity }}"
-                                data-program_date="{{ program.program_date }}"
-                                data-program_notes="{{ program.program_notes }}">
-                            Edit Program
-                        </button>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                data-bs-target="#deleteProgramModal"
-                                data-id="{{ program.id }}">
-                            Delete Program
-                        </button>
-                        <button type="button" class="btn btn-success share-whatsapp">
-                            Share via WhatsApp
-                        </button>
-                    </div>
+                    <!-- Edit and Delete Buttons -->
+                    <button type="button" class="col-md-2 btn btn-warning" data-bs-toggle="modal"
+                            data-bs-target="#editProgramModal"
+                            data-id="{{ program.id }}" data-product_name="{{ program.product_name }}"
+                            data-program_quantity="{{ program.program_quantity }}"
+                            data-program_date="{{ program.program_date }}"
+                            data-program_notes="{{ program.program_notes }}">
+                        Edit Program
+                    </button>
+                    <button type="button" class="col-md-2 btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#deleteProgramModal"
+                            data-id="{{ program.id }}">
+                        Delete Program
+                    </button>
+                    <button type="button" class="col-md-2 btn btn-success share-whatsapp">
+                        Share via WhatsApp
+                    </button>
                 </div>
             </div>
             <div class="card-body">

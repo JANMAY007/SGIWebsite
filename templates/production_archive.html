@@ -12,55 +12,53 @@
             </div>
         {% endfor %}
         <script>
-            setTimeout(function() {
+            setTimeout(function () {
                 bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
             }, 2500)
         </script>
     {% endif %}
-    <div class="container-fluid">
-        {% for production in productions %}
-            <!-- Start: Dropdown Card -->
-            <div class="card shadow mb-4" data-production-id="{{ production.id }}">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h6 class="text-primary fw-bold m-0">{{ production.product_name }}</h6>
-                    <h6 class="text-primary float-end fw-bold m-0">{{ production.production_date }}</h6>
-                </div>
-                <div class="card-body">
-                    <!-- Start: Card Success -->
-                    <div class="card shadow border-start-success py-2">
-                        <div class="card-body">
-                            <div class="row align-items-center no-gutters">
-                                <div class="col me-2">
-                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1">
-                                        <span>Production Quantity</span>
-                                    </div>
-                                    <div class="text-dark fw-bold h5 mb-0">
-                                        <span>{{ production.production_quantity }}</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End: Card Success -->
-                    <!-- Start: Card Warning -->
-                    <div class="card shadow border-start-warning py-2">
-                        <div class="card-body">
-                            <div class="row align-items-center no-gutters">
-                                <div class="col me-2">
-                                    <div class="text-uppercase text-primary fw-bold text-sm mb-1">
-                                        <span>Reels Used</span>
-                                    </div>
-                                    {% for reel in production.reels %}
-                                        <div class="text-dark fw-bold h5 mb-0">
-                                            <span>{{ reel }}</span>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End: Card Warning -->
-                </div>
+    {% for production in productions %}
+        <!-- Start: Dropdown Card -->
+        <div class="card shadow mb-4" data-production-id="{{ production.id }}">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="text-primary fw-bold m-0">{{ production.product_name }}</h6>
+                <h6 class="text-primary float-end fw-bold m-0">{{ production.production_date }}</h6>
             </div>
-        {% endfor %}
-    </div>
+            <div class="card-body">
+                <!-- Start: Card Success -->
+                <div class="card shadow border-start-success py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col me-2">
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1">
+                                    <span>Production Quantity</span>
+                                </div>
+                                <div class="text-dark fw-bold h5 mb-0">
+                                    <span>{{ production.production_quantity }}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End: Card Success -->
+                <!-- Start: Card Warning -->
+                <div class="card shadow border-start-warning py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col me-2">
+                                <div class="text-uppercase text-primary fw-bold text-sm mb-1">
+                                    <span>Reels Used</span>
+                                </div>
+                                {% for reel in production.reels %}
+                                    <div class="text-dark fw-bold h5 mb-0">
+                                        <span>{{ reel }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End: Card Warning -->
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}

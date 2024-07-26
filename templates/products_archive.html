@@ -12,7 +12,7 @@
             </div>
         {% endfor %}
         <script>
-            setTimeout(function() {
+            setTimeout(function () {
                 bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
             }, 2500)
         </script>
@@ -27,44 +27,42 @@
             display: none !important;
         }
     </style>
-    <div class="container-fluid">
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label for="searchBar"></label>
-                <input type="text" id="searchBar" class="form-control" placeholder="Search products...">
-            </div>
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label for="searchBar"></label>
+            <input type="text" id="searchBar" class="form-control" placeholder="Search products...">
         </div>
-        <div class="row" id="productContainer">
-            {% for product in products %}
-                <div class="col-md-6 col-xl-2 mb-2 product-card">
-                    <a href="{% url 'Corrugation:product_detail_archive' product.pk %}"
-                       class="link-light text-decoration-none">
-                        <div class="card shadow border-start-warning py-2 h-100">
-                            <div class="card-body d-flex flex-column justify-content-between">
-                                <div class="text-uppercase text-dark fw-bold text-xs mb-1">
-                                    <h6 class="mb-0">{{ product.product_name }}</h6>
-                                </div>
+    </div>
+    <div class="row" id="productContainer">
+        {% for product in products %}
+            <div class="col-md-6 col-xl-2 mb-2 product-card">
+                <a href="{% url 'Corrugation:product_detail_archive' product.pk %}"
+                   class="link-light text-decoration-none">
+                    <div class="card shadow border-start-warning py-2 h-100">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="text-uppercase text-dark fw-bold text-xs mb-1">
+                                <h6 class="mb-0">{{ product.product_name }}</h6>
                             </div>
                         </div>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
-        <script>
-            document.getElementById('searchBar').addEventListener('input', function () {
-                var query = this.value.toLowerCase();
-                var products = document.querySelectorAll('.product-card');
-                products.forEach(function (product) {
-                    var productName = product.querySelector('h6').textContent.toLowerCase();
-                    if (productName.includes(query)) {
-                        product.classList.remove('hidden');
-                    } else {
-                        product.classList.add('hidden');
-                    }
-                });
-            });
-        </script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
     </div>
+    <script>
+        document.getElementById('searchBar').addEventListener('input', function () {
+            var query = this.value.toLowerCase();
+            var products = document.querySelectorAll('.product-card');
+            products.forEach(function (product) {
+                var productName = product.querySelector('h6').textContent.toLowerCase();
+                if (productName.includes(query)) {
+                    product.classList.remove('hidden');
+                } else {
+                    product.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 {% endblock %}

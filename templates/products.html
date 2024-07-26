@@ -27,57 +27,56 @@
             display: none !important;
         }
     </style>
-    <div class="container-fluid">
-        <div class="row mb-3">
-            <div class="col-md-2">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                    Add Product
-                </button>
-            </div>
-            <div class="col-md-4">
-                <label for="searchBar"></label>
-                <input type="text" id="searchBar" class="form-control" placeholder="Search products...">
-            </div>
+    <div class="row mb-3">
+        <div class="col-md-2">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                Add Product
+            </button>
         </div>
-        <div class="row" id="productContainer">
-            {% for product in products %}
-                <div class="col-md-6 col-xl-2 mb-2 product-card">
-                    <a href="{% url 'Corrugation:products_detail' product.pk %}"
-                       class="link-light text-decoration-none">
-                        <div class="card shadow border-start-warning py-2 h-100">
-                            <div class="card-body d-flex flex-column justify-content-between">
-                                <div class="text-uppercase text-dark fw-bold text-xs mb-1">
-                                    <h6 class="mb-0">{{ product.product_name }}</h6>
-                                </div>
+        <div class="col-md-4">
+            <label for="searchBar"></label>
+            <input type="text" id="searchBar" class="form-control" placeholder="Search products...">
+        </div>
+    </div>
+    <div class="row" id="productContainer">
+        {% for product in products %}
+            <div class="col-md-6 col-xl-2 mb-2 product-card">
+                <a href="{% url 'Corrugation:products_detail' product.pk %}"
+                   class="link-light text-decoration-none">
+                    <div class="card shadow border-start-warning py-2 h-100">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="text-uppercase text-dark fw-bold text-xs mb-1">
+                                <h6 class="mb-0">{{ product.product_name }}</h6>
                             </div>
                         </div>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
-        <script>
-            document.getElementById('searchBar').addEventListener('input', function () {
-                var query = this.value.toLowerCase();
-                var products = document.querySelectorAll('.product-card');
-                products.forEach(function (product) {
-                    var productName = product.querySelector('h6').textContent.toLowerCase();
-                    if (productName.includes(query)) {
-                        product.classList.remove('hidden');
-                    } else {
-                        product.classList.add('hidden');
-                    }
-                });
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+    <script>
+        document.getElementById('searchBar').addEventListener('input', function () {
+            var query = this.value.toLowerCase();
+            var products = document.querySelectorAll('.product-card');
+            products.forEach(function (product) {
+                var productName = product.querySelector('h6').textContent.toLowerCase();
+                if (productName.includes(query)) {
+                    product.classList.remove('hidden');
+                } else {
+                    product.classList.add('hidden');
+                }
             });
+        });
 
-            document.addEventListener('DOMContentLoaded', function () {
-                let partitionCount = 0;
+        document.addEventListener('DOMContentLoaded', function () {
+            let partitionCount = 0;
 
-                document.getElementById('addPartitionBtn').addEventListener('click', function () {
-                    partitionCount++;
-                    const newPartition = document.createElement('div');
-                    newPartition.classList.add('partition', 'mb-3');
-                    newPartition.id = `partition_${partitionCount}`;
-                    newPartition.innerHTML = `
+            document.getElementById('addPartitionBtn').addEventListener('click', function () {
+                partitionCount++;
+                const newPartition = document.createElement('div');
+                newPartition.classList.add('partition', 'mb-3');
+                newPartition.id = `partition_${partitionCount}`;
+                newPartition.innerHTML = `
             <h6>Partition ${partitionCount + 1}</h6>
             <div class="mb-3">
                 <label for="partition_size_${partitionCount}" class="form-label">Partition Size</label>
@@ -125,178 +124,177 @@
             </div>
             <hr>
         `;
-                    document.getElementById('partitions').appendChild(newPartition);
-                });
-
-                document.getElementById('removePartitionBtn').addEventListener('click', function () {
-                    if (partitionCount >= 0) {
-                        document.getElementById(`partition_${partitionCount}`).remove();
-                        partitionCount--;
-                    }
-                });
+                document.getElementById('partitions').appendChild(newPartition);
             });
-        </script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-        <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form id="addProductForm" method="post" action="{% url 'Corrugation:add_product' %}">
-                        {% csrf_token %}
-                        <div class="modal-body">
-                            <!-- Product Fields -->
-                            <div class="mb-3">
-                                <label for="product_name" class="form-label">Product Name</label>
-                                <input type="text" class="form-control" id="product_name" name="product_name" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="box_no" class="form-label">Box Number</label>
-                                <input type="text" class="form-control" id="box_no" name="box_no">
-                            </div>
-                            <div class="mb-3">
-                                <label for="material_code" class="form-label">Material Code</label>
-                                <input type="text" class="form-control" id="material_code" name="material_code">
-                            </div>
-                            <div class="mb-3">
-                                <label for="size" class="form-label">Size</label>
-                                <input type="text" class="form-control" id="size" name="size" required>
-                            </div>
-                            <!-- Inner Dimensions -->
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label for="inner_length" class="form-label">Inner Length</label>
-                                    <input type="number" class="form-control" id="inner_length" name="inner_length"
-                                           required>
-                                </div>
-                                <div class="col">
-                                    <label for="inner_breadth" class="form-label">Inner Width</label>
-                                    <input type="number" class="form-control" id="inner_breadth" name="inner_breadth"
-                                           required>
-                                </div>
-                                <div class="col">
-                                    <label for="inner_depth" class="form-label">Inner Height</label>
-                                    <input type="number" class="form-control" id="inner_depth" name="inner_depth"
-                                           required>
-                                </div>
-                            </div>
-                            <!-- Outer Dimensions -->
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label for="outer_length" class="form-label">Outer Length</label>
-                                    <input type="number" class="form-control" id="outer_length" name="outer_length"
-                                           required>
-                                </div>
-                                <div class="col">
-                                    <label for="outer_breadth" class="form-label">Outer Width</label>
-                                    <input type="number" class="form-control" id="outer_breadth" name="outer_breadth"
-                                           required>
-                                </div>
-                                <div class="col">
-                                    <label for="outer_depth" class="form-label">Outer Height</label>
-                                    <input type="number" class="form-control" id="outer_depth" name="outer_depth"
-                                           required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="color" class="form-label">Color</label>
-                                <input type="text" class="form-control" id="color" name="color" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="weight" class="form-label">Weight</label>
-                                <input type="text" class="form-control" id="weight" name="weight" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="ply" class="form-label">Ply</label>
-                                <input type="text" class="form-control" id="ply" name="ply" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="gsm" class="form-label">GSM</label>
-                                <input type="text" class="form-control" id="gsm" name="gsm" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="bf" class="form-label">BF</label>
-                                <input type="number" class="form-control" id="bf" name="bf" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="cs" class="form-label">CS</label>
-                                <input type="number" class="form-control" id="cs" name="cs" required>
-                            </div>
-                            <hr>
-                            <!-- Partition Fields -->
-                            <div id="partitions">
-                                <div class="partition mb-3" id="partition_0">
-                                    <h6>Partition 1</h6>
-                                    <div class="mb-3">
-                                        <label for="partition_size_0" class="form-label">Partition Size</label>
-                                        <input type="text" class="form-control" id="partition_size_0"
-                                               name="partition_size">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="partition_od_0" class="form-label">Partition OD</label>
-                                        <input type="text" class="form-control" id="partition_od_0"
-                                               name="partition_od">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="deckle_cut_0" class="form-label">Deckle Cut</label>
-                                        <input type="text" class="form-control" id="deckle_cut_0" name="deckle_cut">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="length_cut_0" class="form-label">Length Cut</label>
-                                        <input type="text" class="form-control" id="length_cut_0" name="length_cut">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="partition_type_0" class="form-label">Partition Type</label>
-                                        <select class="form-control" id="partition_type_0" name="partition_type">
-                                            <option value="vertical">Vertical</option>
-                                            <option value="horizontal">Horizontal</option>
-                                            <option value="z-type">Z-Type</option>
-                                            <option value="crisscross">Criss-Cross</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="ply_no_0" class="form-label">Ply Number</label>
-                                        <select class="form-control" id="ply_no_0" name="ply_no">
-                                            <option value="3">3 Ply</option>
-                                            <option value="5">5 Ply</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="partition_weight_0" class="form-label">Ply Weight</label>
-                                        <input type="text" class="form-control" id="partition_weight_0"
-                                               name="partition_weight">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="partition_gsm_0" class="form-label">Ply GSM</label>
-                                        <input type="text" class="form-control" id="partition_gsm_0"
-                                               name="partition_gsm">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="partition_bf_0" class="form-label">Ply BF</label>
-                                        <input type="text" class="form-control" id="partition_bf_0" name="partition_bf">
-                                    </div>
-                                    <hr>
-                                </div>
-                            </div>
-                            <div class="d-grid gap-2 d-md-block">
-                                <button type="button" class="btn btn-outline-primary" id="addPartitionBtn">Add
-                                    Partition
-                                </button>
-                                <button type="button" class="btn btn-outline-danger" id="removePartitionBtn">Remove
-                                    Partition
-                                </button>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </form>
+
+            document.getElementById('removePartitionBtn').addEventListener('click', function () {
+                if (partitionCount >= 0) {
+                    document.getElementById(`partition_${partitionCount}`).remove();
+                    partitionCount--;
+                }
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form id="addProductForm" method="post" action="{% url 'Corrugation:add_product' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <!-- Product Fields -->
+                        <div class="mb-3">
+                            <label for="product_name" class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="product_name" name="product_name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="box_no" class="form-label">Box Number</label>
+                            <input type="text" class="form-control" id="box_no" name="box_no">
+                        </div>
+                        <div class="mb-3">
+                            <label for="material_code" class="form-label">Material Code</label>
+                            <input type="text" class="form-control" id="material_code" name="material_code">
+                        </div>
+                        <div class="mb-3">
+                            <label for="size" class="form-label">Size</label>
+                            <input type="text" class="form-control" id="size" name="size" required>
+                        </div>
+                        <!-- Inner Dimensions -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="inner_length" class="form-label">Inner Length</label>
+                                <input type="number" class="form-control" id="inner_length" name="inner_length"
+                                       required>
+                            </div>
+                            <div class="col">
+                                <label for="inner_breadth" class="form-label">Inner Width</label>
+                                <input type="number" class="form-control" id="inner_breadth" name="inner_breadth"
+                                       required>
+                            </div>
+                            <div class="col">
+                                <label for="inner_depth" class="form-label">Inner Height</label>
+                                <input type="number" class="form-control" id="inner_depth" name="inner_depth"
+                                       required>
+                            </div>
+                        </div>
+                        <!-- Outer Dimensions -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="outer_length" class="form-label">Outer Length</label>
+                                <input type="number" class="form-control" id="outer_length" name="outer_length"
+                                       required>
+                            </div>
+                            <div class="col">
+                                <label for="outer_breadth" class="form-label">Outer Width</label>
+                                <input type="number" class="form-control" id="outer_breadth" name="outer_breadth"
+                                       required>
+                            </div>
+                            <div class="col">
+                                <label for="outer_depth" class="form-label">Outer Height</label>
+                                <input type="number" class="form-control" id="outer_depth" name="outer_depth"
+                                       required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="color" class="form-label">Color</label>
+                            <input type="text" class="form-control" id="color" name="color" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="weight" class="form-label">Weight</label>
+                            <input type="text" class="form-control" id="weight" name="weight" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ply" class="form-label">Ply</label>
+                            <input type="text" class="form-control" id="ply" name="ply" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="gsm" class="form-label">GSM</label>
+                            <input type="text" class="form-control" id="gsm" name="gsm" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="bf" class="form-label">BF</label>
+                            <input type="number" class="form-control" id="bf" name="bf" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cs" class="form-label">CS</label>
+                            <input type="number" class="form-control" id="cs" name="cs" required>
+                        </div>
+                        <hr>
+                        <!-- Partition Fields -->
+                        <div id="partitions">
+                            <div class="partition mb-3" id="partition_0">
+                                <h6>Partition 1</h6>
+                                <div class="mb-3">
+                                    <label for="partition_size_0" class="form-label">Partition Size</label>
+                                    <input type="text" class="form-control" id="partition_size_0"
+                                           name="partition_size">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="partition_od_0" class="form-label">Partition OD</label>
+                                    <input type="text" class="form-control" id="partition_od_0"
+                                           name="partition_od">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="deckle_cut_0" class="form-label">Deckle Cut</label>
+                                    <input type="text" class="form-control" id="deckle_cut_0" name="deckle_cut">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="length_cut_0" class="form-label">Length Cut</label>
+                                    <input type="text" class="form-control" id="length_cut_0" name="length_cut">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="partition_type_0" class="form-label">Partition Type</label>
+                                    <select class="form-control" id="partition_type_0" name="partition_type">
+                                        <option value="vertical">Vertical</option>
+                                        <option value="horizontal">Horizontal</option>
+                                        <option value="z-type">Z-Type</option>
+                                        <option value="crisscross">Criss-Cross</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="ply_no_0" class="form-label">Ply Number</label>
+                                    <select class="form-control" id="ply_no_0" name="ply_no">
+                                        <option value="3">3 Ply</option>
+                                        <option value="5">5 Ply</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="partition_weight_0" class="form-label">Ply Weight</label>
+                                    <input type="text" class="form-control" id="partition_weight_0"
+                                           name="partition_weight">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="partition_gsm_0" class="form-label">Ply GSM</label>
+                                    <input type="text" class="form-control" id="partition_gsm_0"
+                                           name="partition_gsm">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="partition_bf_0" class="form-label">Ply BF</label>
+                                    <input type="text" class="form-control" id="partition_bf_0" name="partition_bf">
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 d-md-block">
+                            <button type="button" class="btn btn-outline-primary" id="addPartitionBtn">Add
+                                Partition
+                            </button>
+                            <button type="button" class="btn btn-outline-danger" id="removePartitionBtn">Remove
+                                Partition
+                            </button>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
