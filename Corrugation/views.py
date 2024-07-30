@@ -240,7 +240,8 @@ def delete_reel(request, pk):
         reel.used = True
         reel.save()
         messages.error(request, 'Paper reel deleted successfully.')
-        return redirect('Corrugation:paper_reels')
+        next_url = request.POST.get('next', request.META.get('HTTP_REFERER', 'Corrugation:paper_reels'))
+        return redirect(next_url)
     return redirect('Corrugation:paper_reels')
 
 
@@ -251,7 +252,8 @@ def restore_reel(request, pk):
         reel.used = False
         reel.save()
         messages.success(request, 'Paper reel restored successfully.')
-        return redirect('Corrugation:paper_reels')
+        next_url = request.POST.get('next', request.META.get('HTTP_REFERER', 'Corrugation:paper_reels'))
+        return redirect(next_url)
     return redirect('Corrugation:paper_reels')
 
 

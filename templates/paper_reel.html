@@ -100,22 +100,22 @@
                 success: function (data) {
                     const total_weight = data.total_weight;
 
-                // Clear previous total weight list
-                $('#total-weight-list').empty();
+                    // Clear previous total weight list
+                    $('#total-weight-list').empty();
 
-                // Check if there are total_weight entries
-                if (total_weight.length > 0) {
-                    // Show the total-weight-section div
-                    $('#total-weight-section').show();
+                    // Check if there are total_weight entries
+                    if (total_weight.length > 0) {
+                        // Show the total-weight-section div
+                        $('#total-weight-section').show();
 
-                    // Populate the total weight list
-                    total_weight.forEach(function (weight) {
-                        $('#total-weight-list').append(`<li>${weight.gsm} GSM: ${weight.total_weight} KG</li>`);
-                    });
-                } else {
-                    // Hide the total-weight-section div if there are no total weights
-                    $('#total-weight-section').hide();
-                }
+                        // Populate the total weight list
+                        total_weight.forEach(function (weight) {
+                            $('#total-weight-list').append(`<li>${weight.gsm} GSM: ${weight.total_weight} KG</li>`);
+                        });
+                    } else {
+                        // Hide the total-weight-section div if there are no total weights
+                        $('#total-weight-section').hide();
+                    }
                     const results = data.results;
                     let tableBody = '';
                     results.forEach(function (reel, index) {
@@ -146,11 +146,11 @@
                         $('body').append(getModalHTML(reel, 'restore'));
                     });
                     // Show/hide search results section
-            if (query.trim() !== '') {
-                $('#total-weight-section').show();
-            } else {
-                $('#total-weight-section').hide();
-            }
+                    if (query.trim() !== '') {
+                        $('#total-weight-section').show();
+                    } else {
+                        $('#total-weight-section').hide();
+                    }
                 }
             });
         }
@@ -370,15 +370,15 @@
                                         aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <p>Are you sure you want to make the reel
-                                    <strong>{{ reel.reel_number }}</strong> used?</p>
+                                <p>Are you sure you want to make the reel <strong>{{ reel.reel_number }}</strong> used?
+                                </p>
                             </div>
                             <div class="modal-footer">
-                                <form method="post" action="{% url 'Corrugation:delete_reel' reel.id %}">
+                                <form method="post"
+                                      action="{% url 'Corrugation:delete_reel' reel.id %}?next={{ request.get_full_path }}">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-danger">Make Used</button>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                        Cancel
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel
                                     </button>
                                 </form>
                             </div>
@@ -397,15 +397,15 @@
                                         aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <p>Are you sure you want to make the reel
-                                    <strong>{{ reel.reel_number }}</strong> Un used?</p>
+                                <p>Are you sure you want to make the reel <strong>{{ reel.reel_number }}</strong> Un
+                                    used?</p>
                             </div>
                             <div class="modal-footer">
-                                <form method="post" action="{% url 'Corrugation:restore_reel' reel.id %}">
+                                <form method="post"
+                                      action="{% url 'Corrugation:restore_reel' reel.id %}?next={{ request.get_full_path }}">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-danger">Make Un Used</button>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                        Cancel
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel
                                     </button>
                                 </form>
                             </div>
