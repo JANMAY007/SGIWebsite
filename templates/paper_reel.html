@@ -22,7 +22,7 @@
             <div class="text-md-end dataTables_filter" id="dataTable_filter">
                 <label class="form-label">
                     <input type="search" id="search-input" class="form-control form-control-sm"
-                           aria-controls="dataTable" placeholder="Search Reels">
+                           oninput="searchReels(this.value)" aria-controls="dataTable" placeholder="Search Reels">
                 </label>
             </div>
         </div>
@@ -98,59 +98,75 @@
                 url: "{% url 'Corrugation:search_reels' %}",
                 data: {'q': query},
                 success: function (data) {
-                    const total_weight = data.total_weight;
+                    updateReelTable(data);
+                }
+            });
+        }
 
-                    // Clear previous total weight list
-                    $('#total-weight-list').empty();
+        function updateReelTable(data) {
+            const total_weight = data.total_weight;
 
-                    // Check if there are total_weight entries
-                    if (total_weight.length > 0) {
-                        // Show the total-weight-section div
-                        $('#total-weight-section').show();
+            // Clear previous total weight list
+            $('#total-weight-list').empty();
 
-                        // Populate the total weight list
-                        total_weight.forEach(function (weight) {
-                            $('#total-weight-list').append(`<li>${weight.gsm} GSM: ${weight.total_weight} KG</li>`);
-                        });
-                    } else {
-                        // Hide the total-weight-section div if there are no total weights
-                        $('#total-weight-section').hide();
-                    }
-                    const results = data.results;
-                    let tableBody = '';
-                    results.forEach(function (reel, index) {
-                        tableBody += `
-                        <tr class="${reel.used ? 'table-danger' : ''}">
-                            <td>${index + 1}</td>
-                            <td>${reel.size} Inch</td>
-                            <td>${reel.gsm}</td>
-                            <td>${reel.bf}</td>
-                            <td>${reel.weight}</td>
-                            <td>${reel.reel_number}</td>
-                            <td>
-                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editReelModal${reel.id}">Edit</button>
-                                ${reel.used ? `
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#restoreReelModal${reel.id}">Un Use</button>
-                                ` : `
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteReelModal${reel.id}">Use</button>
-                                `}
-                            </td>
-                        </tr>
-                    `;
-                    });
-                    $('#reel-table-body').html(tableBody);
+            // Check if there are total_weight entries
+            if (total_weight.length > 0) {
+                // Show the total-weight-section div
+                $('#total-weight-section').show();
 
-                    results.forEach(function (reel) {
-                        $('body').append(getModalHTML(reel, 'edit'));
-                        $('body').append(getModalHTML(reel, 'delete'));
-                        $('body').append(getModalHTML(reel, 'restore'));
-                    });
-                    // Show/hide search results section
-                    if (query.trim() !== '') {
-                        $('#total-weight-section').show();
-                    } else {
-                        $('#total-weight-section').hide();
-                    }
+                // Populate the total weight list
+                total_weight.forEach(function (weight) {
+                    $('#total-weight-list').append(`<li>${weight.gsm} GSM: ${weight.total_weight} KG</li>`);
+                });
+            } else {
+                // Hide the total-weight-section div if there are no total weights
+                $('#total-weight-section').hide();
+            }
+
+            const results = data.results;
+            let tableBody = '';
+            results.forEach(function (reel, index) {
+                tableBody += `
+            <tr class="${reel.used ? 'table-danger' : ''}">
+                <td>${index + 1}</td>
+                <td>${reel.size} Inch</td>
+                <td>${reel.gsm}</td>
+                <td>${reel.bf}</td>
+                <td>${reel.weight}</td>
+                <td>${reel.reel_number}</td>
+                <td>
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editReelModal${reel.id}">Edit</button>
+                    ${reel.used ? `
+                        <button type="button" class="btn btn-danger" onclick="updateReelStatus(${reel.id}, 'restore')">Un Use</button>
+                    ` : `
+                        <button type="button" class="btn btn-danger" onclick="updateReelStatus(${reel.id}, 'delete')">Use</button>
+                    `}
+                </td>
+            </tr>
+        `;
+            });
+            $('#reel-table-body').html(tableBody);
+
+            results.forEach(function (reel) {
+                $('body').append(getModalHTML(reel, 'edit'));
+                $('body').append(getModalHTML(reel, 'delete'));
+                $('body').append(getModalHTML(reel, 'restore'));
+            });
+        }
+
+        function updateReelStatus(reelId, action) {
+            let url = action === 'delete' ?
+                "{% url 'Corrugation:delete_reel' 0 %}".replace('0', reelId) :
+                "{% url 'Corrugation:restore_reel' 0 %}".replace('0', reelId);
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    searchReels($('#search-input').val());
                 }
             });
         }
