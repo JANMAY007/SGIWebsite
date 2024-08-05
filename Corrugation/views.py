@@ -129,7 +129,10 @@ def search_reels(request):
 
 @login_required
 def summary(request):
-    paper_reel_summary = PaperReels.objects.values('size', 'gsm', 'bf').annotate(total_weight=Sum('weight'))
+    paper_reel_summary = PaperReels.objects.values('size', 'gsm', 'bf').annotate(
+        total_weight=Sum('weight'),
+        total_reels=Count('id'),
+    )
     context = {
         'paper_reel_summary': paper_reel_summary,
         'total_reels': PaperReels.objects.filter(used=False).count(),
