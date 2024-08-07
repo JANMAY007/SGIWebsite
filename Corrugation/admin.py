@@ -27,7 +27,13 @@ class ProductionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Production, ProductionAdmin)
-admin.site.register(PaperReels)
+
+
+class PaperReelsAdmin(admin.ModelAdmin):
+    list_filter = ['reel_number', 'created_at', 'updated_at']
+
+
+admin.site.register(PaperReels, PaperReelsAdmin)
 admin.site.register(PurchaseOrder)
 admin.site.register(Dispatch)
 admin.site.register(Program)
